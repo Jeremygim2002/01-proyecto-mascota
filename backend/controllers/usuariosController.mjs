@@ -1,4 +1,11 @@
-import * as usuariosModel from '../models/mysql/usuariosModel.mjs';
+
+//  usanod la base de datos
+// import * as usuariosModel from '../models/mysql/usuariosModel.mjs';
+
+
+// Ahora (usando archivos locales):
+import * as usuariosModel from '../models/local-file-system/usuariosModel.mjs';
+
 
 export const getAll = async (req, res) => {
   const usuarios = await usuariosModel.getUsuarios();

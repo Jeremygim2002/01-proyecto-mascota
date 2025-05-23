@@ -2,7 +2,7 @@
 GET http://localhost:3000/api/usuarios
 
 ### Obtener usuario por ID
-GET http://localhost:3000/api/usuarios/3
+GET http://localhost:3000/api/usuarios/a1b2c3d4-e5f6-7890-1234-56789abcdef0
 
 ### Crear usuario
 POST http://localhost:3000/api/usuarios
@@ -18,7 +18,7 @@ Content-Type: application/json
 }
 
 ### Actualizar usuario
-PUT http://localhost:3000/api/usuarios/3
+PUT http://localhost:3000/api/usuarios/e15a395f-f773-4c12-b50a-0b087600def3
 Content-Type: application/json
 
 {
@@ -27,8 +27,8 @@ Content-Type: application/json
   "apellido_materno": "Gómez",
   "correo": "luis.c@example.com",
   "numero_telefono": "999888777",
-  "dni": "87654321"
+  "dni": "87654329"
 }
 
 ### Eliminar usuario
-DELETE http://localhost:3000/api/usuarios/1
+DELETE http://localhost:3000/api/usuarios/e15a395f-f773-4c12-b50a-0b087600def3
