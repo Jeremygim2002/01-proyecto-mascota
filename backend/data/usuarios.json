@@ -1,0 +1,20 @@
+[
+  {
+    "id": "a1b2c3d4-e5f6-7890-1234-56789abcdef0",
+    "nombre": "María",
+    "apellido_paterno": "Pérez",
+    "apellido_materno": "Gómez",
+    "correo": "maria.perez@example.com",
+    "numero_telefono": "987654321",
+    "dni": "76543210"
+  },
+  {
+    "id": "b2c3d4e5-f6a7-8901-2345-6789abcdef01",
+    "nombre": "Carlos",
+    "apellido_paterno": "Ramírez",
+    "apellido_materno": "Díaz",
+    "correo": "carlos.ramirez@example.com",
+    "numero_telefono": "912345678",
+    "dni": "87654321"
+  }
+]
