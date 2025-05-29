@@ -1,15 +1,25 @@
 import express from 'express';
-import cors from './middlewares/cors.mjs';
-import usuariosRoutes from './routes/usuariosRoutes.mjs';
+import { createUsuarioRouter } from './routes/usuariosRoutes.mjs'
+import { corsMiddleware } from './middlewares/cors.mjs';
 
-const app = express();
-app.use(cors);
-app.use(express.json());
-app.disable('x-powered-by');
 
-app.use('/api/usuarios', usuariosRoutes);
+export const createApp = ({ usuarioModel }) => {
 
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+  const app = express();
+
+  const port = 3000;
+
+  app.disable('x-powered-by');
+  app.use(express.json());
+  app.use(corsMiddleware());
+
+  app.use('/usuarios', createUsuarioRouter({ usuarioModel }));
+
+  app.listen(port, () => {
+    console.log(`Servidor corriendo en http://localhost:${port}`);
+  });
+}
+
+
+
+

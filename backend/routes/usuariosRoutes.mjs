@@ -1,14 +1,30 @@
-import { Router } from 'express';
-import * as usuariosController from '../controllers/usuariosController.mjs';
-import { validate } from '../middlewares/validate.mjs';
-import { usuarioSchema } from '../schemas/usuariosSchema.mjs';
+import { Router } from 'express'
 
-const router = Router();
+import { UsuarioController } from '../controllers/usuarioController.mjs'
 
-router.get('/', usuariosController.getAll);
-router.get('/:id', usuariosController.getById);
-router.post('/', validate(usuarioSchema), usuariosController.create);
-router.put('/:id', validate(usuarioSchema), usuariosController.update);
-router.delete('/:id', usuariosController.remove);
+export const createUsuarioRouter = ({ usuarioModel }) => {
 
-export default router;
+    const usuariosRouter = Router();
+
+    const usuarioController = new UsuarioController({ usuarioModel })
+
+    // traer todas los usuarios
+    usuariosRouter.get('/', usuarioController.getAll)
+
+    // traer usuario por id
+    usuariosRouter.get('/:id', usuarioController.getById)
+
+
+    // insertar nuevo usuario
+    usuariosRouter.post('/', usuarioController.create)
+
+    // eliminar usuario por id
+    usuariosRouter.delete('/:id', usuarioController.delete)
+
+
+    // editar una parte de un usuario
+    usuariosRouter.patch('/:id', usuarioController.update)
+
+    return usuariosRouter
+
+}
