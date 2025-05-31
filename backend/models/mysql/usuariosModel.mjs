@@ -3,17 +3,7 @@ import pool from '../../config/db.mjs';
 export class UsuarioModel {
   static async getAll() {
     try {
-      const [usuarios] = await pool.query(`
-        SELECT 
-          BIN_TO_UUID(id) AS id,
-          nombre,
-          apellido_paterno,
-          apellido_materno,
-          correo,
-          numero_telefono,
-          dni
-        FROM usuarios
-      `);
+      const [usuarios] = await pool.query('SELECT * FROM vista_usuarios');
       return usuarios;
     } catch (error) {
       console.error('Error al obtener usuarios:', error);
@@ -21,22 +11,10 @@ export class UsuarioModel {
     }
   }
 
-
   static async getById({ id }) {
     try {
       const [[usuario]] = await pool.query(
-        `
-        SELECT 
-          BIN_TO_UUID(id) AS id,
-          nombre,
-          apellido_paterno,
-          apellido_materno,
-          correo,
-          numero_telefono,
-          dni
-        FROM usuarios 
-        WHERE id = UUID_TO_BIN(?)
-        `,
+        'SELECT * FROM vista_usuarios WHERE id = ?',
         [id]
       );
       return usuario || null;
@@ -45,7 +23,6 @@ export class UsuarioModel {
       throw error;
     }
   }
-
 
   static async create({ input }) {
     const {
@@ -58,10 +35,8 @@ export class UsuarioModel {
     } = input;
 
     try {
-      // Obtener un UUID desde MySQL
       const [[{ uuid }]] = await pool.query('SELECT UUID() AS uuid');
 
-      // Insertar usando UUID_TO_BIN(uuid generado)
       await pool.query(
         `INSERT INTO usuarios (
           id,
@@ -77,7 +52,6 @@ export class UsuarioModel {
         [uuid, nombre, apellido_paterno, apellido_materno, correo, numero_telefono, dni]
       );
 
-      // Retornar el usuario creado
       return {
         id: uuid,
         nombre,
@@ -92,7 +66,6 @@ export class UsuarioModel {
       throw error;
     }
   }
-
 
   static async update({ id, input }) {
     const {
@@ -122,8 +95,6 @@ export class UsuarioModel {
     }
   }
 
-
-  
   static async delete({ id }) {
     try {
       const [result] = await pool.query(

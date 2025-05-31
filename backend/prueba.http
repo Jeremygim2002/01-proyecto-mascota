@@ -2,7 +2,7 @@
 GET http://localhost:3000/usuarios
 
 ### Obtener usuario por ID
-GET http://localhost:3000/usuarios/7d30ac02-39f6-11f0-a95b-a8a159de6f1d
+GET http://localhost:3000/usuarios/69444bc4-39f6-11f0-a95b-a8a159de6f1d
 
 ### Crear usuario
 POST http://localhost:3000/usuarios
