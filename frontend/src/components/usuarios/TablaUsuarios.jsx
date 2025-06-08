@@ -63,7 +63,7 @@ const TablaUsuarios = () => {
 
   const handleAgregar = (nuevoServicio) => {
     // Aquí actualizas tu estado o envías a la base de datos
-    console.log("Nuevo personal:", nuevoServicio);
+    console.log("Nuevo usuario:", nuevoServicio);
   };
   const {
     busqueda,

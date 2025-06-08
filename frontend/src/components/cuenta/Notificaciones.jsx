@@ -24,7 +24,7 @@ const Notificaciones = () => {
         setNotificaciones({ ...notificaciones, email: !notificaciones.email }),
     },
     {
-      label: "Nuevo Personal",
+      label: "Nuevo Veterinario",
       estado: notificaciones.sms,
       setEstado: () =>
         setNotificaciones({ ...notificaciones, sms: !notificaciones.sms }),

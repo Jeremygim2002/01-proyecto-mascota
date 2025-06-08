@@ -9,7 +9,7 @@ const ModalVerOrden = ({ isOpen, onClose, orden }) => {
         <p><strong>Servicio:</strong> {orden.servicio}</p>
         <p><strong>Dueño:</strong> {orden.dueno}</p>
         <p><strong>Mascota:</strong> {orden.nombre_mascota}</p>
-        <p><strong>Personal encargado:</strong> {orden.personal}</p>
+        <p><strong>Veterinario encargado:</strong> {orden.veterinario}</p>
         <p><strong>Fecha:</strong> {orden.fecha}</p>
         <p><strong>Estado:</strong> {orden.estado ? "Activo" : "Inactivo"}</p>
       </div>

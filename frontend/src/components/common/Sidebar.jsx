@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import {
   BarChart2,
@@ -12,16 +11,19 @@ import {
 // eslint-disable-next-line no-unused-vars
 import { AnimatePresence, motion } from "framer-motion";
 import useRutasActivas from "../../hooks/useRutasActivas";
-import useSidebarResponsivo from "../../hooks/useSidebarResponsivo";  
+import useSidebarResponsivo from "../../hooks/useSidebarResponsivo";
 
 const SIDEBAR_ITEMS = [
-  { name: "Analisis", icon: BarChart2, href: "/" },
-  { name: "Servicios", icon: ShoppingCart, href: "/servicios" },
-  { name: "Usuarios", icon: SquareUserRound, href: "/usuarios" },
-  { name: "Personal", icon: BriefcaseBusiness, href: "/personal" },
-  { name: "Ordenes", icon: SquareChartGantt, href: "/ordenes" },
-  { name: "Calendario", icon: CalendarPlus, href: "/calendario" },
-
+  { name: "Análisis", icon: BarChart2, href: "/dashboard" },
+  { name: "Servicios", icon: ShoppingCart, href: "/dashboard/servicios" },
+  {
+    name: "Veterinarios",
+    icon: BriefcaseBusiness,
+    href: "/dashboard/veterinarios",
+  },
+  { name: "Usuarios", icon: SquareUserRound, href: "/dashboard/usuarios" },
+  { name: "Órdenes", icon: SquareChartGantt, href: "/dashboard/ordenes" },
+  { name: "Calendario", icon: CalendarPlus, href: "/dashboard/calendario" },
 ];
 
 const Sidebar = () => {

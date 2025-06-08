@@ -20,7 +20,7 @@ const CartillaMascota = ({ ordenes }) => {
               <tr key={index} className="hover:bg-input-hover">
                 <td className="px-4 py-2">{orden.fecha}</td>
                 <td className="px-4 py-2">{orden.servicio}</td>
-                <td className="px-4 py-2">{orden.personal}</td>
+                <td className="px-4 py-2">{orden.veterinario}</td>
                 <td className="px-4 py-2">{orden.estado}</td>
               </tr>
             ))}

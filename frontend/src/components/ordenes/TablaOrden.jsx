@@ -14,7 +14,7 @@ const DATA_ORDENES = [
     servicio: "baño",
     dueno: "Carlos Pérez",
     nombre_mascota: "lana",
-    personal: "juan cubillas",
+    veterinario: "juan cubillas",
     fecha: "2025-05-01",
     estado: true, // Activo
   },
@@ -23,7 +23,7 @@ const DATA_ORDENES = [
     servicio: "baño",
     dueno: "Carlos Pérez",
     nombre_mascota: "lana",
-    personal: "juan cubillas",
+    veterinario: "juan cubillas",
     fecha: "2025-05-01",
     estado: true, // Activo
   },
@@ -32,7 +32,7 @@ const DATA_ORDENES = [
     servicio: "baño",
     dueno: "Carlos Pérez",
     nombre_mascota: "lana",
-    personal: "juan cubillas",
+    veterinario: "juan cubillas",
     fecha: "2025-05-01",
     estado: true, // Activo
   },
@@ -41,7 +41,7 @@ const DATA_ORDENES = [
     servicio: "baño",
     dueno: "Carlos Pérez",
     nombre_mascota: "lana",
-    personal: "juan cubillas",
+    veterinario: "juan cubillas",
     fecha: "2025-05-01",
     estado: true, // Activo
   },
@@ -50,7 +50,7 @@ const DATA_ORDENES = [
     servicio: "baño",
     dueno: "Carlos Pérez",
     nombre_mascota: "lana",
-    personal: "juan cubillas",
+    veterinario: "juan cubillas",
     fecha: "2025-05-01",
     estado: true, // Activo
   },
@@ -61,9 +61,9 @@ const TablaOrden = () => {
   const [modalVerOpen, setModalVerOpen] = useState(false);
   const [ordenSeleccionado, setOrdenSeleccionado] = useState(null);
 
-  const handleAgregar = (nuevoPersonal) => {
+  const handleAgregar = (nuevoVeterinario) => {
     // Aquí actualizas tu estado o envías a la base de datos
-    console.log("Nuevo personal:", nuevoPersonal);
+    console.log("Nuevo veterinario:", nuevoVeterinario);
   };
 
   const {
@@ -125,7 +125,7 @@ const TablaOrden = () => {
           { id: "servicio", label: "Servicio" },
           { id: "dueno", label: "Dueño" },
           { id: "nombre_mascota", label: "Nombre mascota" },
-          { id: "personal", label: "personal" },
+          { id: "veterinario", label: "veterinario" },
           { id: "fecha", label: "fecha" },
         ]}
         datos={ordenFiltrado}

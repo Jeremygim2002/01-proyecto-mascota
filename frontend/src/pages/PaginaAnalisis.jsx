@@ -2,7 +2,7 @@ import Header from "../components/common/Header";
 import StatCardsGroup from "../components/common/StatCardsGroup";
 import GraficoServicios from "../components/analisis/GraficoServicios";
 import GraficoUsuarios from "../components/analisis/GraficoUsuarios";
-import GraficoPersonal from "../components/analisis/GraficoPersonal";
+import GraficoVeterinarios from "../components/analisis/GraficoVeterinarios";
 import GraficoOrdenes from "../components/analisis/GraficoOrdenes";
 
 const PaginaAnalisis = () => {
@@ -16,7 +16,7 @@ const PaginaAnalisis = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <GraficoOrdenes />
           <GraficoUsuarios />
-          <GraficoPersonal />
+          <GraficoVeterinarios />
           <GraficoServicios />
         </div>
       </main>

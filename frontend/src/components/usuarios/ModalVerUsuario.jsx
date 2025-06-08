@@ -8,9 +8,9 @@ const ModalVerUsuario = ({ isOpen, onClose, usuario }) => {
   if (!usuario) return null;
 
   const ordenesDummy = [
-    { fecha: "2025-01-15", servicio: "Vacunación", personal: "Dr. Pérez", estado: "Completado" },
-    { fecha: "2025-02-20", servicio: "Consulta general", personal: "Dra. López", estado: "Pendiente" },
-    { fecha: "2025-03-10", servicio: "Desparasitación", personal: "Dr. Gómez", estado: "Completado" },
+    { fecha: "2025-01-15", servicio: "Vacunación", veterinario: "Dr. Pérez", estado: "Completado" },
+    { fecha: "2025-02-20", servicio: "Consulta general", veterinario: "Dra. López", estado: "Pendiente" },
+    { fecha: "2025-03-10", servicio: "Desparasitación", veterinario: "Dr. Gómez", estado: "Completado" },
   ];
 
   return (

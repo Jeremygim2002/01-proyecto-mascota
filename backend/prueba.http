@@ -1,34 +1,75 @@
 ### Obtener todos los usuarios
-GET http://localhost:3000/usuarios
+GET http://localhost:3000/api/usuarios
+
 
 ### Obtener usuario por ID
-GET http://localhost:3000/usuarios/69444bc4-39f6-11f0-a95b-a8a159de6f1d
+GET http://localhost:3000/api/usuarios/c216424a-4312-11f0-b45e-a8a159de6f1d
 
 ### Crear usuario
-POST http://localhost:3000/usuarios
+POST http://localhost:3000/api/usuarios
 Content-Type: application/json
 
 {
   "nombre": "Luis",
-  "apellido_paterno": "Cruzado",
-  "apellido_materno": "Gómez",
-  "correo": "luis.cruz@exaple.com",
-  "numero_telefono": "999808777",
-  "dni": "87651321"
+  "apellido_paterno": "Cruzaaado",
+  "apellido_materno": "Gómedsaz",
+  "correo": "luis.cruz@exapahhsdle.com",
+  "numero_telefono": "999818787",
+  "dni": "87611329"
 }
 
 ### Actualizar usuario
-PATCH http://localhost:3000/usuarios/7d30ac02-39f6-11f0-a95b-a8a159de6f1d
+PATCH http://localhost:3000/api/usuarios/b3b341b2-43fc-11f0-8bc8-a8a159de6f1d
 Content-Type: application/json
 
 {
   "nombre": "Jeremy",
-  "apellido_paterno": "Cruzado",
-  "apellido_materno": "Gómez",
+  "apellido_paterno": "Cruzadooooooooooo",
+  "apellido_materno": "Gómezzzzz",
   "correo": "luis.c@example.com",
   "numero_telefono": "999888777",
   "dni": "87654329"
 }
 
 ### Eliminar usuario
-DELETE http://localhost:3000/usuarios/7d30ac02-39f6-11f0-a95b-a8a159de6f1d
+DELETE http://localhost:3000/api/usuarios/b3b341b2-43fc-11f0-8bc8-a8a159de6f1d
+
+
+
+
+
+
+#====== MASCOTAS =====#
+
+### Obtener todas las mascotas
+GET http://localhost:3000/api/mascotas
+
+### Obtener mascota por ID
+GET http://localhost:3000/api/mascotas/d2c79ba0-4312-11f0-b45e-a8a159de6f1d
+
+### Crear nueva mascota (con id_usuario existente)
+POST http://localhost:3000/api/mascotas/
+Content-Type: application/json
+
+{
+  "nombre": "Firulais",
+  "raza": "Labrador",
+  "edad": 4,
+  "sexo": "M",
+  "id_usuario": "c216424a-4312-11f0-b45e-a8a159de6f1d"
+}
+
+### Actualizar mascota (cambiar nombre y edad)
+PATCH http://localhost:3000/api/mascotas/d2c79ba0-4312-11f0-b45e-a8a159de6f1d
+Content-Type: application/json
+
+{
+  "nombre": "Maxxxxxxx",
+  "raza": "negrooooooooooooo"
+}
+
+### Eliminar mascota
+DELETE http://localhost:3000/api/mascotas/f6bb5744-4314-11f0-b45e-a8a159de6f1d
+
+
+

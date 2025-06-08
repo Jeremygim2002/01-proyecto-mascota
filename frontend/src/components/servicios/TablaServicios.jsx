@@ -62,7 +62,7 @@ const TablaServicios = () => {
   const [servicioSeleccionado, setServicioSeleccionado] = useState(null);
 
   const handleAgregar = (nuevoServicio) => {
-    console.log("Nuevo personal:", nuevoServicio);
+    console.log("Nuevo servicio:", nuevoServicio);
   };
   const {
     busqueda,

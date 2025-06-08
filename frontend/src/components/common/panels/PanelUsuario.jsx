@@ -7,7 +7,7 @@ const PanelUsuario = () => {
     <PanelGeneral className="w-48 flex flex-col space-y-3">
       <Link
         aria-label="Ver perfil"
-        to="/Cuenta"
+        to="/dashboard/Cuenta"
         className="flex items-center space-x-2 text-texto text-sm hover:bg-sidebar-hover rounded-lg p-2 transition"
       >
         <User size={18} />

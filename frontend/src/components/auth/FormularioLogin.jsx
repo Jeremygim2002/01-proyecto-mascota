@@ -1,19 +1,33 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { Mail, Lock } from "lucide-react";
 import Button from "../common/forms/Button";
 import Input from "../common/forms/Input";
 import Title from "../common/Titulo";
+import { login } from "../../services/authService"; // nuevo
 
-const FormularioLogin = () => {
+const FormularioLogin = ({ onOlvidaste, onCrearCuenta }) => {
   const navigate = useNavigate();
 
-  const manejarLogin = (e) => {
-    e.preventDefault();
-    navigate("/servicios");
-  };
+  const [correo, setCorreo] = useState("");
+  const [password, setPassword] = useState("");
 
+  const manejarLogin = async (e) => {
+    e.preventDefault();
+    const data = { correo, password };
+
+    try {
+      await login(data);
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Error al iniciar sesión:", error);
+      alert(error.error || "Error desconocido");
+    }
+  };
+  
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -21,35 +35,59 @@ const FormularioLogin = () => {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="bg-superficie p-10 rounded-2xl shadow-2xl w-full max-w-md border border-superficie-borde"
     >
-      <Title className="text-center tracking-wide mb-4" text="INICIAR SESIÓNN" />
+      <Title className="text-center tracking-wide mb-4" text="INICIAR SESIÓN" />
 
       <form onSubmit={manejarLogin} className="space-y-6">
+        {/* Campo correo */}
         <div>
-          <label className="text-sm text-texto block mb-2 font-cuerpo">
+          <label
+            htmlFor="correo"
+            className="text-sm text-texto block mb-2 font-cuerpo"
+          >
             Correo electrónico
           </label>
+
           <div className="relative">
             <span className="absolute left-4 top-1/2 -translate-y-1/2 text-texto-secundario">
               <Mail size={18} />
             </span>
+
             <Input
+              id="correo"
+              name="correo"
               type="email"
               placeholder="correo@ejemplo.com"
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
               className="pl-12 w-full py-2"
+              required
             />
           </div>
         </div>
 
+        {/* Campo contraseña */}
         <div>
-          <label className="text-sm text-texto block mb-2 font-cuerpo">Contraseña</label>
+          <label
+            htmlFor="password"
+            className="text-sm text-texto block mb-2 font-cuerpo"
+          >
+            Contraseña
+          </label>
+
           <div className="relative">
             <span className="absolute left-4 top-1/2 -translate-y-1/2 text-texto-secundario">
               <Lock size={18} />
             </span>
+
             <Input
+              id="password"
+              name="password"
               type="password"
               placeholder="********"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="pl-12 w-full py-2"
+              required
             />
           </div>
         </div>
@@ -57,6 +95,26 @@ const FormularioLogin = () => {
         <Button type="submit" className="w-full mt-6 transition duration-300">
           Iniciar Sesión
         </Button>
+
+        <p className="text-center text-sm mt-4 text-texto-secundario">
+          <button
+            type="button"
+            onClick={onOlvidaste}
+            className="hover:underline text-primary"
+          >
+            ¿Olvidaste tu contraseña?
+          </button>
+        </p>
+
+        <p className="text-center text-sm mt-2 text-texto-secundario">
+          <button
+            type="button"
+            onClick={onCrearCuenta}
+            className="hover:underline text-primary"
+          >
+            Crear cuenta nueva
+          </button>
+        </p>
       </form>
     </motion.div>
   );

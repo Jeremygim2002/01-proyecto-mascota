@@ -52,7 +52,7 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
   };
 
   return (
-    <ModalGeneral isOpen={isOpen} onClose={onClose} title="Agregar personal">
+    <ModalGeneral isOpen={isOpen} onClose={onClose} title="Agregar orden">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-8">
           <Input
