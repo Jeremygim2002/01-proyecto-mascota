@@ -7,6 +7,7 @@ const mascotaSchema = z.object({
   sexo: z.enum(['M', 'F'], {
     errorMap: () => ({ message: 'El sexo debe ser M o F' })
   }),
+  estado: z.boolean().optional(),
   id_usuario: z.string().uuid('ID de usuario no válido')
 });
 

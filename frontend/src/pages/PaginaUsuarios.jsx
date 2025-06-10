@@ -1,20 +1,14 @@
-import Header from "../components/common/Header";
-import StatCardsGroup from "../components/common/StatCardsGroup";
-import TablaUsuarios from "../components/usuarios/TablaUsuarios";
+import Header from "@common/layout/Header";
+import StatCardsGroup from "@common/stats/StatCardsGroup";
+import TablaUsuario from "@components/usuarios/TablaUsuario";
 
 const PaginaAnalisis = () => {
   return (
     <div className="flex-1 overflow-auto relative z-10">
       <Header title="Usuarios" />
       <main className="max-w-7xl mx-auto py-6 px-4 lg:px-8">
-       
-      <StatCardsGroup />
-        <TablaUsuarios/>
-
-        {/* Graficos*/}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
- 
-        </div>
+        <StatCardsGroup />
+        <TablaUsuario />
       </main>
     </div>
   );

@@ -1,10 +1,10 @@
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
-import FiltroTabla from "../common/TablaFiltros";
-import { useTablaDatos } from "../../hooks/useTablaDatos";
+import TablaFiltrosServicio from "./TablaFiltrosServicio";
+import { useTablaDatos } from "@hooks/useTablaDatos";
 import { useState } from "react";
 import ModalAgregarServicio from "./ModalAgregarServicio";
-import TablaBase from "../common/TablaBase";
+import TablaBase from "@common/tablas/TablaBase";
 import ModalVerServicio from "./ModalVerServicio";
 
 // Datos de ejemplo
@@ -56,7 +56,7 @@ const DATA_SERVICIOS = [
   },
 ];
 
-const TablaServicios = () => {
+const TablaServicio = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalVerOpen, setModalVerOpen] = useState(false);
   const [servicioSeleccionado, setServicioSeleccionado] = useState(null);
@@ -71,7 +71,6 @@ const TablaServicios = () => {
     datosFiltrados: servicioFiltrado,
   } = useTablaDatos(DATA_SERVICIOS, ["categoria", "tipo"]);
 
-
   const handleVerServicios = (servicio) => {
     setServicioSeleccionado(servicio);
     setModalVerOpen(true);
@@ -84,34 +83,12 @@ const TablaServicios = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
-      <FiltroTabla
+      <TablaFiltrosServicio
         busqueda={busqueda}
         handleSearch={handleSearch}
-        filtro_1={{
-          label: "Categoría",
-          options: [
-            { value: "medicina", label: "Medicina Preventiva" },
-            { value: "diagnostico", label: "Diagnóstico y Tratamiento" },
-            { value: "peluqueria", label: "Peluquería y Estética" },
-          ],
-        }}
-        filtro_2={{
-          label: "Disponibilidad",
-          options: [
-            { value: "disponible", label: "Disponible" },
-            { value: "no_disponible", label: "No disponible" },
-          ],
-        }}
-        filtro_3={{
-          label: "Precio",
-          options: [
-            { value: "mayor", label: "Mayor a 100" },
-            { value: "menor", label: "Menor a 100" },
-          ],
-        }}
-        botonTexto="Agregar servicio"
         onClickBoton={() => setModalOpen(true)}
       />
+
       <ModalAgregarServicio
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
@@ -143,4 +120,4 @@ const TablaServicios = () => {
   );
 };
 
-export default TablaServicios;
+export default TablaServicio;

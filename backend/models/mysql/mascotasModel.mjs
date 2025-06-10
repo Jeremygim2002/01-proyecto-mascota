@@ -25,19 +25,15 @@ export class MascotaModel {
   }
 
   static async create({ input }) {
-    const { nombre, raza, edad, sexo, id_usuario } = input;
-    const [[{ uuid }]] = await pool.query('SELECT UUID() AS uuid');
+    const { nombre, raza, edad, sexo, estado, id_usuario } = input;
 
+    // llamamos al procedimiento almacenado
     await pool.query(
-      `INSERT INTO mascotas (
-        id, nombre, raza, edad, sexo, id_usuario
-      ) VALUES (
-        UUID_TO_BIN(?), ?, ?, ?, ?, UUID_TO_BIN(?)
-      )`,
-      [uuid, nombre, raza, edad, sexo, id_usuario]
+      `CALL sp_insertar_mascota(?, ?, ?, ?, ?, UUID_TO_BIN(?))`,
+      [nombre, raza, edad, sexo, estado, id_usuario]
     );
 
-    return { id: uuid, nombre, raza, edad, sexo, id_usuario };
+    return { nombre, raza, edad, sexo, estado, id_usuario };
   }
 
   static async update({ id, input }) {
@@ -62,13 +58,23 @@ export class MascotaModel {
 
   static async delete({ id }) {
     try {
-      const [result] = await pool.query(
-        'DELETE FROM mascotas WHERE id = UUID_TO_BIN(?)',
-        [id]
-      );
-      return result.affectedRows > 0;
+      await pool.query('CALL sp_eliminar_mascota(UUID_TO_BIN(?))', [id]);
+      return true;
     } catch (error) {
       console.error(`Error al eliminar mascota con ID ${id}:`, error);
+      throw error;
+    }
+  }
+
+  static async updateEstado({ id, estado }) {
+    try {
+      await pool.query(
+        'UPDATE mascotas SET estado = ? WHERE id = UUID_TO_BIN(?)',
+        [estado, id]
+      );
+      return true;
+    } catch (error) {
+      console.error(`Error actualizando estado de mascota ${id}:`, error);
       throw error;
     }
   }

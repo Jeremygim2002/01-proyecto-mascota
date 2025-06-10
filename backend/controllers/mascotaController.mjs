@@ -68,4 +68,21 @@ export class MascotaController {
 
     res.json({ message: 'Mascota eliminada' });
   };
+
+  toggleEstado = async (req, res) => {
+    const { id } = req.params;
+    const { estado } = req.body;
+
+    if (typeof estado !== 'boolean') {
+      return res.status(400).json({ error: 'Estado inválido' });
+    }
+
+    const mascota = await this.mascotaModel.getById({ id });
+    if (!mascota) {
+      return res.status(404).json({ error: 'Mascota no encontrada' });
+    }
+
+    await this.mascotaModel.updateEstado({ id, estado });
+    res.json({ message: 'Estado actualizado correctamente' });
+  };
 }

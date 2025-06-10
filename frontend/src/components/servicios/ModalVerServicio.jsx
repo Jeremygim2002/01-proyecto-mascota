@@ -1,5 +1,5 @@
 
-import ModalGeneral from "../common/ModalGeneral";
+import ModalGeneral from "@common/modals/ModalGeneral";
 
 const ModalVerServicio = ({ isOpen, onClose, servicio }) => {
   if (!servicio) return null;

@@ -2,10 +2,11 @@ import express from 'express';
 import { createUsuarioRouter } from './routes/usuariosRoutes.mjs'
 import { createMascotasRouter } from './routes/mascotasRoutes.mjs'
 import { createAsistentesRouter } from './routes/asistentesRoutes.mjs';
+import { createMascotaUsuarioRouter } from './routes/mascotaUsuarioRoutes.mjs';
 import { corsMiddleware } from './middlewares/cors.mjs';
 import cookieParser from 'cookie-parser';
 
-export const createApp = ({ usuarioModel, mascotaModel, asistenteModel }) => {
+export const createApp = ({ usuarioModel, mascotaModel, asistenteModel, mascotaUsuarioModel }) => {
 
   const app = express();
 
@@ -17,8 +18,11 @@ export const createApp = ({ usuarioModel, mascotaModel, asistenteModel }) => {
   app.use(express.json());
 
   app.use('/api/usuarios', createUsuarioRouter({ usuarioModel }));
-  app.use('/api/mascotas', createMascotasRouter ({ mascotaModel }))
+  app.use('/api/mascotas', createMascotasRouter({ mascotaModel }));
   app.use('/api/asistentes', createAsistentesRouter({ asistenteModel }));
+  app.use('/api/mascota-usuario', createMascotaUsuarioRouter({ mascotaUsuarioModel }));
+
+
 
   app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);

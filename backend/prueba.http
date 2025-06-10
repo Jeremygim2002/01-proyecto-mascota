@@ -10,12 +10,12 @@ POST http://localhost:3000/api/usuarios
 Content-Type: application/json
 
 {
-  "nombre": "Luis",
-  "apellido_paterno": "Cruzaaado",
-  "apellido_materno": "Gómedsaz",
-  "correo": "luis.cruz@exapahhsdle.com",
-  "numero_telefono": "999818787",
-  "dni": "87611329"
+  "nombre": "JEREMY",
+  "apellido_paterno": "CruzaDDaGado",
+  "apellido_materno": "GómeDDdGsaz",
+  "correo": "luis.crGGuz@exapGFahhsdle.com",
+  "numero_telefono": "999110787",
+  "dni": "87611109"
 }
 
 ### Actualizar usuario
@@ -45,22 +45,23 @@ DELETE http://localhost:3000/api/usuarios/b3b341b2-43fc-11f0-8bc8-a8a159de6f1d
 GET http://localhost:3000/api/mascotas
 
 ### Obtener mascota por ID
-GET http://localhost:3000/api/mascotas/d2c79ba0-4312-11f0-b45e-a8a159de6f1d
+GET http://localhost:3000/api/mascotas/1a1566c6-4550-11f0-bcb0-a8a159de6f1d
 
 ### Crear nueva mascota (con id_usuario existente)
 POST http://localhost:3000/api/mascotas/
 Content-Type: application/json
 
 {
-  "nombre": "Firulais",
-  "raza": "Labrador",
+  "nombre": "THOR",
+  "raza": "NEGRO",
   "edad": 4,
   "sexo": "M",
-  "id_usuario": "c216424a-4312-11f0-b45e-a8a159de6f1d"
+  "estado": true,
+  "id_usuario": "747c201b-4575-11f0-bcb0-a8a159de6f1d"
 }
 
 ### Actualizar mascota (cambiar nombre y edad)
-PATCH http://localhost:3000/api/mascotas/d2c79ba0-4312-11f0-b45e-a8a159de6f1d
+PATCH http://localhost:3000/api/mascotas/1a1566c6-4550-11f0-bcb0-a8a159de6f1d
 Content-Type: application/json
 
 {
@@ -69,7 +70,20 @@ Content-Type: application/json
 }
 
 ### Eliminar mascota
-DELETE http://localhost:3000/api/mascotas/f6bb5744-4314-11f0-b45e-a8a159de6f1d
+DELETE http://localhost:3000/api/mascotas/95a6e8dd-4551-11f0-bcb0-a8a159de6f1d
+
+### 🔄 Cambiar estado de mascota
+PATCH http://localhost:3000/api/mascotas/819f0174-4575-11f0-bcb0-a8a159de6f1d
+Content-Type: application/json
+
+{
+  "estado": true
+}
 
 
 
+
+
+
+### 🔍 MASCOTAS INNER  USUARIOS
+GET http://localhost:3000/api/mascota-usuario

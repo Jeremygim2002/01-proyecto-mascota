@@ -1,10 +1,10 @@
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { useState } from "react";
-import FiltroTabla from "../common/TablaFiltros";
-import { useTablaDatos } from "../../hooks/useTablaDatos";
+import TablaFiltrosOrden from "./TablaFiltrosOrden";
+import { useTablaDatos } from "@hooks/useTablaDatos";
 import ModalAgregarOrden from "./ModalAgregarOrden";
-import TablaBase from "../common/TablaBase";
+import TablaBase from "@common/tablas/TablaBase";
 import ModalVerOrden from "./ModalVerOrden";
 
 // Datos de ejemplo
@@ -62,7 +62,6 @@ const TablaOrden = () => {
   const [ordenSeleccionado, setOrdenSeleccionado] = useState(null);
 
   const handleAgregar = (nuevoVeterinario) => {
-    // Aquí actualizas tu estado o envías a la base de datos
     console.log("Nuevo veterinario:", nuevoVeterinario);
   };
 
@@ -85,34 +84,12 @@ const TablaOrden = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
-      <FiltroTabla
+      <TablaFiltrosOrden
         busqueda={busqueda}
         handleSearch={handleSearch}
-        filtro_1={{
-          label: "Categoría",
-          options: [
-            { value: "medicina", label: "Medicina Preventiva" },
-            { value: "diagnostico", label: "Diagnóstico y Tratamiento" },
-            { value: "peluqueria", label: "Peluquería y Estética" },
-          ],
-        }}
-        filtro_2={{
-          label: "Disponibilidad",
-          options: [
-            { value: "disponible", label: "Disponible" },
-            { value: "no_disponible", label: "No disponible" },
-          ],
-        }}
-        filtro_3={{
-          label: "Precio",
-          options: [
-            { value: "mayor", label: "Mayor a 100" },
-            { value: "menor", label: "Menor a 100" },
-          ],
-        }}
-        botonTexto="Crear Orden"
         onClickBoton={() => setModalOpen(true)}
       />
+
       <ModalAgregarOrden
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}

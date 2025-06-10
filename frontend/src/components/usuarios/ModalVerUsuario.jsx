@@ -1,8 +1,8 @@
-// src/components/usuarios/ModalVerUsuario.jsx
-import ModalGeneral from "../common/ModalGeneral";
+
+import ModalGeneral from "@common/modals/ModalGeneral";
 import DniMascota from "./DniMascota";
 import CartillaMascota from "./CartillaMascota";
-import Button from "../common/forms/Button";
+import Button from "@common/ui/Button";
 
 const ModalVerUsuario = ({ isOpen, onClose, usuario }) => {
   if (!usuario) return null;

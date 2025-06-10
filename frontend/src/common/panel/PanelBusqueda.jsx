@@ -1,4 +1,4 @@
-import PanelGeneral from "../PanelGeneral";
+import PanelGeneral from "./PanelGeneral";
 import React from "react";
 
 const busqueda = [

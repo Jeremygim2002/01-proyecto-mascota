@@ -4,10 +4,10 @@ import { useNavigate } from "react-router-dom";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { Mail, Lock } from "lucide-react";
-import Button from "../common/forms/Button";
-import Input from "../common/forms/Input";
-import Title from "../common/Titulo";
-import { login } from "../../services/authService"; // nuevo
+import Button from "@common/ui/Button";
+import Input from "@common/ui/Input";
+import Title from "@common/layout/Titulo";
+import { login } from "@services/authService";
 
 const FormularioLogin = ({ onOlvidaste, onCrearCuenta }) => {
   const navigate = useNavigate();

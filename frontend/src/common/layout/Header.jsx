@@ -3,11 +3,11 @@ import { Bell } from "lucide-react";
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 
-import PanelNotificacion from "./panels/PanelNotificacion";
-import PanelUsuario from "./panels/PanelUsuario";
-import PanelBusqueda from "./panels/PanelBusqueda";
-import Title from "./Titulo";
-import SearchInput from "./forms/SearchInput";
+import PanelNotificacion from "../panel/PanelNotificacion";
+import PanelUsuario from "../panel/PanelUsuario";
+import PanelBusqueda from "../panel/PanelBusqueda";
+import Title from "../layout/Titulo";
+import SearchInput from "../ui/SearchInput";
 import useClickFuera from "../../hooks/useClickFuera"
 
 

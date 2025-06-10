@@ -8,9 +8,9 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import Title from "../common/Titulo"
+import Title from "@common/layout/Titulo"
 
-const channelData = [
+const datosServicios = [
   { name: "Consulta general y preventiva", value: 4200 },
   { name: "Vacunación y desparasitación", value: 3000 },
   { name: "Peluquería y estética", value: 2500 },
@@ -42,7 +42,7 @@ const GraficoServicios = () => {
         <ResponsiveContainer>
           <PieChart>
             <Pie
-              data={channelData}
+              data={datosServicios}
               cx="45%"
               cy="50%"
               innerRadius={60}
@@ -62,7 +62,7 @@ const GraficoServicios = () => {
                 </text>
               )}
             >
-              {channelData.map((entry, index) => (
+              {datosServicios.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={COLORS[index % COLORS.length]}

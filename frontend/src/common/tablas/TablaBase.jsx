@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import VerButton from "./accionesTabla/VerButton";
 import EditarButton from "./accionesTabla/EditarButton";
 import EliminarButton from "./accionesTabla/EliminarButton";
-import Switch from "./forms/Switch";
+import Switch from "../ui/Switch";
 
 const TablaBase = ({
   columnas,
@@ -46,11 +46,18 @@ const TablaBase = ({
         <tbody className="divide-y divide-modal-borde">
           {datos.map((fila) => (
             <motion.tr
-              key={fila.id}
+              key={
+                fila.id ??
+                fila.id_mascota ??
+                fila.id_usuario ??
+                fila.id_servicio ??
+                fila.id_veterinario ??
+                JSON.stringify(fila)
+              }
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3 }}
-               className="hover:bg-superficie-hover transition-colors duration-200"
+              className="hover:bg-superficie-hover transition-colors duration-200"
             >
               {/* Botón Ver */}
               <td className="px-6 py-4 whitespace-nowrap text-sm text-texto-secundario font-medium">
@@ -72,7 +79,9 @@ const TablaBase = ({
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-texto">
                   <Switch
                     estado={fila.estado}
-                    setEstado={() => onToggleEstado(fila.id)}
+                    onToggle={() =>
+                      onToggleEstado(fila.id_mascota ?? fila.id, fila.estado)
+                    }
                   />
                 </td>
               )}
@@ -93,4 +102,3 @@ const TablaBase = ({
 };
 
 export default TablaBase;
-

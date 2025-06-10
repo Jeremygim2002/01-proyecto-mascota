@@ -1,8 +1,8 @@
 import { Lock } from "lucide-react";
 import CuentaGeneral from "./CuentaGeneral";
-import Switch from "../common/forms/Switch";
+import Switch from "@common/ui/Switch";
 import { useState } from "react";
-import Button from "../common/forms/Button";
+import Button from "@common/ui/Button";
 
 const Seguridad = () => {
   const [twoFactor, setTwoFactor] = useState(false);

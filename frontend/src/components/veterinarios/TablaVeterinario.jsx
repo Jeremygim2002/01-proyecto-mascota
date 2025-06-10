@@ -1,11 +1,11 @@
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
-import FiltroTabla from "../common/TablaFiltros";
-import { useTablaDatos } from "../../hooks/useTablaDatos";
+import TablaFiltrosVeterinario from "./TablaFiltrosVeterinario";
+import { useTablaDatos } from "@hooks/useTablaDatos";
 import { useState } from "react";
 import ModalAgregarVeterinario from "./ModalAgregarVeterinario";
 import ModalVerVeterinario from "./ModalVerVeterinario";
-import TablaBase from "../common/TablaBase";
+import TablaBase from "@common/tablas/TablaBase";
 
 // Datos de ejemplo
 const DATA_VETERINARIO = [
@@ -85,34 +85,12 @@ const TablaVeterinario = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
     >
-      <FiltroTabla
+      <TablaFiltrosVeterinario
         busqueda={busqueda}
         handleSearch={handleSearch}
-        filtro_1={{
-          label: "Rol",
-          options: [
-            { value: "veterinario", label: "Veterinario" },
-            { value: "recepcionista", label: "Recepcionista" },
-            { value: "administrador", label: "Administrador" },
-          ],
-        }}
-        filtro_2={{
-          label: "Estado",
-          options: [
-            { value: "activo", label: "Activo" },
-            { value: "inactivo", label: "Inactivo" },
-          ],
-        }}
-        filtro_3={{
-          label: "Correo",
-          options: [
-            { value: "gmail", label: "Gmail" },
-            { value: "example", label: "Example.com" },
-          ],
-        }}
-        botonTexto="Agregar veterinario"
         onClickBoton={() => setModalOpen(true)}
       />
+
       <ModalAgregarVeterinario
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}

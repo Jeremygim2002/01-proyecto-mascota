@@ -27,6 +27,7 @@ const StatCard = ({
     requestAnimationFrame(step);
   }, [value, duration]);
 
+  
   return (
     <motion.div
       className="bg-superficie backdrop-blur-md overflow-hidden shadow-lg rounded-xl border border-superficie-borde"

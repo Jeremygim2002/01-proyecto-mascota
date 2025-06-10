@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { User } from "lucide-react";
 import CuentaGeneral from "./CuentaGeneral";
-import Button from "../common/forms/Button";
-import { getProfile } from "../../services/authService";
+import Button from "@common/ui/Button";
+import { profile } from "@services/authService";
 
 const Perfil = () => {
   const [perfil, setPerfil] = useState(null);
@@ -11,7 +11,7 @@ const Perfil = () => {
   useEffect(() => {
     const fetchPerfil = async () => {
       try {
-        const data = await getProfile();
+        const data = await profile();
         setPerfil(data);
       } catch (err) {
         console.error("Error al obtener perfil:", err);

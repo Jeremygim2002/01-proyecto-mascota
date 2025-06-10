@@ -2,10 +2,10 @@ import { useState } from "react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { User, Mail, Phone, Lock, IdCard } from "lucide-react";
-import Button from "../common/forms/Button";
-import Input from "../common/forms/Input";
-import Title from "../common/Titulo";
-import { register } from "../../services/authService"; // nuevo
+import Button from "@common/ui/Button";
+import Input from "@common/ui/Input";
+import Title from "@common/layout/Titulo";
+import { register } from "@services/authService";
 
 const FormularioRegistro = ({ onVolver }) => {
   const [nombres, setNombres] = useState("");

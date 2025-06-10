@@ -11,6 +11,8 @@ export const createMascotasRouter = ({ mascotaModel }) => {
   mascotasRouter.post('/', mascotaController.create);
   mascotasRouter.patch('/:id', mascotaController.update);
   mascotasRouter.delete('/:id', mascotaController.delete);
+  mascotasRouter.patch('/:id/estado', mascotaController.toggleEstado);
+
 
   return mascotasRouter;
 };

@@ -10,9 +10,9 @@ import {
   CartesianGrid,
   Legend,
 } from "recharts";
-import Title from "../common/Titulo"
+import Title from "@common/layout/Titulo"
 
-const stackedData = [
+const datosOrdenes = [
   { semana: "Enero", baño: 1200, corte: 800, vacuna1: 600 },
   { semana: "Febrero", baño: 1400, corte: 1000, vacuna1: 700 },
   { semana: "Marzo", baño: 1600, corte: 1100, vacuna1: 900 },
@@ -32,7 +32,7 @@ const GraficoOrdenes = () => {
       <Title className="text-center tracking-wide mb-4" text="ORDENES POR MES" />
       <div className="w-full h-[360px]">
         <ResponsiveContainer>
-          <AreaChart data={stackedData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+          <AreaChart data={datosOrdenes} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
             <defs>
               <linearGradient id="colorOrganico" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="10%" stopColor="#0EA5E9" stopOpacity={0.8} />

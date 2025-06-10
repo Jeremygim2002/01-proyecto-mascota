@@ -9,9 +9,9 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-import Title from "../common/Titulo"
+import Title from "@common/layout/Titulo"
 
-const data = [
+const datosVeterinarios= [
   { canal: "Medicina interna", valor: 4200 },
   { canal: "Cirugía veterinaria", valor: 3000 },
   { canal: "Dermatología veterinaria", valor: 2500 },
@@ -41,7 +41,7 @@ const GraficoVeterinarios= () => {
       <div className="w-full h-[360px]">
         <ResponsiveContainer>
           <BarChart
-            data={data}
+            data={datosVeterinarios}
             layout="vertical"
             margin={{ top: 10, right: 30, left: 60, bottom: 10 }}
             barCategoryGap={16}
@@ -69,7 +69,7 @@ const GraficoVeterinarios= () => {
               barSize={18}
               isAnimationActive={true}
             >
-              {data.map((entry, index) => (
+              {datosVeterinarios.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Bar>

@@ -1,9 +1,9 @@
 import { useState } from "react";
-import ModalGeneral from "../common/ModalGeneral";
-import Button from "../common/forms/Button";
-import Input from "../common/forms/Input";
-import Select from "../common/forms/Select";
-import Switch from "../common/forms/Switch";
+import ModalGeneral from "@common/modals/ModalGeneral";
+import Button from "@common/ui/Button";
+import Input from "@common/ui/Input";
+import Select from "@common/ui/Select";
+import Switch from "@common/ui/Switch";
 
 const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
   const [dniDuenio, setDniDuenio] = useState("");

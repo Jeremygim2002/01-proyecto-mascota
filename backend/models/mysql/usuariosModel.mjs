@@ -24,6 +24,19 @@ export class UsuarioModel {
     }
   }
 
+  static async getByDni({ dni }) {
+    try {
+      const [[usuario]] = await pool.query(
+        'SELECT * FROM vista_usuarios WHERE dni = ?',
+        [dni]
+      );
+      return usuario || null;
+    } catch (error) {
+      console.error(`Error al buscar usuario por DNI ${dni}:`, error);
+      throw error;
+    }
+  }
+
   static async create({ input }) {
     const {
       nombre,
@@ -38,18 +51,8 @@ export class UsuarioModel {
       const [[{ uuid }]] = await pool.query('SELECT UUID() AS uuid');
 
       await pool.query(
-        `INSERT INTO usuarios (
-          id,
-          nombre,
-          apellido_paterno,
-          apellido_materno,
-          correo,
-          numero_telefono,
-          dni
-        ) VALUES (
-          UUID_TO_BIN(?), ?, ?, ?, ?, ?, ?
-        )`,
-        [uuid, nombre, apellido_paterno, apellido_materno, correo, numero_telefono, dni]
+        'CALL sp_insertar_usuario(?, ?, ?, ?, ?, ?)',
+        [nombre, apellido_paterno, apellido_materno, correo, numero_telefono, dni]
       );
 
       return {
@@ -79,15 +82,8 @@ export class UsuarioModel {
 
     try {
       await pool.query(
-        `UPDATE usuarios SET 
-          nombre = ?, 
-          apellido_paterno = ?, 
-          apellido_materno = ?, 
-          correo = ?, 
-          numero_telefono = ?, 
-          dni = ?
-        WHERE id = UUID_TO_BIN(?)`,
-        [nombre, apellido_paterno, apellido_materno, correo, numero_telefono, dni, id]
+        'CALL sp_actualizar_usuario(UUID_TO_BIN(?), ?, ?, ?, ?, ?, ?)',
+        [id, nombre, apellido_paterno, apellido_materno, correo, numero_telefono, dni]
       );
     } catch (error) {
       console.error(`Error al actualizar usuario con ID ${id}:`, error);
@@ -98,7 +94,7 @@ export class UsuarioModel {
   static async delete({ id }) {
     try {
       const [result] = await pool.query(
-        'DELETE FROM usuarios WHERE id = UUID_TO_BIN(?)',
+        'CALL sp_eliminar_usuario(UUID_TO_BIN(?))',
         [id]
       );
       return result.affectedRows > 0;

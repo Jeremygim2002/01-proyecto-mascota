@@ -1,4 +1,4 @@
-import ModalGeneral from "../common/ModalGeneral";
+import ModalGeneral from "@common/modals/ModalGeneral";
 
 const ModalVerOrden = ({ isOpen, onClose, orden }) => {
   if (!orden) return null;

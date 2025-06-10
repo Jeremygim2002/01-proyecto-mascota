@@ -1,4 +1,4 @@
-import ModalGeneral from "../common/ModalGeneral";
+import ModalGeneral from "@common/modals/ModalGeneral";
 
 const ModalVerVeterinario= ({ isOpen, onClose, personal }) => {
   if (!personal) return null;

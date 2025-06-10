@@ -10,17 +10,14 @@ import {
 } from "lucide-react";
 // eslint-disable-next-line no-unused-vars
 import { AnimatePresence, motion } from "framer-motion";
-import useRutasActivas from "../../hooks/useRutasActivas";
-import useSidebarResponsivo from "../../hooks/useSidebarResponsivo";
+import useRutasActivas from "@hooks/useRutasActivas";
+import useSidebarResponsivo from "@hooks/useSidebarResponsivo";
+
 
 const SIDEBAR_ITEMS = [
   { name: "Análisis", icon: BarChart2, href: "/dashboard" },
   { name: "Servicios", icon: ShoppingCart, href: "/dashboard/servicios" },
-  {
-    name: "Veterinarios",
-    icon: BriefcaseBusiness,
-    href: "/dashboard/veterinarios",
-  },
+  { name: "Veterinarios", icon: BriefcaseBusiness, href: "/dashboard/veterinarios"},
   { name: "Usuarios", icon: SquareUserRound, href: "/dashboard/usuarios" },
   { name: "Órdenes", icon: SquareChartGantt, href: "/dashboard/ordenes" },
   { name: "Calendario", icon: CalendarPlus, href: "/dashboard/calendario" },

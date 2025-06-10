@@ -1,5 +1,5 @@
 import React from "react";
-import PanelGeneral from "../PanelGeneral";
+import PanelGeneral from "./PanelGeneral";
 
 const notificaciones = [
   { color: "bg-green-400", texto: "Nueva notificación: Nuevo cambio" },

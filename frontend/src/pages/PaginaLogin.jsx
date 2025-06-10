@@ -1,7 +1,7 @@
 import { useState } from "react";
-import FormularioLogin from "../components/auth/FormularioLogin";
-import FormularioRegistro from "../components/auth/FormularioRegistro";
-import FormularioRecuperar from "../components/auth/FormularioRecuperar";
+import FormularioLogin from "@components/login/FormularioLogin";
+import FormularioRegistro from "@components/login/FormularioRegistro";
+import FormularioRecuperar from "@components/login/FormularioRecuperar";
 
 const PaginaLogin = () => {
   const [formActivo, setFormActivo] = useState("login"); // "login" | "registro" | "recuperar"
@@ -15,14 +15,10 @@ const PaginaLogin = () => {
         />
       )}
       {formActivo === "registro" && (
-        <FormularioRegistro
-          onVolver={() => setFormActivo("login")}
-        />
+        <FormularioRegistro onVolver={() => setFormActivo("login")} />
       )}
       {formActivo === "recuperar" && (
-        <FormularioRecuperar
-          onVolver={() => setFormActivo("login")}
-        />
+        <FormularioRecuperar onVolver={() => setFormActivo("login")} />
       )}
     </div>
   );

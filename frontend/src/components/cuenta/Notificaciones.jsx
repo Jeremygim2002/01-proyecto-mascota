@@ -1,7 +1,7 @@
 import { useState } from "react";
 import CuentaGeneral from "./CuentaGeneral";
 import { Bell } from "lucide-react";
-import Switch from "../common/forms/Switch";
+import Switch from "@common/ui/Switch";
 
 const Notificaciones = () => {
   const [notificaciones, setNotificaciones] = useState({

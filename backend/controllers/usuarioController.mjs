@@ -24,6 +24,17 @@ export class UsuarioController {
         res.json(usuario);
     };
 
+    getByDni = async (req, res) => {
+        const { dni } = req.params;
+        const usuario = await this.usuarioModel.getByDni({ dni });
+
+        if (!usuario) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+
+        res.json(usuario);
+    };
+
     create = async (req, res) => {
         const result = validateUsuario(req.body);
 

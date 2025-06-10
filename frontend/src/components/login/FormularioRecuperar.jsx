@@ -2,9 +2,9 @@ import { useState } from "react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
-import Button from "../common/forms/Button";
-import Input from "../common/forms/Input";
-import Title from "../common/Titulo";
+import Button from "@common/ui/Button";
+import Input from "@common/ui/Input";
+import Title from "@common/layout/Titulo";
 
 const FormularioRecuperar = ({ onVolver }) => {
   const [correo, setCorreo] = useState("");

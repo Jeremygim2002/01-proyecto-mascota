@@ -12,9 +12,9 @@ export async function login(data) {
   return await res.json();
 }
 
-document.cookie = ""; // borra manualmente
+document.cookie = ""; 
 
-export async function getProfile() {
+export async function profile() {
   const res = await fetch(`${API_URL}/profile`, {
     method: "GET",
     credentials: "include"
@@ -37,3 +37,12 @@ export async function register(data) {
 }
 
 
+export async function logout() {
+  const res = await fetch(`${API_URL}/logout`, {
+    method: "POST",
+    credentials: "include"
+  });
+
+  if (!res.ok) throw await res.json();
+  return await res.json();
+}

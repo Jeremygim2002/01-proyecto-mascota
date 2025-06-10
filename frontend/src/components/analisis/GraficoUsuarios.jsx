@@ -10,9 +10,9 @@ import {
 } from "recharts";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
-import Title from "../common/Titulo"
+import Title from "@common/layout/Titulo"
 
-const userRetentionData = [
+const datosUsuarios = [
   { name: "Enero", cantidad: 100 },
   { name: "Febrero", cantidad: 78 },
   { name: "Marzo", cantidad: 64 },
@@ -34,7 +34,7 @@ const GraficoUsuarios = () => {
       <Title className="text-center tracking-wide mb-4" text="USUARIOS POR MES "/>
       <div className="w-full h-[300px] sm:h-[350px] md:h-[400px]">
         <ResponsiveContainer>
-          <LineChart data={userRetentionData}>
+          <LineChart data={datosUsuarios}>
             <CartesianGrid strokeDasharray="3 3" stroke="#475569" />
             <XAxis dataKey="name" stroke="#CBD5E1" tick={{ fill: "#CBD5E1" }} />
             <YAxis
