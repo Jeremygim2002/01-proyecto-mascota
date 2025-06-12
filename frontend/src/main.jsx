@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import ToasterCustom from "@common/ui/ToasterCustom";
 
 import "./index.css";
 import App from "./App";
@@ -39,6 +40,7 @@ createRoot(document.getElementById("root")).render(
         </Route>
         <Route path="*" element={<PaginaNoEncontrada />} />
       </Routes>
+      <ToasterCustom />
     </BrowserRouter>
   </StrictMode>
 );

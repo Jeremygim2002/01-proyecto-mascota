@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { notificarError, notificarExito } from "@lib/notificaciones";
 
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
@@ -7,7 +8,7 @@ import { Mail, Lock } from "lucide-react";
 import Button from "@common/ui/Button";
 import Input from "@common/ui/Input";
 import Title from "@common/layout/Titulo";
-import { login } from "@services/authService";
+import { login } from "@services/loginService";
 
 const FormularioLogin = ({ onOlvidaste, onCrearCuenta }) => {
   const navigate = useNavigate();
@@ -21,13 +22,14 @@ const FormularioLogin = ({ onOlvidaste, onCrearCuenta }) => {
 
     try {
       await login(data);
+      notificarExito("Inicio de sesión exitoso");
       navigate("/dashboard");
     } catch (error) {
+      notificarError("correo o contraseña incorrecta"); 
       console.error("Error al iniciar sesión:", error);
-      alert(error.error || "Error desconocido");
     }
   };
-  
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -64,7 +66,6 @@ const FormularioLogin = ({ onOlvidaste, onCrearCuenta }) => {
             />
           </div>
         </div>
-
         {/* Campo contraseña */}
         <div>
           <label

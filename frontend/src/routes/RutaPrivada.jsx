@@ -1,8 +1,8 @@
 import { Navigate } from "react-router-dom";
-import useAuth from "@hooks/useAuth";
+import useLogin from "@hooks/useLogin";
 
 const RutaPrivada = ({ children }) => {
-  const { usuario, loading } = useAuth();
+  const { usuario, loading } = useLogin();
 5
   if (loading) {
     return (

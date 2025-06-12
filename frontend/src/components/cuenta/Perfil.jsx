@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { User } from "lucide-react";
 import CuentaGeneral from "./CuentaGeneral";
 import Button from "@common/ui/Button";
-import { profile } from "@services/authService";
+import { profile } from "@services/loginService";
 
 const Perfil = () => {
   const [perfil, setPerfil] = useState(null);

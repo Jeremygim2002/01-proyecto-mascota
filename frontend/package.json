@@ -15,7 +15,9 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.5.2",
-    "recharts": "^2.15.3"
+    "recharts": "^2.15.3",
+    "sonner": "^2.0.5",
+    "zod": "^3.25.62"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",

@@ -14,6 +14,7 @@ const TablaBase = ({
   onToggleEstado,
   mostrarEstado = true,
   mostrarAcciones = true,
+  idKey = "id",
 }) => {
   return (
     <div className="overflow-x-auto">
@@ -46,25 +47,16 @@ const TablaBase = ({
         <tbody className="divide-y divide-modal-borde">
           {datos.map((fila) => (
             <motion.tr
-              key={
-                fila.id ??
-                fila.id_mascota ??
-                fila.id_usuario ??
-                fila.id_servicio ??
-                fila.id_veterinario ??
-                JSON.stringify(fila)
-              }
+              key={fila[idKey] ?? JSON.stringify(fila)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.3 }}
               className="hover:bg-superficie-hover transition-colors duration-200"
             >
-              {/* Botón Ver */}
               <td className="px-6 py-4 whitespace-nowrap text-sm text-texto-secundario font-medium">
                 <VerButton onClick={() => onVer(fila)} />
               </td>
 
-              {/* Contenido dinámico */}
               {columnas.map((col) => (
                 <td
                   key={col.id}
@@ -74,23 +66,19 @@ const TablaBase = ({
                 </td>
               ))}
 
-              {/* Switch de estado */}
               {mostrarEstado && (
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-texto">
                   <Switch
                     estado={fila.estado}
-                    onToggle={() =>
-                      onToggleEstado(fila.id_mascota ?? fila.id, fila.estado)
-                    }
+                    onToggle={() => onToggleEstado(fila[idKey], fila.estado)}
                   />
                 </td>
               )}
 
-              {/* Botones Editar y Eliminar */}
               {mostrarAcciones && (
                 <td className="px-7 py-4 whitespace-nowrap text-sm text-texto flex gap-2">
                   <EditarButton onClick={() => onEditar(fila)} />
-                  <EliminarButton onClick={() => onEliminar(fila.id)} />
+                  <EliminarButton onClick={() => onEliminar(fila[idKey])} />
                 </td>
               )}
             </motion.tr>

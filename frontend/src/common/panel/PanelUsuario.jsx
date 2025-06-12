@@ -2,18 +2,20 @@ import { User, LogOut } from "lucide-react";
 import PanelGeneral from "./PanelGeneral";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { logout } from "@services/authService";
+import { logout } from "@services/loginService";
+import { notificarError, notificarExito } from "@lib/notificaciones";
 
 const PanelUsuario = () => {
   const navigate = useNavigate();
 
   const cerrarSesion = async () => {
     try {
-      await logout(); 
-      navigate("/login"); 
+      await logout();
+      notificarExito("Sesión cerrada correctamente");
+      navigate("/login");
     } catch (error) {
       console.error("Error al cerrar sesión", error);
-      alert("Hubo un problema al cerrar sesión.");
+      notificarError(error);
     }
   };
 

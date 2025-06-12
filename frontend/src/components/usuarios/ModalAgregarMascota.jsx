@@ -1,97 +1,109 @@
 import { useState } from "react";
 import ModalGeneral from "@common/modals/ModalGeneral";
 import Input from "@common/ui/Input";
-import Switch from "@common/ui/Switch";
 import Button from "@common/ui/Button";
+import Select from "@common/ui/Select";
 import ModalAgregarUsuario from "./ModalAgregarUsuario";
 import { buscarUsuarioPorDni } from "@services/usuarioService";
+import { useResetFormulario } from "@hooks/useResetFormulario";
+import { mascotaSchema } from "@schemas/mascotaSchema";
 
+import {
+  notificarError,
+  notificarExito,
+  notificarUsuarioInvalido,
+} from "@lib/notificaciones";
 
-const ModalAgregarMascota = ({ isOpen, onClose, onSubmit,  onAbrirUsuario }) => {
+const ModalAgregarMascota = ({ isOpen, onClose, onSubmit, onAbrirUsuario }) => {
   const [dni, setDni] = useState("");
   const [nombre, setNombre] = useState("");
   const [apellidoPaterno, setApellidoPaterno] = useState("");
   const [apellidoMaterno, setApellidoMaterno] = useState("");
-  const [correo, setCorreo] = useState("");
-  const [numero, setNumero] = useState("");
   const [nombreMascota, setNombreMascota] = useState("");
   const [razaMascota, setRazaMascota] = useState("");
   const [edadMascota, setEdadMascota] = useState("");
   const [sexo, setSexo] = useState("");
-  const [estado, setEstado] = useState(true);
   const [modalUsuarioOpen, setModalUsuarioOpen] = useState(false);
   const [idUsuario, setIdUsuario] = useState("");
+  const [lecturaUsuario, setLecturaUsuario] = useState(false);
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const resetCampos = useResetFormulario(
+    [
+      setDni,
+      setNombre,
+      setApellidoPaterno,
+      setApellidoMaterno,
+      setNombreMascota,
+      setRazaMascota,
+      setEdadMascota,
+      setSexo,
+    ],
+    ["", "", "", "", "", "", "", "", "", ""]
+  );
 
-  if (!idUsuario) {
-    alert("Debes buscar un usuario válido antes de agregar la mascota.");
-    return;
-  }
+  const manejarRegistroMascota = async (e) => {
+    e.preventDefault();
 
-  const nuevaMascota = {
-    nombre: nombreMascota,
-    raza: razaMascota,
-    edad: Number(edadMascota),
-    sexo,
-    estado,
-    id_usuario: idUsuario,
+    if (!idUsuario) {
+      notificarUsuarioInvalido(
+        "Debes buscar un usuario válido antes de agregar una mascota."
+      );
+      return;
+    }
+
+    const nuevaMascota = {
+      nombre: nombreMascota,
+      raza: razaMascota,
+      edad: Number(edadMascota),
+      sexo,
+      estado: true,
+      id_usuario: idUsuario,
+    };
+
+    try {
+      const validacion = mascotaSchema.safeParse(nuevaMascota);
+      if (!validacion.success) {
+        const errores = validacion.error.format();
+        for (const campo in errores) {
+          const mensaje = errores[campo]?._errors?.[0];
+          if (mensaje) notificarError(mensaje);
+        }
+        return;
+      }
+
+      await onSubmit(nuevaMascota);
+      notificarExito("Mascota registrada correctamente.");
+      resetCampos();
+      onClose();
+    } catch (error) {
+      console.error("Error al crear mascota:", error);
+      notificarError(error);
+    }
   };
-
-  try {
-    await onSubmit(nuevaMascota); // 🔁 Llama al padre, ahí se crea y recarga
-    alert("Mascota creada correctamente");
-    resetCampos();
-    onClose();
-  } catch (error) {
-    console.error("Error al crear mascota:", error);
-    alert("Error al crear la mascota");
-  }
-};
 
   const buscarPorDni = async () => {
     if (!dni) return;
 
     const usuario = await buscarUsuarioPorDni(dni);
     if (!usuario) {
-      // 🔁 Limpiar campos si no encuentra usuario
       setNombre("");
       setApellidoPaterno("");
       setApellidoMaterno("");
-      setCorreo("");
-      setNumero("");
-      alert("Usuario no encontrado");
+      notificarError("No se encontró ningún usuario con ese DNI.");
       return;
     }
-
-    // ✅ Si encuentra, rellenar normalmente
-    setIdUsuario(usuario.id); // ✅ Guardamos el id
+    notificarExito("Usuario encontrado satisfactoriamente");
+    setLecturaUsuario(true); // ✅ Bloquea los campos
+    setIdUsuario(usuario.id);
     setNombre(usuario.nombre);
     setApellidoPaterno(usuario.apellido_paterno);
     setApellidoMaterno(usuario.apellido_materno);
-    setCorreo(usuario.correo);
-    setNumero(usuario.numero_telefono);
-  };
-
-  const resetCampos = () => {
-    setDni("");
-    setNombre("");
-    setApellidoPaterno("");
-    setApellidoMaterno("");
-    setCorreo("");
-    setNumero("");
-    setNombreMascota("");
-    setRazaMascota("");
-    setEdadMascota("");
-    setSexo("");
-    setEstado(true);
   };
 
   return (
     <>
       <ModalGeneral isOpen={isOpen} onClose={onClose} title="Agregar mascota">
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={manejarRegistroMascota} className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-8">
             <div className="col-span-4 flex gap-4">
               <Input
@@ -112,6 +124,7 @@ const handleSubmit = async (e) => {
               placeholder="Nombre completo"
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
+              disabled={lecturaUsuario}
             />
             <Input
               className="col-span-2 pl-4"
@@ -120,6 +133,7 @@ const handleSubmit = async (e) => {
               placeholder="Apellido Paterno"
               value={apellidoPaterno}
               onChange={(e) => setApellidoPaterno(e.target.value)}
+              disabled={lecturaUsuario}
             />
             <Input
               className="col-span-2 pl-4"
@@ -128,22 +142,7 @@ const handleSubmit = async (e) => {
               placeholder="Apellido Materno"
               value={apellidoMaterno}
               onChange={(e) => setApellidoMaterno(e.target.value)}
-            />
-            <Input
-              className="col-span-2 pl-4"
-              name="correo"
-              type="email"
-              placeholder="Correo"
-              value={correo}
-              onChange={(e) => setCorreo(e.target.value)}
-            />
-            <Input
-              className="col-span-2 pl-4"
-              name="numero"
-              type="number"
-              placeholder="Numero de telefono"
-              value={numero}
-              onChange={(e) => setNumero(e.target.value)}
+              disabled={lecturaUsuario}
             />
             <Input
               className="col-span-2 pl-4"
@@ -165,21 +164,22 @@ const handleSubmit = async (e) => {
               className="col-span-2 pl-4"
               name="edadMascota"
               type="number"
-              placeholder="Edad Mascota"
+              placeholder="Edad Mascota en años"
               value={edadMascota}
               onChange={(e) => setEdadMascota(e.target.value)}
             />
-            <Input
-              className="col-span-2 pl-4"
+            <Select
               name="sexo"
-              type="text"
-              placeholder="Sexo Mascota"
               value={sexo}
               onChange={(e) => setSexo(e.target.value)}
-            />
+              className="col-span-2"
+              required
+            >
+              <option value="">Seleccionar sexo</option>
+              <option value="M">Macho</option>
+              <option value="F">Hembra</option>
+            </Select>
           </div>
-
-          <Switch estado={estado} setEstado={setEstado} />
 
           <div className="flex justify-between">
             <Button type="submit">Agregar Mascota</Button>
@@ -187,6 +187,7 @@ const handleSubmit = async (e) => {
               type="button"
               onClick={() => {
                 resetCampos();
+                setLecturaUsuario(false); // 🔓 Desbloquea campos
                 onAbrirUsuario(true);
               }}
             >

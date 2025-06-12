@@ -4,7 +4,7 @@ import DniMascota from "./DniMascota";
 import CartillaMascota from "./CartillaMascota";
 import Button from "@common/ui/Button";
 
-const ModalVerUsuario = ({ isOpen, onClose, usuario }) => {
+const ModalVerMascotaUsuario = ({ isOpen, onClose, usuario }) => {
   if (!usuario) return null;
 
   const ordenesDummy = [
@@ -28,4 +28,4 @@ const ModalVerUsuario = ({ isOpen, onClose, usuario }) => {
   );
 };
 
-export default ModalVerUsuario;
+export default ModalVerMascotaUsuario;

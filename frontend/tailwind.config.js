@@ -18,6 +18,7 @@ export default {
         //  Textos
         texto: "#E2E8F0",                   // Texto principal 
         "texto-secundario": "#94A3B8",      // Texto secundario 
+ 
 
         //  Superficie (Divs dentro del fondo)
         superficie: "#1E293B",               // Fondo de divs 

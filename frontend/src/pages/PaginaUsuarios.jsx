@@ -1,6 +1,6 @@
 import Header from "@common/layout/Header";
 import StatCardsGroup from "@common/stats/StatCardsGroup";
-import TablaUsuario from "@components/usuarios/TablaUsuario";
+import TablaMascotaUsuario from "@components/usuarios/TablaMascotaUsuario";
 
 const PaginaAnalisis = () => {
   return (
@@ -8,7 +8,7 @@ const PaginaAnalisis = () => {
       <Header title="Usuarios" />
       <main className="max-w-7xl mx-auto py-6 px-4 lg:px-8">
         <StatCardsGroup />
-        <TablaUsuario />
+        <TablaMascotaUsuario />
       </main>
     </div>
   );

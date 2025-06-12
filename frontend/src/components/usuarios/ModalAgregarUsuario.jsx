@@ -4,6 +4,9 @@ import Input from "@common/ui/Input";
 import Switch from "@common/ui/Switch";
 import Button from "@common/ui/Button";
 import { crearUsuario } from "@services/usuarioService";
+import { useResetFormulario } from "@hooks/useResetFormulario";
+import { usuarioSchema } from "@schemas/usuarioSchema";
+import { notificarError, notificarExito } from "@lib/notificaciones";
 
 const ModalAgregarUsuario = ({ isOpen, onClose, onSubmit }) => {
   const [dni, setDni] = useState("");
@@ -14,40 +17,56 @@ const ModalAgregarUsuario = ({ isOpen, onClose, onSubmit }) => {
   const [numero, setNumero] = useState("");
   const [estado, setEstado] = useState(true);
 
-  const resetCampos = () => {
-    setDni("");
-    setNombre("");
-    setApellidoPaterno("");
-    setApellidoMaterno("");
-    setCorreo("");
-    setNumero("");
-    setEstado(true);
-  };
+  const resetCampos = useResetFormulario(
+    [
+      setDni,
+      setNombre,
+      setApellidoPaterno,
+      setApellidoMaterno,
+      setCorreo,
+      setNumero,
+      setEstado,
+    ],
+    ["", "", "", "", "", "", true]
+  );
 
-  const handleSubmit = async (e) => {
+  const manejarRegistroUsuario = async (e) => {
     e.preventDefault();
 
-    try {
-      const nuevoUsuario = await crearUsuario({
-        dni,
-        nombre,
-        apellido_paterno: apellidoPaterno,
-        apellido_materno: apellidoMaterno,
-        correo,
-        numero_telefono: numero,
-      });
+    const nuevoUsuario = {
+      dni,
+      nombre,
+      apellido_paterno: apellidoPaterno,
+      apellido_materno: apellidoMaterno,
+      correo,
+      numero_telefono: numero,
+    };
 
-      onSubmit?.(nuevoUsuario); // envía el nuevo usuario al padre si es necesario
+    const validacion = usuarioSchema.safeParse(nuevoUsuario);
+    if (!validacion.success) {
+      const errores = validacion.error.format();
+      for (const campo in errores) {
+        const mensaje = errores[campo]?._errors?.[0];
+        if (mensaje) notificarError(mensaje);
+      }
+      return;
+    }
+
+    try {
+      const usuarioCreado = await crearUsuario(nuevoUsuario);
+      notificarExito("Usuario registrado correctamente");
+      onSubmit?.(usuarioCreado);
+      resetCampos();
       onClose();
-      resetCampos(); // cierra el modal
-    } catch {
-      alert("Error al crear usuario");
+    } catch (error) {
+      console.error("Error al crear usuario:", error);
+      notificarError(error);
     }
   };
 
   return (
     <ModalGeneral isOpen={isOpen} onClose={onClose} title="Agregar usuario">
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={manejarRegistroUsuario} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           <Input
             className="col-span-2 pl-4"

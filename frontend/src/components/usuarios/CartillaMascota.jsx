@@ -1,27 +1,38 @@
 const CartillaMascota = ({ ordenes }) => {
   if (!ordenes || ordenes.length === 0)
-    return <p className="text-sm text-gray-400">No hay órdenes registradas.</p>;
+    return (
+      <div className="bg-superficie text-texto placeholder-texto-secundario border border-superficie-borde rounded-xl p-4 shadow-sm">
+        <p className="text-sm text-texto-secundario">No hay órdenes registradas.</p>
+      </div>
+    );
 
   return (
-    <div className="font-cuerpo bg-input border border-input-borde focus:outline-none focus:ring-2 focus:ring-input-foco text-texto placeholder-texto-secundario rounded-lg p-6 mb-6">
-      <h3 className="text-lg font-bold mb-4">Historial de Órdenes</h3>
-      <div className="overflow-x-auto">
-        <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden">
+    <div className="bg-superficie text-texto border border-superficie-borde rounded-xl p-6 shadow-md">
+      <h3 className="text-xl font-bold mb-4">📑 Historial de Órdenes</h3>
+
+      <div className="overflow-x-auto rounded-lg border border-superficie-borde">
+        <table className="min-w-full divide-y divide-superficie-borde text-sm">
           <thead className="bg-boton-primario text-white">
             <tr>
-              <th className="px-4 py-2 text-left">Fecha</th>
-              <th className="px-4 py-2 text-left">Servicio</th>
-              <th className="px-4 py-2 text-left">Veterinario</th>
-              <th className="px-4 py-2 text-left">Estado</th>
+              <th className="px-4 py-2 text-left">📅 Fecha</th>
+              <th className="px-4 py-2 text-left">🩺 Servicio</th>
+              <th className="px-4 py-2 text-left">👨‍⚕️ Veterinario</th>
+              <th className="px-4 py-2 text-left">📶 Estado</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-superficie-borde">
             {ordenes.map((orden, index) => (
               <tr key={index} className="hover:bg-input-hover">
                 <td className="px-4 py-2">{orden.fecha}</td>
                 <td className="px-4 py-2">{orden.servicio}</td>
                 <td className="px-4 py-2">{orden.veterinario}</td>
-                <td className="px-4 py-2">{orden.estado}</td>
+                <td className="px-4 py-2 font-semibold">
+                  {orden.estado === "Completado" ? (
+                    <span className="text-green-400">✅ Completado</span>
+                  ) : (
+                    <span className="text-yellow-300">⏳ Pendiente</span>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

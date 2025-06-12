@@ -6,18 +6,21 @@ import { useTablaDatos } from "@hooks/useTablaDatos";
 import ModalAgregarMascota from "./ModalAgregarMascota";
 import ModalAgregarUsuario from "./ModalAgregarUsuario";
 import TablaBase from "@common/tablas/TablaBase";
-import ModalVerUsuario from "./ModalVerUsuario";
-import { obtenerMascotasUsuarios } from "@services/mascotaUsuarioService";
+import ModalVerMascotaUsuario from "./ModalVerMascotaUsuario";
+import {
+  obtenerMascotasUsuarios,
+  eliminarMascota,
+} from "@services/mascotaUsuarioService";
 import { crearMascota } from "@services/mascotaService";
 
-const TablaUsuarios = () => {
+const TablaMascotaUsuario = () => {
   const [modalVerOpen, setModalVerOpen] = useState(false);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const [modalMascotaOpen, setModalMascotaOpen] = useState(false);
   const [modalUsuarioOpen, setModalUsuarioOpen] = useState(false);
   const [datosMascotasUsuarios, setDatosMascotasUsuarios] = useState([]);
 
-  const handleAgregar = async (nuevaMascota) => {
+  const registrarMascota = async (nuevaMascota) => {
     try {
       await crearMascota(nuevaMascota);
       const data = await obtenerMascotasUsuarios(); // Recarga datos
@@ -57,7 +60,7 @@ const TablaUsuarios = () => {
     setModalVerOpen(true);
   };
 
-  const handleAgregarUsuario = (nuevoUsuario) => {
+  const registrarUsuarioNuevo = (nuevoUsuario) => {
     console.log("Nuevo usuario agregado:", nuevoUsuario);
   };
 
@@ -77,14 +80,14 @@ const TablaUsuarios = () => {
       <ModalAgregarMascota
         isOpen={modalMascotaOpen}
         onClose={() => setModalMascotaOpen(false)}
-        onSubmit={handleAgregar}
+        onSubmit={registrarMascota}
         onAbrirUsuario={() => setModalUsuarioOpen(true)}
       />
 
       <ModalAgregarUsuario
         isOpen={modalUsuarioOpen}
         onClose={() => setModalUsuarioOpen(false)}
-        onSubmit={handleAgregarUsuario}
+        onSubmit={registrarUsuarioNuevo}
       />
 
       <TablaBase
@@ -99,11 +102,22 @@ const TablaUsuarios = () => {
         datos={usuarioFiltrado}
         onVer={handleVerUsuario}
         onEditar={(p) => console.log("Editar", p)}
-        onEliminar={(id) => console.log("Eliminar ID:", id)}
+        onEliminar={async (id) => {
+          console.log("ID a eliminar:", id);
+          try {
+            await eliminarMascota(id); // ← servicio importado desde mascotaUsuarioService.js
+            const data = await obtenerMascotasUsuarios(); // recarga
+            setDatosMascotasUsuarios(data);
+          } catch (error) {
+            console.error("Error al eliminar:", error);
+            alert("No se pudo eliminar la mascota");
+          }
+        }}
         onToggleEstado={toggleEstado}
+        idKey="id_mascota"
       />
 
-      <ModalVerUsuario
+      <ModalVerMascotaUsuario
         isOpen={modalVerOpen}
         onClose={() => setModalVerOpen(false)}
         usuario={usuarioSeleccionado}
@@ -112,4 +126,4 @@ const TablaUsuarios = () => {
   );
 };
 
-export default TablaUsuarios;
+export default TablaMascotaUsuario;

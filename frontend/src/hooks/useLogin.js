@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { profile } from "@services/authService";
+import { profile } from "@services/loginService";
 
-export default function useAuth() {
+export default function useLogin() {
   const [usuario, setUsuario] = useState(null);
   const [loading, setLoading] = useState(true);
 

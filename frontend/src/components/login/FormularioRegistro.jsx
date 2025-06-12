@@ -5,7 +5,9 @@ import { User, Mail, Phone, Lock, IdCard } from "lucide-react";
 import Button from "@common/ui/Button";
 import Input from "@common/ui/Input";
 import Title from "@common/layout/Titulo";
-import { register } from "@services/authService";
+import { register } from "@services/loginService";
+import { asistenteSchema } from "@schemas/asistenteSchema";
+import { toast } from "sonner";
 
 const FormularioRegistro = ({ onVolver }) => {
   const [nombres, setNombres] = useState("");
@@ -29,13 +31,22 @@ const FormularioRegistro = ({ onVolver }) => {
       password,
     };
 
+    const validacion = asistenteSchema.safeParse(data);
+    if (!validacion.success) {
+      const errores = validacion.error.format();
+      for (const campo in errores) {
+        const mensaje = errores[campo]?._errors?.[0];
+        if (mensaje) toast.error(mensaje);
+      }
+      return;
+    }
+
     try {
       await register(data);
-      alert("Registro exitoso, ahora inicia sesión");
-      onVolver(); // vuelve al login
+      toast.success("Registro exitoso. Ahora inicia sesión.");
+      onVolver();
     } catch (error) {
-      console.error("Error al registrar:", error);
-      alert(error.error || "Error desconocido");
+      toast.error(error.error || "Error desconocido");
     }
   };
 
