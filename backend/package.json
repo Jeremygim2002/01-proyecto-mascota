@@ -19,8 +19,19 @@
     "dotenv": "^16.5.0",
     "express": "5.1.0",
     "jsonwebtoken": "9.0.2",
+    "module-alias": "^2.2.3",
     "mysql2": "3.14.1",
     "zod": "3.25.26"
+  },
+  "_moduleAliases": {
+    "@common": "src/common",
+    "@components": "src/components",
+    "@hooks": "src/hooks",
+    "@pages": "src/pages",
+    "@routes": "src/routes",
+    "@services": "src/services",
+    "@lib": "src/lib",
+    "@schemas": "src/schemas"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import ModalGeneral from "@common/modals/ModalGeneral";
 import Input from "@common/ui/Input";
-import Switch from "@common/ui/Switch";
 import Button from "@common/ui/Button";
 import { crearUsuario } from "@services/usuarioService";
 import { useResetFormulario } from "@hooks/useResetFormulario";
@@ -15,7 +14,6 @@ const ModalAgregarUsuario = ({ isOpen, onClose, onSubmit }) => {
   const [apellidoMaterno, setApellidoMaterno] = useState("");
   const [correo, setCorreo] = useState("");
   const [numero, setNumero] = useState("");
-  const [estado, setEstado] = useState(true);
 
   const resetCampos = useResetFormulario(
     [
@@ -25,7 +23,6 @@ const ModalAgregarUsuario = ({ isOpen, onClose, onSubmit }) => {
       setApellidoMaterno,
       setCorreo,
       setNumero,
-      setEstado,
     ],
     ["", "", "", "", "", "", true]
   );
@@ -116,8 +113,6 @@ const ModalAgregarUsuario = ({ isOpen, onClose, onSubmit }) => {
             onChange={(e) => setNumero(e.target.value)}
           />
         </div>
-
-        <Switch estado={estado} setEstado={setEstado} />
 
         <Button type="submit">Agregar Usuario</Button>
       </form>

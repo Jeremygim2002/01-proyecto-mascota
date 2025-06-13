@@ -7,11 +7,13 @@ import ModalAgregarMascota from "./ModalAgregarMascota";
 import ModalAgregarUsuario from "./ModalAgregarUsuario";
 import TablaBase from "@common/tablas/TablaBase";
 import ModalVerMascotaUsuario from "./ModalVerMascotaUsuario";
+import ModalEditarMascotaUsuario from "./ModalEditarMascotaUsuario";
+
 import {
   obtenerMascotasUsuarios,
   eliminarMascota,
 } from "@services/mascotaUsuarioService";
-import { crearMascota } from "@services/mascotaService";
+import { crearMascota, actualizarMascota } from "@services/mascotaService";
 
 const TablaMascotaUsuario = () => {
   const [modalVerOpen, setModalVerOpen] = useState(false);
@@ -19,12 +21,22 @@ const TablaMascotaUsuario = () => {
   const [modalMascotaOpen, setModalMascotaOpen] = useState(false);
   const [modalUsuarioOpen, setModalUsuarioOpen] = useState(false);
   const [datosMascotasUsuarios, setDatosMascotasUsuarios] = useState([]);
+  const [mascotaEditando, setMascotaEditando] = useState(null);
+  const [modalEditarOpen, setModalEditarOpen] = useState(false);
+
+  const cargarDatosMascotas = async () => {
+    try {
+      const data = await obtenerMascotasUsuarios();
+      setDatosMascotasUsuarios(data);
+    } catch (error) {
+      console.error("Error actualizando datos:", error);
+    }
+  };
 
   const registrarMascota = async (nuevaMascota) => {
     try {
       await crearMascota(nuevaMascota);
-      const data = await obtenerMascotasUsuarios(); // Recarga datos
-      setDatosMascotasUsuarios(data); // Refresca tabla
+      await cargarDatosMascotas();
     } catch (error) {
       console.error("Error al crear mascota:", error);
       alert("Error al crear la mascota");
@@ -32,16 +44,7 @@ const TablaMascotaUsuario = () => {
   };
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const data = await obtenerMascotasUsuarios();
-        setDatosMascotasUsuarios(data);
-      } catch (error) {
-        console.error("Error cargando datos:", error);
-        console.error("Error cargando datos:", error);
-      }
-    }
-    fetchData();
+    cargarDatosMascotas();
   }, []);
 
   const {
@@ -60,8 +63,19 @@ const TablaMascotaUsuario = () => {
     setModalVerOpen(true);
   };
 
-  const registrarUsuarioNuevo = (nuevoUsuario) => {
-    console.log("Nuevo usuario agregado:", nuevoUsuario);
+  const handleEditar = (fila) => {
+    setMascotaEditando(fila);
+    setModalEditarOpen(true);
+  };
+
+  const handleEliminar = async (id) => {
+    try {
+      await eliminarMascota(id);
+      await cargarDatosMascotas();
+    } catch (error) {
+      console.error("Error al eliminar:", error);
+      alert("No se pudo eliminar la mascota");
+    }
   };
 
   return (
@@ -87,12 +101,10 @@ const TablaMascotaUsuario = () => {
       <ModalAgregarUsuario
         isOpen={modalUsuarioOpen}
         onClose={() => setModalUsuarioOpen(false)}
-        onSubmit={registrarUsuarioNuevo}
       />
 
       <TablaBase
         columnas={[
-          // { id: "id_mascota", label: "ID Mascota" },
           { id: "nombre_usuario", label: "Nombre dueño" },
           { id: "dni", label: "DNI" },
           { id: "nombre_mascota", label: "Nombre Mascota" },
@@ -101,18 +113,8 @@ const TablaMascotaUsuario = () => {
         ]}
         datos={usuarioFiltrado}
         onVer={handleVerUsuario}
-        onEditar={(p) => console.log("Editar", p)}
-        onEliminar={async (id) => {
-          console.log("ID a eliminar:", id);
-          try {
-            await eliminarMascota(id); // ← servicio importado desde mascotaUsuarioService.js
-            const data = await obtenerMascotasUsuarios(); // recarga
-            setDatosMascotasUsuarios(data);
-          } catch (error) {
-            console.error("Error al eliminar:", error);
-            alert("No se pudo eliminar la mascota");
-          }
-        }}
+        onEditar={handleEditar}
+        onEliminar={handleEliminar}
         onToggleEstado={toggleEstado}
         idKey="id_mascota"
       />
@@ -121,6 +123,16 @@ const TablaMascotaUsuario = () => {
         isOpen={modalVerOpen}
         onClose={() => setModalVerOpen(false)}
         usuario={usuarioSeleccionado}
+      />
+
+      <ModalEditarMascotaUsuario
+        isOpen={modalEditarOpen}
+        onClose={() => setModalEditarOpen(false)}
+        mascota={mascotaEditando}
+        onActualizar={async (mascotaEditada) => {
+          await actualizarMascota(mascotaEditada);
+          await cargarDatosMascotas();
+        }}
       />
     </motion.div>
   );

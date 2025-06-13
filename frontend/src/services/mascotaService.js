@@ -23,3 +23,16 @@ export async function crearMascota(data) {
 
   return res.json();
 }
+
+export async function actualizarMascota(mascota) {
+  const res = await fetch(`${API_URL}/${mascota.id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(mascota)
+  });
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.error || "Error al actualizar mascota");
+  }
+  return res.json();
+}

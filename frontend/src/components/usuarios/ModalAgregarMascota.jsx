@@ -196,10 +196,17 @@ const ModalAgregarMascota = ({ isOpen, onClose, onSubmit, onAbrirUsuario }) => {
           </div>
         </form>
       </ModalGeneral>
-
       <ModalAgregarUsuario
         isOpen={modalUsuarioOpen}
         onClose={() => setModalUsuarioOpen(false)}
+        onSubmit={(usuarioCreado) => {
+          setDni(usuarioCreado.dni);
+          setNombre(usuarioCreado.nombre);
+          setApellidoPaterno(usuarioCreado.apellido_paterno);
+          setApellidoMaterno(usuarioCreado.apellido_materno);
+          setIdUsuario(usuarioCreado.id);
+          setLecturaUsuario(true);
+        }}
       />
     </>
   );

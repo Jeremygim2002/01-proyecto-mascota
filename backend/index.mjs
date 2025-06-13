@@ -5,6 +5,8 @@ import { createAsistentesRouter } from './routes/asistentesRoutes.mjs';
 import { createMascotaUsuarioRouter } from './routes/mascotaUsuarioRoutes.mjs';
 import { corsMiddleware } from './middlewares/cors.mjs';
 import cookieParser from 'cookie-parser';
+import 'module-alias/register' 
+
 
 export const createApp = ({ usuarioModel, mascotaModel, asistenteModel, mascotaUsuarioModel }) => {
 

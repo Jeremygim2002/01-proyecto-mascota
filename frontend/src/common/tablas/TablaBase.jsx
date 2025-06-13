@@ -17,7 +17,7 @@ const TablaBase = ({
   idKey = "id",
 }) => {
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto ">
       <table className="min-w-full divide-y divide-tabla-linea-inicial">
         <thead>
           <tr>
