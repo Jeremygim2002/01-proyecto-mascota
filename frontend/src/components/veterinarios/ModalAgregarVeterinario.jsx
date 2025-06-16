@@ -1,12 +1,14 @@
 import { useState } from "react";
+
+import { validateVeterinario } from "@schemas/veterinariosSchema";
+import { useResetFormulario } from "@hooks/useResetFormulario";
+
 import ModalGeneral from "@common/modals/ModalGeneral";
 import Input from "@common/ui/Input";
 import Select from "@common/ui/Select";
 import Button from "@common/ui/Button";
 
-import { useResetFormulario } from "@hooks/useResetFormulario";
 import { notificarError, notificarExito } from "@lib/notificaciones";
-import { validateVeterinario } from "@schemas/veterinariosSchema";
 
 const ModalAgregarVeterinario = ({
   isOpen,
@@ -22,7 +24,7 @@ const ModalAgregarVeterinario = ({
   const [dni, setDni] = useState("");
   const [idEspecialidad, setIdEspecialidad] = useState("");
 
-  const resetCampos = useResetFormulario(
+  const resetFormulario = useResetFormulario(
     [
       setNombre,
       setApellidoPaterno,
@@ -35,7 +37,7 @@ const ModalAgregarVeterinario = ({
     ["", "", "", "", "", "", ""]
   );
 
-  const handleSubmit = async (e) => {
+  const handleRegistrar = async (e) => {
     e.preventDefault();
 
     const nuevoVeterinario = {
@@ -62,7 +64,7 @@ const ModalAgregarVeterinario = ({
     try {
       await onSubmit(nuevoVeterinario);
       notificarExito("Veterinario registrado correctamente.");
-      resetCampos();
+      resetFormulario();
       onClose();
     } catch (error) {
       console.error("Error al crear veterinario:", error);
@@ -71,7 +73,7 @@ const ModalAgregarVeterinario = ({
   };
   return (
     <ModalGeneral isOpen={isOpen} onClose={onClose} title="Agregar veterinario">
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleRegistrar} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-8">
           <Input
             className="col-span-4 pl-4"

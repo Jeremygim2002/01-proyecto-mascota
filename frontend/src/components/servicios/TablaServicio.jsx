@@ -2,11 +2,11 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-import TablaFiltrosServicio from "./TablaFiltrosServicio";
-import ModalAgregarServicio from "./ModalAgregarServicio";
-import ModalEditarServicio from "./ModalEditarServicio";
-import ModalVerServicio from "./ModalVerServicio";
 import TablaBase from "@common/tablas/TablaBase";
+
+import { useBusqueda } from "@hooks/useBusqueda";
+import { useFiltrado } from "@hooks/useFiltrado";
+import { useToggleEstado } from "@hooks/useToggleEstado";
 
 import {
   obtenerServicios,
@@ -15,17 +15,19 @@ import {
   eliminarServicio,
   actualizarEstadoServicio,
 } from "@services/servicioService";
-
 import { obtenerCategorias } from "@services/categoriaServicioService";
-import { useTablaDatos } from "@hooks/useTablaDatos";
+
+import TablaFiltrosServicio from "./TablaFiltrosServicio";
+import ModalAgregarServicio from "./ModalAgregarServicio";
+import ModalEditarServicio from "./ModalEditarServicio";
+import ModalVerServicio from "./ModalVerServicio";
 
 const TablaServicio = () => {
-  const [servicios, setServicios] = useState([]);
-  const [categorias, setCategorias] = useState([]);
-
   const [modalAgregar, setModalAgregar] = useState(false);
   const [modalEditar, setModalEditar] = useState(false);
   const [modalVer, setModalVer] = useState(false);
+  const [servicios, setServicios] = useState([]);
+  const [categorias, setCategorias] = useState([]);
   const [seleccionado, setSeleccionado] = useState(null);
 
   const cargarServicios = async () => {
@@ -43,14 +45,14 @@ const TablaServicio = () => {
     cargarCategorias();
   }, []);
 
-  const {
-    busqueda,
-    handleSearch,
-    toggleEstado,
-    datosFiltrados: serviciosFiltrados,
-  } = useTablaDatos(
+  const { busqueda, handleSearch } = useBusqueda();
+  const serviciosFiltrados = useFiltrado(
     servicios,
     ["nombre", "categoria", "descripcion"],
+    busqueda
+  );
+  const toggleEstado = useToggleEstado(
+    setServicios,
     "id_servicio",
     actualizarEstadoServicio
   );
@@ -116,8 +118,8 @@ const TablaServicio = () => {
 
       <TablaBase
         columnas={[
-          { id: "nombre", label: "Nombre" },
           { id: "categoria", label: "Categoría" },
+          { id: "nombre", label: "Servicio" },
           { id: "descripcion", label: "Descripción" },
           { id: "duracion", label: "Duración" },
           { id: "precio", label: "Precio" },
@@ -129,8 +131,6 @@ const TablaServicio = () => {
         onToggleEstado={toggleEstado}
         idKey="id_servicio"
       />
-
-
     </motion.div>
   );
 };

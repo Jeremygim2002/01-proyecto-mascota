@@ -1,11 +1,12 @@
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import TablaFiltrosVeterinario from "./TablaFiltrosVeterinario";
-import ModalAgregarVeterinario from "./ModalAgregarVeterinario";
-import ModalEditarVeterinario from "./ModalEditarVeterinario";
-import ModalVerVeterinario from "./ModalVerVeterinario";
+
 import TablaBase from "@common/tablas/TablaBase";
+
+import { useBusqueda } from "@hooks/useBusqueda";
+import { useFiltrado } from "@hooks/useFiltrado";
+import { useToggleEstado } from "@hooks/useToggleEstado";
 
 import {
   obtenerVeterinarios,
@@ -15,14 +16,18 @@ import {
   actualizarVeterinario,
 } from "@services/veterinarioService";
 import { obtenerEspecialidades } from "@services/especialidadService";
-import { useTablaDatos } from "@hooks/useTablaDatos";
+
+import TablaFiltrosVeterinario from "./TablaFiltrosVeterinario";
+import ModalAgregarVeterinario from "./ModalAgregarVeterinario";
+import ModalEditarVeterinario from "./ModalEditarVeterinario";
+import ModalVerVeterinario from "./ModalVerVeterinario";
 
 const TablaVeterinario = () => {
-  const [veterinarios, setVeterinarios] = useState([]);
-  const [especialidades, setEspecialidades] = useState([]);
   const [modalAgregar, setModalAgregar] = useState(false);
   const [modalEditar, setModalEditar] = useState(false);
   const [modalVer, setModalVer] = useState(false);
+  const [veterinarios, setVeterinarios] = useState([]);
+  const [especialidades, setEspecialidades] = useState([]);
   const [seleccionado, setSeleccionado] = useState(null);
 
   const cargarVeterinarios = async () => {
@@ -40,14 +45,14 @@ const TablaVeterinario = () => {
     cargarEspecialidades();
   }, []);
 
-  const {
-    busqueda,
-    handleSearch,
-    toggleEstado,
-    datosFiltrados: veterinariosFiltrados,
-  } = useTablaDatos(
+  const { busqueda, handleSearch } = useBusqueda();
+  const veterinariosFiltrados = useFiltrado(
     veterinarios,
     ["nombre", "dni", "especialidad"],
+    busqueda
+  );
+  const toggleEstado = useToggleEstado(
+    setVeterinarios,
     "id_veterinario",
     actualizarEstadoVeterinario
   );

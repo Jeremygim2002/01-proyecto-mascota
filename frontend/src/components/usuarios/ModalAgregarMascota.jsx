@@ -14,7 +14,7 @@ import {
   notificarUsuarioInvalido,
 } from "@lib/notificaciones";
 
-const ModalAgregarMascota = ({ isOpen, onClose, onSubmit, onAbrirUsuario }) => {
+const ModalAgregarMascota = ({ isOpen, onClose, onSubmit, onAbrirModalUsuario }) => {
   const [dni, setDni] = useState("");
   const [nombre, setNombre] = useState("");
   const [apellidoPaterno, setApellidoPaterno] = useState("");
@@ -188,7 +188,7 @@ const ModalAgregarMascota = ({ isOpen, onClose, onSubmit, onAbrirUsuario }) => {
               onClick={() => {
                 resetCampos();
                 setLecturaUsuario(false); // 🔓 Desbloquea campos
-                onAbrirUsuario(true);
+                onAbrirModalUsuario(true);
               }}
             >
               Agregar Usuario

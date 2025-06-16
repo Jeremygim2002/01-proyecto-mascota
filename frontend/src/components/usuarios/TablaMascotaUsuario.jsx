@@ -1,31 +1,39 @@
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import TablaFiltrosUsuario from "./TablaFiltrosUsuario";
-import { useTablaDatos } from "@hooks/useTablaDatos";
-import ModalAgregarMascota from "./ModalAgregarMascota";
-import ModalAgregarUsuario from "./ModalAgregarUsuario";
-import TablaBase from "@common/tablas/TablaBase";
-import ModalVerMascotaUsuario from "./ModalVerMascotaUsuario";
-import ModalEditarMascotaUsuario from "./ModalEditarMascotaUsuario";
 
+import TablaBase from "@common/tablas/TablaBase";
+
+import { useBusqueda } from "@hooks/useBusqueda";
+import { useFiltrado } from "@hooks/useFiltrado";
+import { useToggleEstado } from "@hooks/useToggleEstado";
 
 import {
   obtenerMascotasUsuarios,
   eliminarMascota,
 } from "@services/mascotaUsuarioService";
-import { crearMascota, actualizarMascota, actualizarEstadoMascota } from "@services/mascotaService";
+import {
+  crearMascota,
+  actualizarMascota,
+  actualizarEstadoMascota,
+} from "@services/mascotaService";
+
+import TablaFiltrosUsuario from "./TablaFiltrosUsuario";
+import ModalAgregarMascota from "./ModalAgregarMascota";
+import ModalAgregarUsuario from "./ModalAgregarUsuario";
+import ModalVerMascotaUsuario from "./ModalVerMascotaUsuario";
+import ModalEditarMascotaUsuario from "./ModalEditarMascotaUsuario";
 
 const TablaMascotaUsuario = () => {
   const [modalVerOpen, setModalVerOpen] = useState(false);
-  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const [modalMascotaOpen, setModalMascotaOpen] = useState(false);
   const [modalUsuarioOpen, setModalUsuarioOpen] = useState(false);
+  const [modalEditarOpen, setModalEditarOpen] = useState(false);
+  const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const [datosMascotasUsuarios, setDatosMascotasUsuarios] = useState([]);
   const [mascotaEditando, setMascotaEditando] = useState(null);
-  const [modalEditarOpen, setModalEditarOpen] = useState(false);
 
-  const cargarDatosMascotas = async () => {
+  const cargarMascotas = async () => {
     try {
       const data = await obtenerMascotasUsuarios();
       setDatosMascotasUsuarios(data);
@@ -37,30 +45,29 @@ const TablaMascotaUsuario = () => {
   const registrarMascota = async (nuevaMascota) => {
     try {
       await crearMascota(nuevaMascota);
-      await cargarDatosMascotas();
+      await cargarMascotas();
     } catch (error) {
       console.error("Error al crear mascota:", error);
-      alert("Error al crear la mascota");
     }
   };
 
   useEffect(() => {
-    cargarDatosMascotas();
+    cargarMascotas();
   }, []);
 
-  const {
-    busqueda,
-    handleSearch,
-    toggleEstado,
-    datosFiltrados: usuarioFiltrado,
-  } = useTablaDatos(
+  const { busqueda, handleSearch } = useBusqueda();
+  const usuarioFiltrado = useFiltrado(
     datosMascotasUsuarios,
     ["nombre_mascota", "raza", "nombre_usuario", "dni"],
+    busqueda
+  );
+  const toggleEstado = useToggleEstado(
+    setDatosMascotasUsuarios,
     "id_mascota",
     actualizarEstadoMascota
   );
 
-  const handleVerUsuario = (usuario) => {
+  const handleVer = (usuario) => {
     setUsuarioSeleccionado(usuario);
     setModalVerOpen(true);
   };
@@ -73,10 +80,9 @@ const TablaMascotaUsuario = () => {
   const handleEliminar = async (id) => {
     try {
       await eliminarMascota(id);
-      await cargarDatosMascotas();
+      await cargarMascotas();
     } catch (error) {
       console.error("Error al eliminar:", error);
-      alert("No se pudo eliminar la mascota");
     }
   };
 
@@ -97,28 +103,12 @@ const TablaMascotaUsuario = () => {
         isOpen={modalMascotaOpen}
         onClose={() => setModalMascotaOpen(false)}
         onSubmit={registrarMascota}
-        onAbrirUsuario={() => setModalUsuarioOpen(true)}
+        onAbrirModalUsuario={() => setModalUsuarioOpen(true)}
       />
 
       <ModalAgregarUsuario
         isOpen={modalUsuarioOpen}
         onClose={() => setModalUsuarioOpen(false)}
-      />
-
-      <TablaBase
-        columnas={[
-          { id: "nombre_usuario", label: "Nombre dueño" },
-          { id: "dni", label: "DNI" },
-          { id: "nombre_mascota", label: "Nombre Mascota" },
-          { id: "raza", label: "Raza" },
-          { id: "edad", label: "Edad" },
-        ]}
-        datos={usuarioFiltrado}
-        onVer={handleVerUsuario}
-        onEditar={handleEditar}
-        onEliminar={handleEliminar}
-        onToggleEstado={toggleEstado}
-        idKey="id_mascota"
       />
 
       <ModalVerMascotaUsuario
@@ -133,8 +123,24 @@ const TablaMascotaUsuario = () => {
         mascota={mascotaEditando}
         onActualizar={async (mascotaEditada) => {
           await actualizarMascota(mascotaEditada);
-          await cargarDatosMascotas();
+          await cargarMascotas();
         }}
+      />
+
+      <TablaBase
+        columnas={[
+          { id: "nombre_usuario", label: "Nombre dueño" },
+          { id: "dni", label: "DNI" },
+          { id: "nombre_mascota", label: "Nombre Mascota" },
+          { id: "raza", label: "Raza" },
+          { id: "edad", label: "Edad" },
+        ]}
+        datos={usuarioFiltrado}
+        onVer={handleVer}
+        onEditar={handleEditar}
+        onEliminar={handleEliminar}
+        onToggleEstado={toggleEstado}
+        idKey="id_mascota"
       />
     </motion.div>
   );

@@ -62,15 +62,6 @@ const ModalAgregarServicio = ({
     <ModalGeneral isOpen={isOpen} onClose={onClose} title="Agregar servicio">
       <form onSubmit={handleSubmit} className="space-y-8">
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-8">
-          <Input
-            className="col-span-2 pl-4"
-            name="nombre"
-            type="text"
-            placeholder="Nombre del servicio"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-          />
-
           <Select
             className="col-span-2"
             name="idCategoria"
@@ -84,6 +75,14 @@ const ModalAgregarServicio = ({
               </option>
             ))}
           </Select>
+          <Input
+            className="col-span-2 pl-4"
+            name="nombre"
+            type="text"
+            placeholder="Nombre del servicio"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+          />
 
           <Input
             className="col-span-4 pl-4"
