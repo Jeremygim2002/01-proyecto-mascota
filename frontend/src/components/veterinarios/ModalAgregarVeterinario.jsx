@@ -2,34 +2,73 @@ import { useState } from "react";
 import ModalGeneral from "@common/modals/ModalGeneral";
 import Input from "@common/ui/Input";
 import Select from "@common/ui/Select";
-import Switch from "@common/ui/Switch";
 import Button from "@common/ui/Button";
 
-const ModalAgregarVeterinario = ({ isOpen, onClose, onSubmit }) => {
-  const [dni, setDni] = useState("");
+import { useResetFormulario } from "@hooks/useResetFormulario";
+import { notificarError, notificarExito } from "@lib/notificaciones";
+import { validateVeterinario } from "@schemas/veterinariosSchema";
+
+const ModalAgregarVeterinario = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  especialidades = [],
+}) => {
   const [nombre, setNombre] = useState("");
   const [apellidoPaterno, setApellidoPaterno] = useState("");
   const [apellidoMaterno, setApellidoMaterno] = useState("");
   const [correo, setCorreo] = useState("");
-  const [numero, setNumero] = useState("");
-  const [rol, setRol] = useState("veterinario");
-  const [estado, setEstado] = useState(true);
+  const [numeroTelefono, setNumeroTelefono] = useState("");
+  const [dni, setDni] = useState("");
+  const [idEspecialidad, setIdEspecialidad] = useState("");
 
-  const handleSubmit = (e) => {
+  const resetCampos = useResetFormulario(
+    [
+      setNombre,
+      setApellidoPaterno,
+      setApellidoMaterno,
+      setCorreo,
+      setNumeroTelefono,
+      setDni,
+      setIdEspecialidad,
+    ],
+    ["", "", "", "", "", "", ""]
+  );
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit({
-      nombre,
-      apellidoPaterno,
-      apellidoMaterno,
-      correo,
-      numero,
-      dni,
-      rol,
-      estado,
-    });
-    onClose();
-  };
 
+    const nuevoVeterinario = {
+      nombre,
+      apellido_paterno: apellidoPaterno,
+      apellido_materno: apellidoMaterno,
+      correo,
+      numero_telefono: numeroTelefono,
+      dni,
+      id_especialidad: idEspecialidad,
+      estado: true,
+    };
+
+    const validacion = validateVeterinario(nuevoVeterinario);
+    if (!validacion.success) {
+      const errores = validacion.error.format();
+      for (const campo in errores) {
+        const mensaje = errores[campo]?._errors?.[0];
+        if (mensaje) notificarError(mensaje);
+      }
+      return;
+    }
+
+    try {
+      await onSubmit(nuevoVeterinario);
+      notificarExito("Veterinario registrado correctamente.");
+      resetCampos();
+      onClose();
+    } catch (error) {
+      console.error("Error al crear veterinario:", error);
+      notificarError("Ocurrió un error al registrar el veterinario.");
+    }
+  };
   return (
     <ModalGeneral isOpen={isOpen} onClose={onClose} title="Agregar veterinario">
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -76,17 +115,17 @@ const ModalAgregarVeterinario = ({ isOpen, onClose, onSubmit }) => {
 
           <Input
             className="col-span-2 pl-4"
-            type="text"
-            name="numero"
-            id="numero"
+            type="number"
+            name="numeroTelefono"
+            id="numeroTelefono"
             placeholder="Numero de telefono"
-            value={numero}
-            onChange={(e) => setNumero(e.target.value)}
+            value={numeroTelefono}
+            onChange={(e) => setNumeroTelefono(e.target.value)}
           />
 
           <Input
             className="col-span-2 pl-4"
-            type="text"
+            type="number"
             name="dni"
             id="dni"
             placeholder="Dni"
@@ -95,24 +134,19 @@ const ModalAgregarVeterinario = ({ isOpen, onClose, onSubmit }) => {
           />
           <Select
             className="col-span-2"
-            name="rol"
-            value={rol}
-            onChange={(e) => setRol(e.target.value)}
+            value={idEspecialidad}
+            onChange={(e) => setIdEspecialidad(e.target.value)}
           >
-            <option value="" disabled>
-              Seleccione un rol
-            </option>
-            <option value="administrador">Rol</option>
-            <option value="administrador">Administrador</option>
-            <option value="veterinario">Veterinario</option>
-            <option value="recepcionista">Recepcionista</option>
-            <option value="limpieza">Limpieza</option>
+            <option value="">Seleccione Especialidad</option>
+            {especialidades.map((esp) => (
+              <option key={esp.id} value={esp.id}>
+                {esp.nombre}
+              </option>
+            ))}
           </Select>
         </div>
 
-        <Switch estado={estado} setEstado={setEstado} />
-
-        <Button>Agregar</Button>
+        <Button type="submit">Agregar</Button>
       </form>
     </ModalGeneral>
   );

@@ -1,23 +1,31 @@
+import { useState } from "react";
 import { User, LogOut } from "lucide-react";
 import PanelGeneral from "./PanelGeneral";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { logout } from "@services/loginService";
 import { notificarError, notificarExito } from "@lib/notificaciones";
+import Loader from "@common/ui/Loader";
 
 const PanelUsuario = () => {
   const navigate = useNavigate();
+  const [mostrandoLoader, setMostrandoLoader] = useState(false);
 
   const cerrarSesion = async () => {
     try {
+            setMostrandoLoader(true);
       await logout();
       notificarExito("Sesión cerrada correctamente");
-      navigate("/login");
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000); // Mismo tiempo del loader
     } catch (error) {
+            setMostrandoLoader(false); // Si falla, ocultamos loader
       console.error("Error al cerrar sesión", error);
       notificarError(error);
     }
   };
+
+    if (mostrandoLoader) return <Loader duracion={2500} />;
 
   return (
     <PanelGeneral className="w-48 flex flex-col space-y-3">

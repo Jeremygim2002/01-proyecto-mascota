@@ -1,83 +1,81 @@
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import TablaFiltrosVeterinario from "./TablaFiltrosVeterinario";
-import { useTablaDatos } from "@hooks/useTablaDatos";
-import { useState } from "react";
 import ModalAgregarVeterinario from "./ModalAgregarVeterinario";
+import ModalEditarVeterinario from "./ModalEditarVeterinario";
 import ModalVerVeterinario from "./ModalVerVeterinario";
 import TablaBase from "@common/tablas/TablaBase";
 
-// Datos de ejemplo
-const DATA_VETERINARIO = [
-  {
-    id: 1,
-    nombre: "Carlos Pérez",
-    correo: "carlos.perez@example.com",
-    telefono: "123456789",
-    dni: "12345678",
-    especialidad: "medico general",
-    estado: false,
-  },
-  {
-    id: 2,
-    nombre: "Ana Gómez",
-    correo: "ana.gomez@example.com",
-    telefono: "987654321",
-    dni: "12345678",
-    especialidad: "medico general",
-    estado: true,
-  },
-  {
-    id: 3,
-    nombre: "Luis Fernández",
-    correo: "luis.fernandez@example.com",
-    telefono: "456789123",
-    dni: "12345678",
-    especialidad: "medico general",
-    estado: false,
-  },
-  {
-    id: 4,
-    nombre: "Sofía Ramírez",
-    correo: "sofia.ramirez@example.com",
-    telefono: "456789123",
-    dni: "12345678",
-    especialidad: "medico general",
-    estado: true,
-  },
-  {
-    id: 5,
-    nombre: "Miguel Torres",
-    correo: "miguel.torres@example.com",
-    telefono: "456789123",
-    dni: "12345678",
-    especialidad: "medico general",
-    estado: true,
-  },
-];
+import {
+  obtenerVeterinarios,
+  actualizarEstadoVeterinario,
+  crearVeterinario,
+  eliminarVeterinario,
+  actualizarVeterinario,
+} from "@services/veterinarioService";
+import { obtenerEspecialidades } from "@services/especialidadService";
+import { useTablaDatos } from "@hooks/useTablaDatos";
 
 const TablaVeterinario = () => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalVerOpen, setModalVerOpen] = useState(false);
-  const [personalSeleccionado, setPersonalSeleccionado] = useState(null);
+  const [veterinarios, setVeterinarios] = useState([]);
+  const [especialidades, setEspecialidades] = useState([]);
+  const [modalAgregar, setModalAgregar] = useState(false);
+  const [modalEditar, setModalEditar] = useState(false);
+  const [modalVer, setModalVer] = useState(false);
+  const [seleccionado, setSeleccionado] = useState(null);
 
-  const handleAgregar = (nuevoPersonal) => {
-    // Aquí actualizas tu estado o envías a la base de datos
-    console.log("Nuevo personal:", nuevoPersonal);
+  const cargarVeterinarios = async () => {
+    const data = await obtenerVeterinarios();
+    setVeterinarios(data);
   };
+
+  const cargarEspecialidades = async () => {
+    const data = await obtenerEspecialidades();
+    setEspecialidades(data);
+  };
+
+  useEffect(() => {
+    cargarVeterinarios();
+    cargarEspecialidades();
+  }, []);
 
   const {
     busqueda,
     handleSearch,
     toggleEstado,
-    datosFiltrados: personalFiltrado,
-  } = useTablaDatos(DATA_VETERINARIO, ["nombre", "rol"]);
+    datosFiltrados: veterinariosFiltrados,
+  } = useTablaDatos(
+    veterinarios,
+    ["nombre", "dni", "especialidad"],
+    "id_veterinario",
+    actualizarEstadoVeterinario
+  );
 
-  const handleVerPersonal = (personal) => {
-    setPersonalSeleccionado(personal);
-    setModalVerOpen(true);
+  const handleAgregar = async (nuevoVeterinario) => {
+    await crearVeterinario(nuevoVeterinario);
+    await cargarVeterinarios();
   };
 
+  const handleActualizar = async (veterinarioEditado) => {
+    await actualizarVeterinario(veterinarioEditado);
+    await cargarVeterinarios();
+  };
+
+  const handleEliminar = async (id) => {
+    await eliminarVeterinario(id);
+    await cargarVeterinarios();
+  };
+
+  const handleEditar = (vet) => {
+    setSeleccionado(vet);
+    setModalEditar(true);
+  };
+
+  const handleVer = (vet) => {
+    setSeleccionado(vet);
+    setModalVer(true);
+  };
   return (
     <motion.div
       className="bg-superficie backdrop-blur-md shadow-lg rounded-xl p-6 border border-superficie-borde mb-8"
@@ -88,35 +86,43 @@ const TablaVeterinario = () => {
       <TablaFiltrosVeterinario
         busqueda={busqueda}
         handleSearch={handleSearch}
-        onClickBoton={() => setModalOpen(true)}
+        onClickBoton={() => setModalAgregar(true)}
+      />
+      <ModalAgregarVeterinario
+        isOpen={modalAgregar}
+        onClose={() => setModalAgregar(false)}
+        onSubmit={handleAgregar}
+        especialidades={especialidades}
       />
 
-      <ModalAgregarVeterinario
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onSubmit={handleAgregar}
+      <ModalEditarVeterinario
+        isOpen={modalEditar}
+        onClose={() => setModalEditar(false)}
+        onSubmit={handleActualizar}
+        veterinario={seleccionado}
+        especialidades={especialidades}
+      />
+      <ModalVerVeterinario
+        isOpen={modalVer}
+        onClose={() => setModalVer(false)}
+        veterinario={seleccionado}
+        especialidades={especialidades}
       />
 
       <TablaBase
         columnas={[
-          { id: "id", label: "ID" },
           { id: "nombre", label: "Nombre" },
           { id: "correo", label: "Correo" },
-          { id: "telefono", label: "Teléfono" },
+          { id: "numero_telefono", label: "Teléfono" },
           { id: "dni", label: "DNI" },
           { id: "especialidad", label: "Especialidad" },
         ]}
-        datos={personalFiltrado}
-        onVer={handleVerPersonal}
-        onEditar={(p) => console.log("Editar", p)}
-        onEliminar={(id) => console.log("Eliminar ID:", id)}
-        onToggleEstado={toggleEstado}
-      />
-
-      <ModalVerVeterinario
-        isOpen={modalVerOpen}
-        onClose={() => setModalVerOpen(false)}
-        personal={personalSeleccionado}
+        datos={veterinariosFiltrados}
+        onVer={handleVer}
+        onEditar={handleEditar}
+        onEliminar={handleEliminar}
+        onToggleEstado={(id, estado) => toggleEstado(id, estado)}
+        idKey="id_veterinario"
       />
     </motion.div>
   );

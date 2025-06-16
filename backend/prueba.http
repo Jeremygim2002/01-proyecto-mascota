@@ -82,8 +82,104 @@ Content-Type: application/json
 
 
 
-
+#====== MASCOTAS + USUARIOS =====#
 
 
 ### 🔍 MASCOTAS INNER  USUARIOS
 GET http://localhost:3000/api/mascota-usuario
+
+
+
+
+
+
+#====== VETERINARIOS =====#
+### Obtener todos los veterinarios
+GET http://localhost:3000/api/veterinarios
+
+
+### Obtener veterinario por ID
+GET http://localhost:3000/api/veterinarios/e383034c-4a09-11f0-aa02-a8a159de6f1d
+
+
+### Crear veterinario
+POST http://localhost:3000/api/veterinarios
+Content-Type: application/json
+
+{
+  "nombre": "Andrea",
+  "apellido_paterno": "Paredes",
+  "apellido_materno": "Velásquez",
+  "correo": "andre.pares@example.com",
+  "numero_telefono": "987004321",
+  "dni": "12300078",
+  "estado": true,
+  "id_especialidad": 2
+}
+
+
+### Actualizar veterinario
+PATCH http://localhost:3000/api/veterinarios/d8973415-4a09-11f0-aa02-a8a159de6f1d
+Content-Type: application/json
+
+{
+  "numero_telefono": "999999999"
+}
+
+
+### Eliminar veterinario
+DELETE http://localhost:3000/api/veterinarios/96a4668b-4a0a-11f0-aa02-a8a159de6f1d
+
+
+### Cambiar estado del veterinario
+PATCH http://localhost:3000/api/veterinarios/7f86ac21-4a0d-11f0-aa02-a8a159de6f1d
+Content-Type: application/json
+
+{
+  "estado": false
+}
+
+
+
+
+#====== SERVICIOS =====#
+
+### Obtener todos los servicios
+GET http://localhost:3000/api/servicios
+
+### Obtener servicio por ID
+GET http://localhost:3000/api/servicios/bae538ad-4a15-11f0-aa02-a8a159de6f1d
+
+### Crear servicio
+POST http://localhost:3000/api/servicios
+Content-Type: application/json
+
+{
+  "nombre": "Baño y cortee",
+  "descripcion": "Servicio completo de higiene",
+  "duracion": 30,
+  "precio": 45.50,
+  "estado": true,
+  "id_categoria": 1
+}
+
+### Actualizar servicio
+PATCH http://localhost:3000/api/servicios/bae538ad-4a15-11f0-aa02-a8a159de6f1d
+Content-Type: application/json
+
+{
+  "precio": 50.00
+}
+
+### Eliminar servicio
+DELETE http://localhost:3000/api/servicios/bae538ad-4a15-11f0-aa02-a8a159de6f1d
+
+### Cambiar estado del servicio
+PATCH http://localhost:3000/api/servicios/c460ef98-4a15-11f0-aa02-a8a159de6f1d
+Content-Type: application/json
+
+{
+  "estado": true
+}
+
+

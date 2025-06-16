@@ -8,6 +8,7 @@ import { Mail, Lock } from "lucide-react";
 import Button from "@common/ui/Button";
 import Input from "@common/ui/Input";
 import Title from "@common/layout/Titulo";
+import Loader from "@common/ui/Loader";
 import { login } from "@services/loginService";
 
 const FormularioLogin = ({ onOlvidaste, onCrearCuenta }) => {
@@ -15,6 +16,7 @@ const FormularioLogin = ({ onOlvidaste, onCrearCuenta }) => {
 
   const [correo, setCorreo] = useState("");
   const [password, setPassword] = useState("");
+  const [mostrandoLoader, setMostrandoLoader] = useState(false);
 
   const manejarLogin = async (e) => {
     e.preventDefault();
@@ -23,12 +25,21 @@ const FormularioLogin = ({ onOlvidaste, onCrearCuenta }) => {
     try {
       await login(data);
       notificarExito("Inicio de sesión exitoso");
-      navigate("/dashboard");
+      // Mostrar loader visual antes de navegar
+      setMostrandoLoader(true);
+
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 3000); // Tiempo que dura tu GIF
     } catch (error) {
-      notificarError("correo o contraseña incorrecta"); 
+      notificarError("correo o contraseña incorrecta");
       console.error("Error al iniciar sesión:", error);
     }
   };
+
+  if (mostrandoLoader) {
+    return <Loader duracion={2500} />;
+  }
 
   return (
     <motion.div

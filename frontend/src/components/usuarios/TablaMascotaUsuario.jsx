@@ -9,11 +9,12 @@ import TablaBase from "@common/tablas/TablaBase";
 import ModalVerMascotaUsuario from "./ModalVerMascotaUsuario";
 import ModalEditarMascotaUsuario from "./ModalEditarMascotaUsuario";
 
+
 import {
   obtenerMascotasUsuarios,
   eliminarMascota,
 } from "@services/mascotaUsuarioService";
-import { crearMascota, actualizarMascota } from "@services/mascotaService";
+import { crearMascota, actualizarMascota, actualizarEstadoMascota } from "@services/mascotaService";
 
 const TablaMascotaUsuario = () => {
   const [modalVerOpen, setModalVerOpen] = useState(false);
@@ -55,7 +56,8 @@ const TablaMascotaUsuario = () => {
   } = useTablaDatos(
     datosMascotasUsuarios,
     ["nombre_mascota", "raza", "nombre_usuario", "dni"],
-    "id_mascota"
+    "id_mascota",
+    actualizarEstadoMascota
   );
 
   const handleVerUsuario = (usuario) => {

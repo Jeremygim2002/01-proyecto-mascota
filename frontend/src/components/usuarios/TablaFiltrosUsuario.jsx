@@ -16,18 +16,17 @@ const TablaFiltrosUsuario = ({ busqueda, handleSearch, onClickBoton }) => {
         <div className="flex flex-wrap gap-4 mt-4 w-full">
           <div className="relative flex-1 min-w-[150px]">
             <Select name="raza" className="w-full pl-3 pr-10">
-              <option value="">Raza mascota</option>
-              <option value="labrador">Labrador</option>
-              <option value="pastor">Pastor Alemán</option>
-              <option value="otro">Otro</option>
+              <option value="">Sexo de la mascota</option>
+              <option value="macho">Macho</option>
+              <option value="hembra">Hembra</option>
             </Select>
           </div>
 
           <div className="relative flex-1 min-w-[150px]">
             <Select name="edad" className="w-full pl-3 pr-10">
               <option value="">Edad</option>
-              <option value="menor5">Menor de 5</option>
-              <option value="mayor5">Mayor de 5</option>
+              <option value="menor5">Menor de 5 años</option>
+              <option value="mayor5">Mayor de 5 años</option>
             </Select>
           </div>
 

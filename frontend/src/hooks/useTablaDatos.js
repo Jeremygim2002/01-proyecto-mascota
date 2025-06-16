@@ -1,5 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
-import { actualizarEstadoMascota } from "@services/mascotaService";
+import { useState, useMemo, useEffect } from "react"
 
 /**
  * Hook reutilizable para manejar datos de tablas con búsqueda y estado.
@@ -11,7 +10,7 @@ import { actualizarEstadoMascota } from "@services/mascotaService";
 
 
 
-export const useTablaDatos = (dataInicial, camposBusqueda = [], claveId = 'id') => {
+export const useTablaDatos = (dataInicial, camposBusqueda = [], claveId = 'id', toggleApi) => {
   const [busqueda, setBusqueda] = useState("");
   const [datos, setDatos] = useState([]);
 
@@ -25,7 +24,7 @@ export const useTablaDatos = (dataInicial, camposBusqueda = [], claveId = 'id') 
 
   const toggleEstado = async (id, estadoActual) => {
     try {
-      await actualizarEstadoMascota(id, !estadoActual);
+      await toggleApi(id, !estadoActual);
       setDatos((prev) =>
         prev.map((item) =>
           item[claveId] === id ? { ...item, estado: !estadoActual } : item

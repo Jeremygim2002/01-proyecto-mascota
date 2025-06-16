@@ -1,79 +1,83 @@
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
-import TablaFiltrosServicio from "./TablaFiltrosServicio";
-import { useTablaDatos } from "@hooks/useTablaDatos";
-import { useState } from "react";
-import ModalAgregarServicio from "./ModalAgregarServicio";
-import TablaBase from "@common/tablas/TablaBase";
-import ModalVerServicio from "./ModalVerServicio";
+import { useEffect, useState } from "react";
 
-// Datos de ejemplo
-const DATA_SERVICIOS = [
-  {
-    id: 1,
-    categoria: "Peluquería y Estética",
-    tipo: "baño",
-    descripcion: "Baño y corte de pelo",
-    duracion: "30",
-    precio: 59.99,
-    estado: true,
-  },
-  {
-    id: 2,
-    categoria: "Peluquería y Estética",
-    tipo: "baño",
-    descripcion: "Baño y corte de pelo",
-    duracion: "30",
-    precio: 39.99,
-    estado: true,
-  },
-  {
-    id: 3,
-    categoria: "Medicina Preventiva",
-    tipo: "baño",
-    descripcion: "Baño y corte de pelo",
-    duracion: "30",
-    precio: 199.99,
-    estado: true,
-  },
-  {
-    id: 4,
-    categoria: "Medicina Preventiva",
-    tipo: "baño",
-    descripcion: "Baño y corte de pelo",
-    duracion: "30",
-    precio: 29.99,
-    estado: true,
-  },
-  {
-    id: 5,
-    categoria: "Diagnóstico y Tratamiento",
-    tipo: "baño",
-    descripcion: "Baño y corte de pelo",
-    duracion: "30",
-    precio: 79.99,
-    estado: false,
-  },
-];
+import TablaFiltrosServicio from "./TablaFiltrosServicio";
+import ModalAgregarServicio from "./ModalAgregarServicio";
+import ModalEditarServicio from "./ModalEditarServicio";
+import ModalVerServicio from "./ModalVerServicio";
+import TablaBase from "@common/tablas/TablaBase";
+
+import {
+  obtenerServicios,
+  crearServicio,
+  actualizarServicio,
+  eliminarServicio,
+  actualizarEstadoServicio,
+} from "@services/servicioService";
+
+import { obtenerCategorias } from "@services/categoriaServicioService";
+import { useTablaDatos } from "@hooks/useTablaDatos";
 
 const TablaServicio = () => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalVerOpen, setModalVerOpen] = useState(false);
-  const [servicioSeleccionado, setServicioSeleccionado] = useState(null);
+  const [servicios, setServicios] = useState([]);
+  const [categorias, setCategorias] = useState([]);
 
-  const handleAgregar = (nuevoServicio) => {
-    console.log("Nuevo servicio:", nuevoServicio);
+  const [modalAgregar, setModalAgregar] = useState(false);
+  const [modalEditar, setModalEditar] = useState(false);
+  const [modalVer, setModalVer] = useState(false);
+  const [seleccionado, setSeleccionado] = useState(null);
+
+  const cargarServicios = async () => {
+    const data = await obtenerServicios();
+    setServicios(data);
   };
+
+  const cargarCategorias = async () => {
+    const data = await obtenerCategorias();
+    setCategorias(data);
+  };
+
+  useEffect(() => {
+    cargarServicios();
+    cargarCategorias();
+  }, []);
+
   const {
     busqueda,
     handleSearch,
     toggleEstado,
-    datosFiltrados: servicioFiltrado,
-  } = useTablaDatos(DATA_SERVICIOS, ["categoria", "tipo"]);
+    datosFiltrados: serviciosFiltrados,
+  } = useTablaDatos(
+    servicios,
+    ["nombre", "categoria", "descripcion"],
+    "id_servicio",
+    actualizarEstadoServicio
+  );
 
-  const handleVerServicios = (servicio) => {
-    setServicioSeleccionado(servicio);
-    setModalVerOpen(true);
+  const handleAgregar = async (nuevoServicio) => {
+    await crearServicio(nuevoServicio);
+    await cargarServicios();
+  };
+
+  const handleActualizar = async (servicioEditado) => {
+    await actualizarServicio(servicioEditado);
+    await cargarServicios();
+  };
+
+  const handleEliminar = async (id) => {
+    await eliminarServicio(id);
+    await cargarServicios();
+  };
+
+  const handleEditar = (servicio) => {
+    setSeleccionado(servicio);
+    setModalEditar(true);
+  };
+
+  const handleVer = (servicio) => {
+    setSeleccionado(servicio);
+    setModalVer(true);
   };
 
   return (
@@ -86,36 +90,47 @@ const TablaServicio = () => {
       <TablaFiltrosServicio
         busqueda={busqueda}
         handleSearch={handleSearch}
-        onClickBoton={() => setModalOpen(true)}
+        onClickBoton={() => setModalAgregar(true)}
       />
 
       <ModalAgregarServicio
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
+        isOpen={modalAgregar}
+        onClose={() => setModalAgregar(false)}
         onSubmit={handleAgregar}
+        categorias={categorias}
+      />
+
+      <ModalEditarServicio
+        isOpen={modalEditar}
+        onClose={() => setModalEditar(false)}
+        onSubmit={handleActualizar}
+        servicio={seleccionado}
+        categorias={categorias}
+      />
+
+      <ModalVerServicio
+        isOpen={modalVer}
+        onClose={() => setModalVer(false)}
+        servicio={seleccionado}
       />
 
       <TablaBase
         columnas={[
-          { id: "id", label: "ID" },
-          { id: "categoria", label: "Categoria" },
-          { id: "tipo", label: "Tipo" },
-          { id: "descripcion", label: "Descripcion" },
-          { id: "duracion", label: "Duracion" },
+          { id: "nombre", label: "Nombre" },
+          { id: "categoria", label: "Categoría" },
+          { id: "descripcion", label: "Descripción" },
+          { id: "duracion", label: "Duración" },
           { id: "precio", label: "Precio" },
         ]}
-        datos={servicioFiltrado}
-        onVer={handleVerServicios}
-        onEditar={(p) => console.log("Editar", p)}
-        onEliminar={(id) => console.log("Eliminar ID:", id)}
+        datos={serviciosFiltrados}
+        onVer={handleVer}
+        onEditar={handleEditar}
+        onEliminar={handleEliminar}
         onToggleEstado={toggleEstado}
+        idKey="id_servicio"
       />
 
-      <ModalVerServicio
-        isOpen={modalVerOpen}
-        onClose={() => setModalVerOpen(false)}
-        servicio={servicioSeleccionado}
-      />
+
     </motion.div>
   );
 };
