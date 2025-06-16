@@ -134,6 +134,7 @@ const TablaMascotaUsuario = () => {
           { id: "nombre_mascota", label: "Nombre Mascota" },
           { id: "raza", label: "Raza" },
           { id: "edad", label: "Edad" },
+          { id: "tipo_mascota", label: "Tipo" },
         ]}
         datos={usuarioFiltrado}
         onVer={handleVer}

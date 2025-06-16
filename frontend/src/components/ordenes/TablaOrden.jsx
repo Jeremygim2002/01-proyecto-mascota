@@ -1,80 +1,85 @@
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
-import { useState } from "react";
-import TablaFiltrosOrden from "./TablaFiltrosOrden";
-import { useTablaDatos } from "@hooks/useTablaDatos";
-import ModalAgregarOrden from "./ModalAgregarOrden";
+import { useEffect, useState } from "react";
+
 import TablaBase from "@common/tablas/TablaBase";
+import { useBusqueda } from "@hooks/useBusqueda";
+import { useFiltrado } from "@hooks/useFiltrado";
+import { useToggleEstado } from "@hooks/useToggleEstado";
+
+import {
+  obtenerOrdenes,
+  crearOrden,
+  actualizarOrden,
+  eliminarOrden,
+} from "@services/ordenService";
+
+import TablaFiltrosOrden from "./TablaFiltrosOrden";
+import ModalAgregarOrden from "./ModalAgregarOrden";
+import ModalEditarOrden from "./ModalEditarOrden";
 import ModalVerOrden from "./ModalVerOrden";
 
-// Datos de ejemplo
-const DATA_ORDENES = [
-  {
-    id: 1,
-    servicio: "baño",
-    dueno: "Carlos Pérez",
-    nombre_mascota: "lana",
-    veterinario: "juan cubillas",
-    fecha: "2025-05-01",
-    estado: true, // Activo
-  },
-  {
-    id: 2,
-    servicio: "baño",
-    dueno: "Carlos Pérez",
-    nombre_mascota: "lana",
-    veterinario: "juan cubillas",
-    fecha: "2025-05-01",
-    estado: true, // Activo
-  },
-  {
-    id: 3,
-    servicio: "baño",
-    dueno: "Carlos Pérez",
-    nombre_mascota: "lana",
-    veterinario: "juan cubillas",
-    fecha: "2025-05-01",
-    estado: true, // Activo
-  },
-  {
-    id: 4,
-    servicio: "baño",
-    dueno: "Carlos Pérez",
-    nombre_mascota: "lana",
-    veterinario: "juan cubillas",
-    fecha: "2025-05-01",
-    estado: true, // Activo
-  },
-  {
-    id: 5,
-    servicio: "baño",
-    dueno: "Carlos Pérez",
-    nombre_mascota: "lana",
-    veterinario: "juan cubillas",
-    fecha: "2025-05-01",
-    estado: true, // Activo
-  },
-];
-
 const TablaOrden = () => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalVerOpen, setModalVerOpen] = useState(false);
-  const [ordenSeleccionado, setOrdenSeleccionado] = useState(null);
+  const [modalAgregar, setModalAgregar] = useState(false);
+  const [modalEditar, setModalEditar] = useState(false);
+  const [modalVer, setModalVer] = useState(false);
+  const [ordenes, setOrdenes] = useState([]);
+  const [seleccionado, setSeleccionado] = useState(null);
 
-  const handleAgregar = (nuevoVeterinario) => {
-    console.log("Nuevo veterinario:", nuevoVeterinario);
+  const cargarOrdenes = async () => {
+    try {
+      const data = await obtenerOrdenes();
+      setOrdenes(data);
+    } catch (error) {
+      console.error("Error al cargar órdenes:", error);
+    }
   };
 
-  const {
-    busqueda,
-    handleSearch,
-    toggleEstado,
-    datosFiltrados: ordenFiltrado,
-  } = useTablaDatos(DATA_ORDENES, ["dueno", "servicio"]);
+  useEffect(() => {
+    cargarOrdenes();
+  }, []);
 
-  const handleVerOrden = (orden) => {
-    setOrdenSeleccionado(orden);
-    setModalVerOpen(true);
+  const { busqueda, handleSearch } = useBusqueda();
+  const ordenesFiltradas = useFiltrado(
+    ordenes,
+    ["usuario", "nombre_mascota", "veterinario", "servicios"],
+    busqueda
+  );
+  const toggleEstado = useToggleEstado(
+    setOrdenes,
+    "id_orden",
+    async (id, nuevoEstado) => {
+      try {
+        await actualizarOrden({ id, estado: nuevoEstado });
+      } catch (error) {
+        console.error("Error actualizando estado:", error);
+      }
+    }
+  );
+
+  const handleAgregar = async (nuevaOrden) => {
+    await crearOrden(nuevaOrden);
+    await cargarOrdenes();
+  };
+
+  const handleActualizar = async (ordenEditada) => {
+    await actualizarOrden(ordenEditada);
+    await cargarOrdenes();
+  };
+
+  const handleEliminar = async (id) => {
+    await eliminarOrden(id);
+    await cargarOrdenes();
+  };
+
+  const handleEditar = (orden) => {
+    setSeleccionado(orden);
+    setModalEditar(true);
+  };
+
+  const handleVer = (orden) => {
+    setSeleccionado(orden);
+    setModalVer(true);
   };
 
   return (
@@ -87,35 +92,45 @@ const TablaOrden = () => {
       <TablaFiltrosOrden
         busqueda={busqueda}
         handleSearch={handleSearch}
-        onClickBoton={() => setModalOpen(true)}
+        onClickBoton={() => setModalAgregar(true)}
       />
 
       <ModalAgregarOrden
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
+        isOpen={modalAgregar}
+        onClose={() => setModalAgregar(false)}
         onSubmit={handleAgregar}
+      />
+
+      <ModalEditarOrden
+        isOpen={modalEditar}
+        onClose={() => setModalEditar(false)}
+        onSubmit={handleActualizar}
+        orden={seleccionado}
+      />
+
+      <ModalVerOrden
+        isOpen={modalVer}
+        onClose={() => setModalVer(false)}
+        orden={seleccionado}
       />
 
       <TablaBase
         columnas={[
-          { id: "id", label: "ID" },
-          { id: "servicio", label: "Servicio" },
-          { id: "dueno", label: "Dueño" },
-          { id: "nombre_mascota", label: "Nombre mascota" },
-          { id: "veterinario", label: "veterinario" },
-          { id: "fecha", label: "fecha" },
+          { id: "id_orden", label: "ID Orden" },
+          { id: "usuario", label: "Usuario" },
+          { id: "nombre_mascota", label: "Mascota" },
+          { id: "veterinario", label: "Veterinario" },
+          { id: "servicios", label: "Servicios" },
+          { id: "total", label: "Total S/." },
+          { id: "fecha", label: "Fecha" },
+          { id: "hora", label: "Hora" },
         ]}
-        datos={ordenFiltrado}
-        onVer={handleVerOrden}
-        onEditar={(p) => console.log("Editar", p)}
-        onEliminar={(id) => console.log("Eliminar ID:", id)}
+        datos={ordenesFiltradas}
+        onVer={handleVer}
+        onEditar={handleEditar}
+        onEliminar={handleEliminar}
         onToggleEstado={toggleEstado}
-      />
-
-      <ModalVerOrden
-        isOpen={modalVerOpen}
-        onClose={() => setModalVerOpen(false)}
-        orden={ordenSeleccionado}
+        idKey="id_orden"
       />
     </motion.div>
   );

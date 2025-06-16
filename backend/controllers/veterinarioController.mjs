@@ -87,4 +87,13 @@ export class VeterinarioController {
         await this.veterinarioModel.updateEstado({ id, estado });
         res.json({ message: 'Estado actualizado correctamente' });
     };
+
+    getByCategoria = async (req, res) => {
+        const { idCategoria } = req.params;
+        if (!idCategoria) return res.status(400).json({ error: 'Falta id de categoría' });
+
+        const veterinarios = await this.veterinarioModel.getByCategoria(idCategoria);
+        res.json(veterinarios);
+    };
+
 }

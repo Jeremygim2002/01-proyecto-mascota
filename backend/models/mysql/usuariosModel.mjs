@@ -103,4 +103,37 @@ export class UsuarioModel {
       throw error;
     }
   }
+
+  static async getUsuarioConMascotasByDni(dni) {
+    try {
+      const [[usuario]] = await pool.query(
+        'SELECT BIN_TO_UUID(id) AS id, nombre, apellido_paterno, apellido_materno, correo, numero_telefono, dni FROM usuarios WHERE dni = ?',
+        [dni]
+      );
+
+      if (!usuario) return null;
+
+      const [mascotas] = await pool.query(
+        `SELECT 
+         BIN_TO_UUID(m.id) AS id_mascota,
+         m.nombre AS nombre_mascota,
+         m.raza,
+         m.edad,
+         m.sexo,
+         m.estado
+       FROM mascotas m
+       JOIN usuarios u ON m.id_usuario = u.id
+       WHERE u.dni = ?`,
+        [dni]
+      );
+
+      return {
+        usuario,
+        mascotas
+      };
+    } catch (error) {
+      console.error('Error al obtener usuario y mascotas por DNI:', error);
+      throw error;
+    }
+  }
 }

@@ -79,4 +79,18 @@ export class UsuarioController {
 
         res.json({ message: 'Usuario eliminado' });
     };
+
+    getUsuarioConMascotasByDni = async (req, res) => {
+        const { dni } = req.params;
+
+        try {
+            const data = await this.usuarioModel.getUsuarioConMascotasByDni(dni);
+            if (!data) return res.status(404).json({ error: 'Usuario no encontrado' });
+
+            res.json(data);
+        } catch (error) {
+            res.status(500).json({ error: 'Error interno al obtener usuario y mascotas' });
+        }
+    };
+
 }

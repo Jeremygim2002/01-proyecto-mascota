@@ -11,6 +11,8 @@ export const createVeterinariosRouter = ({ veterinarioModel }) => {
   veterinariosRouter.patch('/:id', veterinarioController.update);
   veterinariosRouter.delete('/:id', veterinarioController.delete);
   veterinariosRouter.patch('/:id/estado', veterinarioController.toggleEstado);
+  veterinariosRouter.get('/categoria/:idCategoria', veterinarioController.getByCategoria);
+
 
   return veterinariosRouter;
 };

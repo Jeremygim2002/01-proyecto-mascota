@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ModalGeneral from "@common/modals/ModalGeneral";
 import Input from "@common/ui/Input";
 import Button from "@common/ui/Button";
 import Select from "@common/ui/Select";
 import ModalAgregarUsuario from "./ModalAgregarUsuario";
 import { buscarUsuarioPorDni } from "@services/usuarioService";
+import { obtenerTiposMascota } from "@services/tipoMascotaService";
 import { useResetFormulario } from "@hooks/useResetFormulario";
 import { mascotaSchema } from "@schemas/mascotaSchema";
 
@@ -14,7 +15,12 @@ import {
   notificarUsuarioInvalido,
 } from "@lib/notificaciones";
 
-const ModalAgregarMascota = ({ isOpen, onClose, onSubmit, onAbrirModalUsuario }) => {
+const ModalAgregarMascota = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  onAbrirModalUsuario,
+}) => {
   const [dni, setDni] = useState("");
   const [nombre, setNombre] = useState("");
   const [apellidoPaterno, setApellidoPaterno] = useState("");
@@ -26,6 +32,21 @@ const ModalAgregarMascota = ({ isOpen, onClose, onSubmit, onAbrirModalUsuario })
   const [modalUsuarioOpen, setModalUsuarioOpen] = useState(false);
   const [idUsuario, setIdUsuario] = useState("");
   const [lecturaUsuario, setLecturaUsuario] = useState(false);
+  const [idTipoMascota, setIdTipoMascota] = useState("");
+  const [tiposMascota, setTiposMascota] = useState([]);
+
+  useEffect(() => {
+    const cargarTiposMascota = async () => {
+      try {
+        const data = await obtenerTiposMascota();
+        setTiposMascota(data);
+      } catch (error) {
+        console.error("Error cargando tipos de mascota:", error);
+      }
+    };
+
+    if (isOpen) cargarTiposMascota(); // solo cuando abre
+  }, [isOpen]);
 
   const resetCampos = useResetFormulario(
     [
@@ -58,6 +79,7 @@ const ModalAgregarMascota = ({ isOpen, onClose, onSubmit, onAbrirModalUsuario })
       sexo,
       estado: true,
       id_usuario: idUsuario,
+      id_tipo_mascota: parseInt(idTipoMascota),
     };
 
     try {
@@ -144,6 +166,20 @@ const ModalAgregarMascota = ({ isOpen, onClose, onSubmit, onAbrirModalUsuario })
               onChange={(e) => setApellidoMaterno(e.target.value)}
               disabled={lecturaUsuario}
             />
+            <Select
+              name="tipo_mascota"
+              value={idTipoMascota}
+              onChange={(e) => setIdTipoMascota(e.target.value)}
+              className="col-span-2"
+              required
+            >
+              <option value="">Tipo de mascota</option>
+              {tiposMascota.map((tipo) => (
+                <option key={tipo.id} value={tipo.id}>
+                  {tipo.nombre}
+                </option>
+              ))}
+            </Select>
             <Input
               className="col-span-2 pl-4"
               name="nombreMascota"
@@ -182,7 +218,6 @@ const ModalAgregarMascota = ({ isOpen, onClose, onSubmit, onAbrirModalUsuario })
           </div>
 
           <div className="flex justify-between">
-            <Button type="submit">Agregar Mascota</Button>
             <Button
               type="button"
               onClick={() => {
@@ -193,6 +228,7 @@ const ModalAgregarMascota = ({ isOpen, onClose, onSubmit, onAbrirModalUsuario })
             >
               Agregar Usuario
             </Button>
+            <Button type="submit">Agregar Mascota</Button>
           </div>
         </form>
       </ModalGeneral>

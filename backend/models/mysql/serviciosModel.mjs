@@ -82,4 +82,15 @@ export class ServicioModel {
             throw error;
         }
     }
+
+    static async getByCategoria({ idCategoria }) {
+        const [rows] = await pool.query(
+            `SELECT id, nombre, duracion, precio 
+     FROM servicios 
+     WHERE id_categoria = ? AND estado = TRUE`,
+            [idCategoria]
+        );
+        return rows;
+    }
+
 }

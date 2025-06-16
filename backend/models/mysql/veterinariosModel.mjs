@@ -102,4 +102,24 @@ export class VeterinarioModel {
       throw error;
     }
   }
+
+  static async getByCategoria(idCategoria) {
+    try {
+      const [rows] = await pool.query(
+        `SELECT 
+         BIN_TO_UUID(v.id) AS id,
+         CONCAT(v.nombre, ' ', v.apellido_paterno) AS nombre_completo,
+         v.dni
+       FROM veterinario v
+       JOIN especialidad_categorias ec ON v.id_especialidad = ec.id_especialidad
+       WHERE ec.id_categoria = ?`,
+        [idCategoria]
+      );
+      return rows;
+    } catch (error) {
+      console.error('Error al obtener veterinarios por categoría:', error);
+      throw error;
+    }
+  }
+
 }

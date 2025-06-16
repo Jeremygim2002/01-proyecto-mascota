@@ -63,3 +63,9 @@ export async function actualizarEstadoServicio(id, nuevoEstado) {
 
   return res.json();
 }
+
+export async function obtenerServiciosPorCategoria(idCategoria) {
+  const res = await fetch(`${API_URL}/categoria/${idCategoria}`);
+  if (!res.ok) throw new Error("Error al obtener servicios por categoría");
+  return res.json(); 
+}

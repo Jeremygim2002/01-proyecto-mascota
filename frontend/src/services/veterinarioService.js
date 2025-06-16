@@ -63,3 +63,10 @@ export async function actualizarEstadoVeterinario(id, nuevoEstado) {
 
   return res.json();
 }
+
+export async function obtenerVeterinariosPorCategoria(idCategoria) {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/api/veterinarios/categoria/${idCategoria}`);
+  if (!res.ok) throw new Error("Error al obtener veterinarios por categoría");
+  return res.json(); // [{ id, nombre_completo, dni }]
+}
+

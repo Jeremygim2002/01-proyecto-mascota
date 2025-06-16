@@ -85,4 +85,16 @@ export class ServicioController {
     await this.servicioModel.updateEstado({ id, estado });
     res.json({ message: 'Estado actualizado correctamente' });
   };
+
+  getByCategoria = async (req, res) => {
+    const { idCategoria } = req.params;
+    try {
+      const servicios = await this.servicioModel.getByCategoria({ idCategoria });
+      res.json(servicios);
+    } catch (error) {
+      console.error("Error al obtener servicios por categoría:", error);
+      res.status(500).json({ error: "Error interno del servidor" });
+    }
+  };
+
 }

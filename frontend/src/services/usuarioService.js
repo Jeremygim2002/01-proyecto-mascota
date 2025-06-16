@@ -17,3 +17,10 @@ export async function crearUsuario(datos) {
     if (!res.ok) throw new Error("Error al crear usuario");
     return res.json();
 }
+
+// Buscar usuario con sus mascotas por DNI
+export async function buscarUsuarioConMascotasPorDni(dni) {
+    const res = await fetch(`${API_URL}/mascotas/${dni}`);
+    if (!res.ok) return null;
+    return res.json();
+}

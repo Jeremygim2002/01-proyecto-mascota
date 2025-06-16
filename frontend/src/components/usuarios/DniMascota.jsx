@@ -10,6 +10,7 @@ const DniMascota = ({ usuario }) => {
     estado,
     sexo,
     foto_mascota,
+    tipo_mascota
   } = usuario;
 
   const fotoFinal =
@@ -38,6 +39,7 @@ const DniMascota = ({ usuario }) => {
           <p><strong> Estado:</strong> {estado ? "Activo" : "Inactivo"}</p>
           <p><strong> Dueño:</strong> {nombre_usuario}</p>
           <p><strong> DNI Dueño:</strong> {dni}</p>
+          <p><strong> Tipo de Mascota:</strong> {tipo_mascota}</p>
         </div>
       </div>
     </div>

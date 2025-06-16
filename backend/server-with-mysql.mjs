@@ -7,6 +7,9 @@ import { VeterinarioModel } from './models/mysql/veterinariosModel.mjs';
 import { ServicioModel } from './models/mysql/serviciosModel.mjs';
 import { EspecialidadVeterinarioModel } from './models/mysql/especialidadVeterinarioModel.mjs';
 import { CategoriaServicioModel } from './models/mysql/categoriaServicioModel.mjs';
+import { TipoMascotaModel } from './models/mysql/tipoMascotaModel.mjs';
+import { OrdenModel } from './models/mysql/ordenModel.mjs';
+
 
 
 createApp({
@@ -17,6 +20,8 @@ createApp({
     veterinarioModel: VeterinarioModel,
     servicioModel: ServicioModel,
     especialidadVeterinarioModel: EspecialidadVeterinarioModel,
-    categoriaServicioModel: CategoriaServicioModel
+    categoriaServicioModel: CategoriaServicioModel,
+    tipoMascotaModel: TipoMascotaModel,
+    ordenModel: OrdenModel
 })
 

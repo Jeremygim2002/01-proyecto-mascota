@@ -8,12 +8,15 @@ import { createVeterinariosRouter } from './routes/veterinariosRoutes.mjs';
 import { createServiciosRouter } from './routes/serviciosRoutes.mjs';
 import { createEspecialidadesRouter } from './routes/especialidadVeterinarioRoutes.mjs';
 import { createCategoriaServicioRouter } from './routes/categoriaServicioRoutes.mjs';
+import { createTipoMascotaRouter } from './routes/tipoMascotaRoutes.mjs';
+import { createOrdenesRouter } from './routes/ordenRoutes.mjs';
+
 
 import { corsMiddleware } from './middlewares/cors.mjs';
 import cookieParser from 'cookie-parser';
 
 
-export const createApp = ({ usuarioModel, mascotaModel, asistenteModel, mascotaUsuarioModel, veterinarioModel, servicioModel, especialidadVeterinarioModel, categoriaServicioModel }) => {
+export const createApp = ({ usuarioModel, mascotaModel, asistenteModel, mascotaUsuarioModel, veterinarioModel, servicioModel, especialidadVeterinarioModel, categoriaServicioModel, tipoMascotaModel, ordenModel }) => {
 
   const app = express();
 
@@ -32,6 +35,9 @@ export const createApp = ({ usuarioModel, mascotaModel, asistenteModel, mascotaU
   app.use('/api/servicios', createServiciosRouter({ servicioModel }));
   app.use('/api/especialidades', createEspecialidadesRouter({ especialidadVeterinarioModel }));
   app.use('/api/categorias-servicio', createCategoriaServicioRouter({ categoriaServicioModel }));
+  app.use('/api/tipos-mascota', createTipoMascotaRouter({ tipoMascotaModel }));
+  app.use('/api/ordenes', createOrdenesRouter({ ordenModel }));
+
 
 
   app.listen(port, () => {

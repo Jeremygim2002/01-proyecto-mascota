@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const servicioSchema = z.object({
+export const servicioSchema = z.object({
   id_categoria: z.number().int('ID de categoría no válido'),
   nombre: z.string().min(1, 'El nombre del servicio es obligatorio'),
   descripcion: z.string().min(1, 'La descripción es obligatoria'),

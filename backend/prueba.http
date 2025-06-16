@@ -45,23 +45,25 @@ DELETE http://localhost:3000/api/usuarios/b3b341b2-43fc-11f0-8bc8-a8a159de6f1d
 GET http://localhost:3000/api/mascotas
 
 ### Obtener mascota por ID
-GET http://localhost:3000/api/mascotas/1a1566c6-4550-11f0-bcb0-a8a159de6f1d
+GET http://localhost:3000/api/mascotas/025188e3-4adf-11f0-8d8e-a8a159de6f1d
 
 ### Crear nueva mascota (con id_usuario existente)
 POST http://localhost:3000/api/mascotas/
 Content-Type: application/json
 
 {
-  "nombre": "THOR",
+  "nombre": "THORR",
   "raza": "NEGRO",
   "edad": 4,
   "sexo": "M",
   "estado": true,
-  "id_usuario": "747c201b-4575-11f0-bcb0-a8a159de6f1d"
+  "imagen": "https://placekitten.com/300/300",
+  "id_usuario": "025188e3-4adf-11f0-8d8e-a8a159de6f1d",
+  "id_tipo_mascota": 1
 }
 
 ### Actualizar mascota (cambiar nombre y edad)
-PATCH http://localhost:3000/api/mascotas/1a1566c6-4550-11f0-bcb0-a8a159de6f1d
+PATCH http://localhost:3000/api/mascotas/50145ec0-4ae1-11f0-8d8e-a8a159de6f1d
 Content-Type: application/json
 
 {
@@ -70,10 +72,10 @@ Content-Type: application/json
 }
 
 ### Eliminar mascota
-DELETE http://localhost:3000/api/mascotas/95a6e8dd-4551-11f0-bcb0-a8a159de6f1d
+DELETE http://localhost:3000/api/mascotas/50145ec0-4ae1-11f0-8d8e-a8a159de6f1d
 
 ### 🔄 Cambiar estado de mascota
-PATCH http://localhost:3000/api/mascotas/819f0174-4575-11f0-bcb0-a8a159de6f1d
+PATCH http://localhost:3000/api/mascotas/50145ec0-4ae1-11f0-8d8e-a8a159de6f1d
 Content-Type: application/json
 
 {

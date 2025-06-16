@@ -11,6 +11,8 @@ export const createServiciosRouter = ({ servicioModel }) => {
   serviciosRouter.patch('/:id', servicioController.update)
   serviciosRouter.delete('/:id', servicioController.delete)
   serviciosRouter.patch('/:id/estado', servicioController.toggleEstado)
+  serviciosRouter.get('/categoria/:idCategoria', servicioController.getByCategoria);
+
 
   return serviciosRouter
 }

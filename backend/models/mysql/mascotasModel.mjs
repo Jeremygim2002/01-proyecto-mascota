@@ -24,17 +24,35 @@ export class MascotaModel {
     }
   }
 
-  static async create({ input }) {
-    const { nombre, raza, edad, sexo, estado, id_usuario } = input;
 
-    // llamamos al procedimiento almacenado
+  static async exists({ nombre, id_usuario }) {
+    const [rows] = await pool.query(`
+    SELECT 1 FROM mascotas 
+    WHERE nombre = ? AND id_usuario = UUID_TO_BIN(?) 
+    LIMIT 1
+  `, [nombre, id_usuario]);
+
+    return rows.length > 0;
+  }
+
+  static async create({ input }) {
+    const { nombre, raza, edad, sexo, estado, imagen, id_usuario, id_tipo_mascota } = input;
+
+    const yaExiste = await this.exists({ nombre, id_usuario });
+    if (yaExiste) {
+      const error = new Error('Ya existe una mascota con ese nombre para este usuario.');
+      error.status = 409;
+      throw error;
+    }
+
     await pool.query(
-      `CALL sp_insertar_mascota(?, ?, ?, ?, ?, UUID_TO_BIN(?))`,
-      [nombre, raza, edad, sexo, estado, id_usuario]
+      `CALL sp_insertar_mascota(?, ?, ?, ?, ?, ?, UUID_TO_BIN(?), ?)`,
+      [nombre, raza, edad, sexo, estado, imagen, id_usuario, id_tipo_mascota]
     );
 
-    return { nombre, raza, edad, sexo, estado, id_usuario };
+    return { nombre, raza, edad, sexo, estado, imagen, id_usuario, id_tipo_mascota };
   }
+
 
   static async update({ id, input }) {
     const fields = [];
