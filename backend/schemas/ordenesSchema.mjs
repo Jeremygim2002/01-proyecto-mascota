@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const ordenSchema = z.object({
+const ordenesSchema = z.object({
     id_mascota: z.string().uuid('ID de mascota inválido'),
     id_veterinario: z.string().uuid('ID de veterinario inválido'),
     id_asistente: z.string().uuid('ID de asistente inválido'),
@@ -11,9 +11,9 @@ const ordenSchema = z.object({
 });
 
 export function validateOrden(input) {
-    return ordenSchema.safeParse(input);
+    return ordenesSchema.safeParse(input);
 }
 
 export function validatePartialOrden(input) {
-    return ordenSchema.partial().safeParse(input);
+    return ordenesSchema.partial().safeParse(input);
 }

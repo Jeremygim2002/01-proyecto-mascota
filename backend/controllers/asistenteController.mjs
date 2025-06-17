@@ -1,7 +1,7 @@
 
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { validateAsistente, validateLogin } from '../schemas/asistentesSchema.mjs';
+import { validateAsistente, validateLogin } from '../schemas/asistenteSchema.mjs';
 import dotenv from 'dotenv';
 dotenv.config();
 const JWT_SECRET = process.env.JWT_SECRET || 'mi-clave-secreta';
@@ -27,7 +27,7 @@ export class AsistenteController {
         }
 
         const asistente = await model.create({ input: result.data });
-        res.status(201).json({ message: 'Asistente registrado exitosamente', asistente });
+        res.status(201).json({ message: 'Asistente registrado exitosamente', asistente });  
     }
 
     static async login(req, res) {

@@ -185,3 +185,56 @@ Content-Type: application/json
 }
 
 
+
+
+
+
+
+### 📄 Obtener todas las órdenes
+GET http://localhost:3000/api/ordenes
+Content-Type: application/json
+
+###
+
+### 🔍 Obtener una orden por ID
+GET http://localhost:3000/api/ordenes/d22a050e-4b45-11f0-af39-a8a159de6f1d
+Content-Type: application/json
+
+###
+
+### ➕ Crear nueva orden
+POST http://localhost:3000/api/ordenes
+Content-Type: application/json
+
+{
+  "id_mascota": "0252119d-4adf-11f0-8d8e-a8a159de6f1d",
+  "id_veterinario": "02546cb3-4adf-11f0-8d8e-a8a159de6f1d",
+  "id_asistente": "337f397e-4ae6-11f0-8d8e-a8a159de6f1d",
+  "servicios": [
+    "0252f7ce-4adf-11f0-8d8e-a8a159de6f1d",
+    "0252fa63-4adf-11f0-8d8e-a8a159de6f1d"
+  ]
+}
+
+###
+
+### ✏️ Actualizar orden
+PATCH http://localhost:3000/api/ordenes/
+Content-Type: application/json
+
+{
+  "id_mascota": "0252119d-4adf-11f0-8d8e-a8a159de6f1d",
+  "id_veterinario": "02546cb3-4adf-11f0-8d8e-a8a159de6f1d",
+  "estado": true,
+  "id_asistente": "337f397e-4ae6-11f0-8d8e-a8a159de6f1d"
+}
+
+###
+
+### ❌ Eliminar orden
+DELETE http://localhost:3000/api/ordenes/cf6c25bc-4b45-11f0-af39-a8a159de6f1d
+Content-Type: application/json
+
+{
+  "id_asistente": "337f397e-4ae6-11f0-8d8e-a8a159de6f1d"
+}

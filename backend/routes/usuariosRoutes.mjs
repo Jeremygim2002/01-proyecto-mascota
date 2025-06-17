@@ -6,14 +6,13 @@ export const createUsuarioRouter = ({ usuarioModel }) => {
 
     const usuarioController = new UsuarioController({ usuarioModel })
 
-    usuariosRouter.get('/', usuarioController.getAll)
-    usuariosRouter.get('/:id', usuarioController.getById)
-    usuariosRouter.post('/', usuarioController.create)
-    usuariosRouter.delete('/:id', usuarioController.delete)
-    usuariosRouter.patch('/:id', usuarioController.update)
+    usuariosRouter.get('/', usuarioController.getAll);
+    usuariosRouter.post('/', usuarioController.create);
     usuariosRouter.get('/dni/:dni', usuarioController.getByDni);
     usuariosRouter.get('/mascotas/:dni', usuarioController.getUsuarioConMascotasByDni);
+    usuariosRouter.patch('/:id', usuarioController.update);
+    usuariosRouter.delete('/:id', usuarioController.delete);
+    usuariosRouter.get('/:id', usuarioController.getById);
 
-    
-    return usuariosRouter
+    return usuariosRouter;
 }

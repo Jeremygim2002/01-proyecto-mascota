@@ -15,7 +15,7 @@ import {
   eliminarVeterinario,
   actualizarVeterinario,
 } from "@services/veterinarioService";
-import { obtenerEspecialidades } from "@services/especialidadService";
+import { obtenerEspecialidades } from "@services/especialidadVeterinarioService";
 
 import TablaFiltrosVeterinario from "./TablaFiltrosVeterinario";
 import ModalAgregarVeterinario from "./ModalAgregarVeterinario";

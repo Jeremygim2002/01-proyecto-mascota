@@ -116,7 +116,6 @@ const TablaOrden = () => {
 
       <TablaBase
         columnas={[
-          { id: "id_orden", label: "ID Orden" },
           { id: "usuario", label: "Usuario" },
           { id: "nombre_mascota", label: "Mascota" },
           { id: "veterinario", label: "Veterinario" },

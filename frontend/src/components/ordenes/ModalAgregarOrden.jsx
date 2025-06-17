@@ -30,20 +30,33 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
 
   const [fecha, setFecha] = useState("");
   const [hora, setHora] = useState("");
+  const [horaFin, setHoraFin] = useState("");
+
+  const calcularHoraFin = (horaInicio, duracionMin) => {
+    if (!horaInicio || !duracionMin) return "";
+    const [h, m] = horaInicio.split(":").map(Number);
+    const inicio = new Date(0, 0, 0, h, m);
+    inicio.setMinutes(inicio.getMinutes() + parseInt(duracionMin));
+    return inicio.toTimeString().slice(0, 5);
+  };
 
   const buscarUsuario = async () => {
     try {
       const res = await buscarUsuarioConMascotasPorDni(dniDuenio);
-      setUsuario(res.user);
+      console.log("RES: ", res);
+      setUsuario(res.usuario);
       setMascotas(res.mascotas);
-    } catch (error) {
-      console.error("Error al buscar usuario:", error);
+    } catch (e) {
+      console.error(e);
+      setUsuario(null);
+      setMascotas([]);
+      alert("Usuario no encontrado");
     }
   };
 
   const handleMascotaChange = (id) => {
     setMascotaSeleccionada(id);
-    const mascota = mascotas.find((m) => m.id === id);
+    const mascota = mascotas.find((m) => m.id_mascota === id);
     if (mascota) {
       setRazaMascota(mascota.raza);
       setEdadMascota(mascota.edad);
@@ -60,10 +73,22 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
 
   const handleServicioChange = (id) => {
     setServicioSeleccionado(id);
-    const s = servicios.find((s) => s.id_servicio === id);
-    if (s) {
-      setPrecio(s.precio);
-      setDuracion(s.duracion);
+    console.log("🆔 ID seleccionado:", id);
+    console.log("📦 Servicios disponibles:", servicios);
+
+    const servicio = servicios.find(
+      (s) => String(s.id_servicio) === String(id)
+    );
+    console.log("🔍 Servicio encontrado:", servicio);
+
+    if (servicio) {
+      setPrecio(servicio.precio);
+      setDuracion(servicio.duracion);
+      if (hora) setHoraFin(calcularHoraFin(hora, servicio.duracion));
+    } else {
+      setPrecio("");
+      setDuracion("");
+      setHoraFin("");
     }
   };
 
@@ -73,9 +98,15 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
     if (v) setDniVeterinario(v.dni);
   };
 
+  const handleHoraChange = (h) => {
+    setHora(h);
+    if (duracion) setHoraFin(calcularHoraFin(h, duracion));
+  };
+
   useEffect(() => {
     const cargarCategorias = async () => {
       const cat = await obtenerCategorias();
+      console.log("📦 Categorias:", cat); // 👈 VERIFICA AQUÍ
       setCategorias(cat);
     };
     cargarCategorias();
@@ -86,7 +117,7 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
     const nuevaOrden = {
       id_mascota: mascotaSeleccionada,
       id_veterinario: veterinarioSeleccionado,
-      id_asistente: "ID_ASISTENTE_FIXME", // Reemplazar con auth
+      id_asistente: "ID_ASISTENTE_FIXME",
       servicios: [servicioSeleccionado],
       fecha,
       hora,
@@ -100,7 +131,7 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-8">
           <Input
-            className="col-span-2 pl-4"
+            className="col-span-2"
             name="dniDuenio"
             placeholder="DNI del dueño"
             value={dniDuenio}
@@ -113,7 +144,9 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
           <Input
             className="col-span-4"
             disabled
-            value={usuario ? `${usuario.nombre} ${usuario.apellido_paterno}` : ""}
+            value={
+              usuario ? `${usuario.nombre} ${usuario.apellido_paterno}` : ""
+            }
             placeholder="Nombre del dueño"
           />
 
@@ -123,9 +156,13 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
             value={mascotaSeleccionada}
             onChange={(e) => handleMascotaChange(e.target.value)}
           >
-            <option value="">Seleccione mascota</option>
-            {mascotas.map((m) => (
-              <option key={m.id} value={m.id}>{m.nombre}</option>
+            <option key="_info_mascota_" value="">
+              Seleccione mascota
+            </option>
+            {mascotas.map((m, i) => (
+              <option key={`mascota_${m.id_mascota ?? i}`} value={m.id_mascota}>
+                {m.nombre_mascota}
+              </option>
             ))}
           </Select>
 
@@ -148,9 +185,13 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
             value={categoriaSeleccionada}
             onChange={(e) => handleCategoriaChange(e.target.value)}
           >
-            <option value="">Seleccione categoría</option>
-            {categorias.map((c) => (
-              <option key={c.id} value={c.id}>{c.nombre}</option>
+            <option key="_info_categoria_" value="">
+              Seleccione categoría
+            </option>
+            {categorias.map((c, i) => (
+              <option key={`cat_${c.id ?? i}`} value={c.id}>
+                {c.nombre}
+              </option>
             ))}
           </Select>
 
@@ -158,31 +199,59 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
             className="col-span-4"
             name="servicio"
             value={servicioSeleccionado}
-            onChange={(e) => handleServicioChange(e.target.value)}
+            onChange={(e) => {
+              const val = e.target.value;
+              console.log("🎯 Valor seleccionado en select servicio:", val);
+              handleServicioChange(val);
+            }}
           >
-            <option value="">Seleccione servicio</option>
-            {servicios.map((s) => (
-              <option key={s.id_servicio} value={s.id_servicio}>{s.nombre}</option>
+            <option key="_info_servicio_" value="">
+              Seleccione servicio
+            </option>
+            {servicios.map((s, i) => (
+              <option
+                key={`serv_${s.id_servicio ?? i}`}
+                value={String(s.id_servicio)} // Asegura string
+              >
+                {s.nombre}
+              </option>
             ))}
           </Select>
 
-          <Input className="col-span-2" disabled value={`S/. ${precio}`} placeholder="Precio" />
-          <Input className="col-span-2" disabled value={`${duracion} min`} placeholder="Duración" />
-
+          <Input
+            className="col-span-2"
+            disabled
+            value={`S/. ${precio}`}
+            placeholder="Precio"
+          />
+          <Input
+            className="col-span-2"
+            disabled
+            value={`${duracion} min`}
+            placeholder="Duración"
+          />
           <Select
             className="col-span-4"
             name="veterinario"
             value={veterinarioSeleccionado}
             onChange={(e) => handleVeterinarioChange(e.target.value)}
           >
-            <option value="">Seleccione veterinario</option>
-            {veterinarios.map((v) => (
-              <option key={v.id} value={v.id}>{v.nombre_completo}</option>
+            <option key="_info_vet_" value="">
+              Seleccione veterinario
+            </option>
+            {veterinarios.map((v, i) => (
+              <option key={`vet_${v.id ?? i}`} value={v.id}>
+                {v.nombre_completo}
+              </option>
             ))}
           </Select>
 
-          <Input className="col-span-2" disabled value={dniVeterinario} placeholder="DNI Veterinario" />
-
+          <Input
+            className="col-span-2"
+            disabled
+            value={dniVeterinario}
+            placeholder="DNI Veterinario"
+          />
           <Input
             className="col-span-2"
             type="date"
@@ -190,13 +259,18 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
             onChange={(e) => setFecha(e.target.value)}
             required
           />
-
           <Input
             className="col-span-2"
             type="time"
             value={hora}
-            onChange={(e) => setHora(e.target.value)}
+            onChange={(e) => handleHoraChange(e.target.value)}
             required
+          />
+          <Input
+            className="col-span-2"
+            disabled
+            value={horaFin}
+            placeholder="Hora Fin"
           />
         </div>
 
