@@ -3,13 +3,13 @@ import express from 'express';
 import { createUsuarioRouter } from './routes/usuariosRoutes.mjs'
 import { createMascotasRouter } from './routes/mascotasRoutes.mjs'
 import { createAsistentesRouter } from './routes/asistentesRoutes.mjs';
-import { createMascotaUsuarioRouter } from './routes/mascotaUsuarioRoutes.mjs';
+import { createMascotaUsuarioRouter } from './routes/mascotasUsuarioRoutes.mjs';
 import { createVeterinariosRouter } from './routes/veterinariosRoutes.mjs';
 import { createServiciosRouter } from './routes/serviciosRoutes.mjs';
-import { createEspecialidadesRouter } from './routes/especialidadVeterinarioRoutes.mjs';
-import { createCategoriaServicioRouter } from './routes/categoriaServicioRoutes.mjs';
-import { createTipoMascotaRouter } from './routes/tipoMascotaRoutes.mjs';
-import { createOrdenesRouter } from './routes/ordenRoutes.mjs';
+import { createEspecialidadesRouter } from './routes/especialidadesVeterinarioRoutes.mjs';
+import { createCategoriaServicioRouter } from './routes/categoriasServicioRoutes.mjs';
+import { createTipoMascotaRouter } from './routes/tiposMascotaRoutes.mjs';
+import { createOrdenesRouter } from './routes/ordenesRoutes.mjs';
 
 
 import { corsMiddleware } from './middlewares/cors.mjs';

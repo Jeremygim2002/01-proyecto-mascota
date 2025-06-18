@@ -1,7 +1,7 @@
 import {
     validateVeterinario,
     validatePartialVeterinario
-} from '../schemas/veterinariosSchema.mjs';
+} from '../schemas/veterinarioSchema.mjs';
 
 export class VeterinarioController {
     constructor({ veterinarioModel }) {

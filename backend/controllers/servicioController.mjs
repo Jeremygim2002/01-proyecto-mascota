@@ -1,7 +1,7 @@
 import {
   validateServicio,
   validatePartialServicio
-} from '../schemas/serviciosSchema.mjs';
+} from '../schemas/servicioSchema.mjs';
 
 export class ServicioController {
   constructor({ servicioModel }) {

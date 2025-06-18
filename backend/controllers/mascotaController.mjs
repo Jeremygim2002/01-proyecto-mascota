@@ -1,7 +1,7 @@
 import {
   validateMascota,
   validatePartialMascota
-} from '../schemas/mascotasSchema.mjs';
+} from '../schemas/mascotaSchema.mjs';
 
 export class MascotaController {
   constructor({ mascotaModel }) {

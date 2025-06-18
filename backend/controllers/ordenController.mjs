@@ -1,7 +1,7 @@
 import {
     validateOrden,
     validatePartialOrden
-} from '../schemas/ordenesSchema.mjs';
+} from '../schemas/ordenSchema.mjs';
 
 export class OrdenController {
     constructor({ ordenModel }) {

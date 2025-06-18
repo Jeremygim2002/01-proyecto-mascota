@@ -5,7 +5,7 @@ import Select from "@common/ui/Select";
 import Button from "@common/ui/Button";
 
 import { notificarError, notificarExito } from "@lib/notificaciones";
-import { validateServicio } from "@schemas/serviciosSchema";
+import { validateServicio } from "@schemas/servicioSchema";
 
 const ModalEditarServicio = ({
   isOpen,

@@ -106,7 +106,7 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
   useEffect(() => {
     const cargarCategorias = async () => {
       const cat = await obtenerCategorias();
-      console.log("📦 Categorias:", cat); // 👈 VERIFICA AQUÍ
+      console.log("Categorias:", cat); 
       setCategorias(cat);
     };
     cargarCategorias();
@@ -130,19 +130,24 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
     <ModalGeneral isOpen={isOpen} onClose={onClose} title="Agregar orden">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-8">
+          <div className="col-span-4 flex gap-4">
+            <Input
+              className="pl-4 flex-1"
+              name="dniDuenio"
+              placeholder="DNI del dueño"
+              value={dniDuenio}
+              onChange={(e) => setDniDuenio(e.target.value)}
+            />
+            <Button
+              type="button"
+              className="col-span-2"
+              onClick={buscarUsuario}
+            >
+              Buscar
+            </Button>
+          </div>
           <Input
-            className="col-span-2"
-            name="dniDuenio"
-            placeholder="DNI del dueño"
-            value={dniDuenio}
-            onChange={(e) => setDniDuenio(e.target.value)}
-          />
-          <Button type="button" className="col-span-2" onClick={buscarUsuario}>
-            Buscar
-          </Button>
-
-          <Input
-            className="col-span-4"
+            className="col-span-2 pl-4"
             disabled
             value={
               usuario ? `${usuario.nombre} ${usuario.apellido_paterno}` : ""
@@ -151,7 +156,7 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
           />
 
           <Select
-            className="col-span-4"
+            className="col-span-2"
             name="mascota"
             value={mascotaSeleccionada}
             onChange={(e) => handleMascotaChange(e.target.value)}
@@ -180,7 +185,7 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
           />
 
           <Select
-            className="col-span-4"
+            className="col-span-2"
             name="categoria"
             value={categoriaSeleccionada}
             onChange={(e) => handleCategoriaChange(e.target.value)}
@@ -196,7 +201,7 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
           </Select>
 
           <Select
-            className="col-span-4"
+            className="col-span-2"
             name="servicio"
             value={servicioSeleccionado}
             onChange={(e) => {
@@ -231,7 +236,7 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
             placeholder="Duración"
           />
           <Select
-            className="col-span-4"
+            className="col-span-2"
             name="veterinario"
             value={veterinarioSeleccionado}
             onChange={(e) => handleVeterinarioChange(e.target.value)}

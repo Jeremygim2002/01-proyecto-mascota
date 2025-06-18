@@ -5,7 +5,7 @@ import Select from "@common/ui/Select";
 import Button from "@common/ui/Button";
 
 import { notificarError, notificarExito } from "@lib/notificaciones";
-import { validateVeterinario } from "@schemas/veterinariosSchema";
+import { validateVeterinario } from "@schemas/veterinarioSchema";
 
 const ModalEditarVeterinario = ({
   isOpen,

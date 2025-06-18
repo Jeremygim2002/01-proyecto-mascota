@@ -6,7 +6,7 @@ import Button from "@common/ui/Button";
 
 import { useResetFormulario } from "@hooks/useResetFormulario";
 import { notificarError, notificarExito } from "@lib/notificaciones";
-import { validateServicio } from "@schemas/serviciosSchema";
+import { validateServicio } from "@schemas/servicioSchema";
 
 const ModalAgregarServicio = ({
   isOpen,

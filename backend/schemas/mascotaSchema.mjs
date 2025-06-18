@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const mascotaSchema = z.object({
+const mascotaSchema = z.object({
   nombre: z.string().trim().min(1, 'Ingresa el nombre de la mascota'),
   raza: z.string().trim().min(1, 'Ingresa la raza'),
   edad: z.number().int().nonnegative('La edad debe ser un número positivo'),

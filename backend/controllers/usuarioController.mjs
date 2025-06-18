@@ -1,7 +1,7 @@
 import {
     validateUsuario,
     validatePartialUsuario
-} from '../schemas/usuariosSchema.mjs';
+} from '../schemas/usuarioSchema.mjs';
 
 export class UsuarioController {
     constructor({ usuarioModel }) {
