@@ -16,10 +16,17 @@ export async function obtenerOrdenPorId(id) {
 }
 
 export async function crearOrden(data) {
+  const mapped = {
+    ...data,
+    hora_inicio: data.hora || data.hora_inicio,
+  };
+
+  delete mapped.hora;
+
   const res = await fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+    body: JSON.stringify(mapped),
   });
 
   if (!res.ok) {
@@ -29,6 +36,7 @@ export async function crearOrden(data) {
 
   return res.json();
 }
+
 
 export async function actualizarOrden(orden) {
   const res = await fetch(`${API_URL}/${orden.id_orden}`, {

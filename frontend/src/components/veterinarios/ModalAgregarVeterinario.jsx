@@ -8,7 +8,11 @@ import Input from "@common/ui/Input";
 import Select from "@common/ui/Select";
 import Button from "@common/ui/Button";
 
-import { notificarError, notificarExito } from "@lib/notificaciones";
+import {
+  notificarError,
+  notificarExito,
+  notificarErroresZod,
+} from "@lib/notificaciones";
 
 const ModalAgregarVeterinario = ({
   isOpen,
@@ -47,17 +51,13 @@ const ModalAgregarVeterinario = ({
       correo,
       numero_telefono: numeroTelefono,
       dni,
-      id_especialidad: idEspecialidad,
+      id_especialidad: Number(idEspecialidad),
       estado: true,
     };
 
     const validacion = validateVeterinario(nuevoVeterinario);
     if (!validacion.success) {
-      const errores = validacion.error.format();
-      for (const campo in errores) {
-        const mensaje = errores[campo]?._errors?.[0];
-        if (mensaje) notificarError(mensaje);
-      }
+      notificarErroresZod(validacion.error);
       return;
     }
 

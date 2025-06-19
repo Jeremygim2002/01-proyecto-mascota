@@ -10,3 +10,12 @@ export const usuarioSchema = z.object({
   dni: z.string().trim()
     .regex(/^\d{8}$/, 'El DNI debe tener exactamente 8 dígitos'),
 });
+
+
+export function validateUsuario(input) {
+  return usuarioSchema.safeParse(input)
+}
+
+export function validatePartialUsuario(input) {
+  return usuarioSchema.partial().safeParse(input)
+}

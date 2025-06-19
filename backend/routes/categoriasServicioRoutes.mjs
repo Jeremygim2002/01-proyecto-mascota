@@ -3,9 +3,9 @@ import { CategoriaServicioController } from '../controllers/categoriaServicioCon
 
 export const createCategoriaServicioRouter = ({ categoriaServicioModel }) => {
   const router = Router();
-  const ctrl = new CategoriaServicioController({ categoriaServicioModel });
+  const categoriaServicioController = new CategoriaServicioController({ categoriaServicioModel });
 
-  router.get('/', ctrl.getAll);
+  router.get('/', categoriaServicioController.getAll);
 
   return router;
 };

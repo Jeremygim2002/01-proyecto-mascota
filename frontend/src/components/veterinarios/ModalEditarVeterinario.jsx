@@ -4,8 +4,12 @@ import Input from "@common/ui/Input";
 import Select from "@common/ui/Select";
 import Button from "@common/ui/Button";
 
-import { notificarError, notificarExito } from "@lib/notificaciones";
-import { validateVeterinario } from "@schemas/veterinarioSchema";
+import {
+  notificarError,
+  notificarExito,
+  notificarErroresZod,
+} from "@lib/notificaciones";
+import { validatePartialVeterinario } from "@schemas/veterinarioSchema";
 
 const ModalEditarVeterinario = ({
   isOpen,
@@ -45,19 +49,15 @@ const ModalEditarVeterinario = ({
       apellido_paterno: apellidoPaterno,
       apellido_materno: apellidoMaterno,
       correo,
-      numero_telefono: numeroTelefono, 
+      numero_telefono: numeroTelefono,
       dni,
       estado: Boolean(estado),
-      id_especialidad: idEspecialidad, 
+      id_especialidad: idEspecialidad,
     };
 
-    const validacion = validateVeterinario(veterinarioEditado);
+    const validacion = validatePartialVeterinario(veterinarioEditado);
     if (!validacion.success) {
-      const errores = validacion.error.format();
-      for (const campo in errores) {
-        const mensaje = errores[campo]?._errors?.[0];
-        if (mensaje) notificarError(mensaje);
-      }
+      notificarErroresZod(validacion.error);
       return;
     }
 

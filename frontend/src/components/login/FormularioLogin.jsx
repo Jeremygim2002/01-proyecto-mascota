@@ -25,12 +25,12 @@ const FormularioLogin = ({ onOlvidaste, onCrearCuenta }) => {
     try {
       await login(data);
       notificarExito("Inicio de sesión exitoso");
-      // Mostrar loader visual antes de navegar
+   
       setMostrandoLoader(true);
 
       setTimeout(() => {
         navigate("/dashboard");
-      }, 3000); // Tiempo que dura tu GIF
+      }, 3000); 
     } catch (error) {
       notificarError("correo o contraseña incorrecta");
       console.error("Error al iniciar sesión:", error);

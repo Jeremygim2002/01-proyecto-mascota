@@ -29,7 +29,8 @@ export class OrdenModel {
             id_mascota,
             id_veterinario,
             id_asistente,
-            servicios
+            servicios,
+            hora_inicio
         } = input;
 
         const serviciosTexto = Array.isArray(servicios)
@@ -38,8 +39,8 @@ export class OrdenModel {
 
         try {
             await pool.query(
-                'CALL sp_insertar_orden(UUID_TO_BIN(?), UUID_TO_BIN(?), UUID_TO_BIN(?), ?)',
-                [id_mascota, id_veterinario, id_asistente, serviciosTexto]
+                'CALL sp_insertar_orden(UUID_TO_BIN(?), UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?)',
+                [id_mascota, id_veterinario, id_asistente, hora_inicio, serviciosTexto]
             );
         } catch (error) {
             console.error('Error al crear orden:', error);
@@ -60,7 +61,7 @@ export class OrdenModel {
                 'CALL sp_actualizar_orden(UUID_TO_BIN(?), UUID_TO_BIN(?), UUID_TO_BIN(?), ?, UUID_TO_BIN(?))',
                 [id, id_mascota, id_veterinario, estado, id_asistente]
             );
-            return { success: true }; 
+            return { success: true };
         } catch (error) {
             console.error(`Error al actualizar orden con ID ${id}:`, error);
             throw error;
@@ -69,8 +70,11 @@ export class OrdenModel {
 
     static async delete({ id, id_asistente }) {
         try {
-            await pool.query('CALL sp_eliminar_orden(UUID_TO_BIN(?), UUID_TO_BIN(?))', [id, id_asistente]);
-            return { success: true }; 
+            await pool.query(
+                'CALL sp_eliminar_orden(UUID_TO_BIN(?), UUID_TO_BIN(?))',
+                [id, id_asistente]
+            );
+            return { success: true };
         } catch (error) {
             console.error(`Error al eliminar orden con ID ${id}:`, error);
             throw error;

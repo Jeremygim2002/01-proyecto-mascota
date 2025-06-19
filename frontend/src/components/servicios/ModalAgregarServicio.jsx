@@ -5,7 +5,11 @@ import Select from "@common/ui/Select";
 import Button from "@common/ui/Button";
 
 import { useResetFormulario } from "@hooks/useResetFormulario";
-import { notificarError, notificarExito } from "@lib/notificaciones";
+import {
+  notificarError,
+  notificarExito,
+  notificarErroresZod,
+} from "@lib/notificaciones";
 import { validateServicio } from "@schemas/servicioSchema";
 
 const ModalAgregarServicio = ({
@@ -39,11 +43,7 @@ const ModalAgregarServicio = ({
 
     const validacion = validateServicio(nuevoServicio);
     if (!validacion.success) {
-      const errores = validacion.error.format();
-      for (const campo in errores) {
-        const mensaje = errores[campo]?._errors?.[0];
-        if (mensaje) notificarError(mensaje);
-      }
+      notificarErroresZod(validacion.error); 
       return;
     }
 

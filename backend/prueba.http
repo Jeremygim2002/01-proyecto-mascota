@@ -1,3 +1,5 @@
+#====== USUARIOS =====#
+
 ### Obtener todos los usuarios
 GET http://localhost:3000/api/usuarios
 
@@ -33,6 +35,7 @@ Content-Type: application/json
 
 ### Eliminar usuario
 DELETE http://localhost:3000/api/usuarios/b3b341b2-43fc-11f0-8bc8-a8a159de6f1d
+
 
 
 
@@ -84,18 +87,19 @@ Content-Type: application/json
 
 
 
-#====== MASCOTAS + USUARIOS =====#
 
 
-### 🔍 MASCOTAS INNER  USUARIOS
+
+#====== HISTORIAL =====#
+
+### 🔗 Mascotas unidas con usuarios (vista historial)
 GET http://localhost:3000/api/mascota-usuario
 
 
 
 
-
-
 #====== VETERINARIOS =====#
+
 ### Obtener todos los veterinarios
 GET http://localhost:3000/api/veterinarios
 
@@ -140,7 +144,6 @@ Content-Type: application/json
 {
   "estado": false
 }
-
 
 
 
@@ -190,6 +193,9 @@ Content-Type: application/json
 
 
 
+
+#====== ORDENES =====#
+
 ### 📄 Obtener todas las órdenes
 GET http://localhost:3000/api/ordenes
 Content-Type: application/json
@@ -238,3 +244,61 @@ Content-Type: application/json
 {
   "id_asistente": "337f397e-4ae6-11f0-8d8e-a8a159de6f1d"
 }
+
+
+
+
+
+
+
+
+
+
+
+#====== ASISTENTE AUTH =====#
+
+
+### 🔐 Login asistente
+POST http://localhost:3000/api/asistente/login
+Content-Type: application/json
+
+{
+  "correo": "admin@example.com",
+  "password": "123456"
+}
+
+###
+
+### 🚪 Logout asistente
+POST http://localhost:3000/api/asistente/logout
+
+### 👤 Perfil del asistente autenticado
+GET http://localhost:3000/api/asistente/profile
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

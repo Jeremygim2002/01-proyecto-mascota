@@ -12,20 +12,20 @@ const PanelUsuario = () => {
 
   const cerrarSesion = async () => {
     try {
-            setMostrandoLoader(true);
+      setMostrandoLoader(true);
       await logout();
       notificarExito("Sesión cerrada correctamente");
       setTimeout(() => {
         navigate("/login");
       }, 3000); // Mismo tiempo del loader
     } catch (error) {
-            setMostrandoLoader(false); // Si falla, ocultamos loader
+      setMostrandoLoader(false); // Si falla, ocultamos loader
       console.error("Error al cerrar sesión", error);
       notificarError(error);
     }
   };
 
-    if (mostrandoLoader) return <Loader duracion={2500} />;
+  if (mostrandoLoader) return <Loader duracion={2500} />;
 
   return (
     <PanelGeneral className="w-48 flex flex-col space-y-3">

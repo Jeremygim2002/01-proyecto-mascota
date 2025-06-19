@@ -89,6 +89,7 @@ export class UsuarioController {
 
             res.json(data);
         } catch (error) {
+            console.error('Error en controlador:', error);
             res.status(500).json({ error: 'Error interno al obtener usuario y mascotas' });
         }
     };

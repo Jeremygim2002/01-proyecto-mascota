@@ -55,24 +55,13 @@ export class MascotaModel {
 
 
   static async update({ id, input }) {
-    const fields = [];
-    const values = [];
+    const { nombre, raza, edad, sexo, estado, imagen, id_usuario, id_tipo_mascota } = input;
 
-    for (const [key, value] of Object.entries(input)) {
-      if (key === 'id_usuario') {
-        fields.push(`${key} = UUID_TO_BIN(?)`);
-      } else {
-        fields.push(`${key} = ?`);
-      }
-      values.push(value);
-    }
-
-    const sql = `UPDATE mascotas SET ${fields.join(', ')} WHERE id = UUID_TO_BIN(?)`;
-    values.push(id);
-
-    await pool.query(sql, values);
+    await pool.query(
+      `CALL sp_actualizar_mascota(UUID_TO_BIN(?), ?, ?, ?, ?, ?, ?, UUID_TO_BIN(?), ?)`,
+      [id, nombre, raza, edad, sexo, estado, imagen, id_usuario, id_tipo_mascota]
+    );
   }
-
 
   static async delete({ id }) {
     try {
@@ -96,4 +85,5 @@ export class MascotaModel {
       throw error;
     }
   }
+
 }

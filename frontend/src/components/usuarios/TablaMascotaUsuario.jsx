@@ -8,32 +8,30 @@ import { useBusqueda } from "@hooks/useBusqueda";
 import { useFiltrado } from "@hooks/useFiltrado";
 import { useToggleEstado } from "@hooks/useToggleEstado";
 
+import { obtenerMascotasUsuarios } from "@services/historialService";
 import {
-  obtenerMascotasUsuarios,
   eliminarMascota,
-} from "@services/mascotaUsuarioService";
-import {
   crearMascota,
-  actualizarMascota,
   actualizarEstadoMascota,
 } from "@services/mascotaService";
+import { actualizarUsuario } from "@services/usuarioService";
 
 import TablaFiltrosUsuario from "./TablaFiltrosUsuario";
 import ModalAgregarMascota from "./ModalAgregarMascota";
 import ModalAgregarUsuario from "./ModalAgregarUsuario";
 import ModalVerMascotaUsuario from "./ModalVerMascotaUsuario";
-import ModalEditarMascotaUsuario from "./ModalEditarMascotaUsuario";
+import ModalEditarUsuario from "./ModalEditarUsuario";
 
 const TablaMascotaUsuario = () => {
   const [modalVerOpen, setModalVerOpen] = useState(false);
   const [modalMascotaOpen, setModalMascotaOpen] = useState(false);
   const [modalUsuarioOpen, setModalUsuarioOpen] = useState(false);
-  const [modalEditarOpen, setModalEditarOpen] = useState(false);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const [datosMascotasUsuarios, setDatosMascotasUsuarios] = useState([]);
-  const [mascotaEditando, setMascotaEditando] = useState(null);
+  const [modalEditarOpen, setModalEditarOpen] = useState(false);
+  const [usuarioEditando, setUsuarioEditando] = useState(null);
 
-  const cargarMascotas = async () => {
+  const cargarUsuarios = async () => {
     try {
       const data = await obtenerMascotasUsuarios();
       setDatosMascotasUsuarios(data);
@@ -45,14 +43,14 @@ const TablaMascotaUsuario = () => {
   const registrarMascota = async (nuevaMascota) => {
     try {
       await crearMascota(nuevaMascota);
-      await cargarMascotas();
+      await cargarUsuarios();
     } catch (error) {
       console.error("Error al crear mascota:", error);
     }
   };
 
   useEffect(() => {
-    cargarMascotas();
+    cargarUsuarios();
   }, []);
 
   const { busqueda, handleSearch } = useBusqueda();
@@ -61,6 +59,7 @@ const TablaMascotaUsuario = () => {
     ["nombre_mascota", "raza", "nombre_usuario", "dni"],
     busqueda
   );
+
   const toggleEstado = useToggleEstado(
     setDatosMascotasUsuarios,
     "id_mascota",
@@ -73,16 +72,24 @@ const TablaMascotaUsuario = () => {
   };
 
   const handleEditar = (fila) => {
-    setMascotaEditando(fila);
+    setUsuarioEditando({
+      id: fila.id_usuario,
+      nombre: fila.nombre_usuario,
+      apellido_paterno: fila.apellido_paterno,
+      apellido_materno: fila.apellido_materno,
+      correo: fila.correo,
+      numero_telefono: fila.numero_telefono,
+      dni: fila.dni,
+    });
     setModalEditarOpen(true);
   };
 
   const handleEliminar = async (id) => {
     try {
       await eliminarMascota(id);
-      await cargarMascotas();
+      await cargarUsuarios();
     } catch (error) {
-      console.error("Error al eliminar:", error);
+      console.error("Error al eliminar mascota:", error);
     }
   };
 
@@ -117,13 +124,13 @@ const TablaMascotaUsuario = () => {
         usuario={usuarioSeleccionado}
       />
 
-      <ModalEditarMascotaUsuario
+      <ModalEditarUsuario
         isOpen={modalEditarOpen}
         onClose={() => setModalEditarOpen(false)}
-        mascota={mascotaEditando}
-        onActualizar={async (mascotaEditada) => {
-          await actualizarMascota(mascotaEditada);
-          await cargarMascotas();
+        usuario={usuarioEditando}
+        onActualizar={async (usuarioEditado) => {
+          await actualizarUsuario(usuarioEditado);
+          await cargarUsuarios();
         }}
       />
 

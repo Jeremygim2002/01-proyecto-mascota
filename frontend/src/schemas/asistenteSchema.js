@@ -10,3 +10,16 @@ export const asistenteSchema = z.object({
   dni: z.string().trim().length(8, 'El DNI debe tener exactamente 8 dígitos'),
   password: z.string().trim().min(6, 'La contraseña debe tener mínimo 6 caracteres'),
 });
+
+const loginSchema = z.object({
+  correo: z.string().trim().email('Correo electrónico no válido'),
+  password: z.string().trim().min(6, 'La contraseña debe tener al menos 6 caracteres'),
+});
+
+export function validateAsistente(input) {
+  return asistenteSchema.safeParse(input);
+}
+
+export function validateLogin(input) {
+  return loginSchema.safeParse(input);
+}

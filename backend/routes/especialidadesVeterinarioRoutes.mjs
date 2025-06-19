@@ -3,9 +3,9 @@ import { EspecialidadVeterinarioController } from '../controllers/especialidadVe
 
 export const createEspecialidadesRouter = ({ especialidadVeterinarioModel }) => {
   const router = Router();
-  const ctrl = new EspecialidadVeterinarioController({ especialidadVeterinarioModel });
+  const especialidadVeterinarioController = new EspecialidadVeterinarioController({ especialidadVeterinarioModel });
 
-  router.get('/', ctrl.getAll);
+  router.get('/', especialidadVeterinarioController.getAll);
 
   return router;
 };

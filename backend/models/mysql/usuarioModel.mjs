@@ -106,33 +106,16 @@ export class UsuarioModel {
 
   static async getUsuarioConMascotasByDni(dni) {
     try {
-      const [[usuario]] = await pool.query(
-        'SELECT BIN_TO_UUID(id) AS id, nombre, apellido_paterno, apellido_materno, correo, numero_telefono, dni FROM usuarios WHERE dni = ?',
-        [dni]
-      );
+      const [resultSets] = await pool.query('CALL sp_get_usuario_con_mascotas(?)', [dni]);
+
+      const usuario = resultSets[0][0] || null;
+      const mascotas = resultSets[1] || [];
 
       if (!usuario) return null;
 
-      const [mascotas] = await pool.query(
-        `SELECT 
-         BIN_TO_UUID(m.id) AS id_mascota,
-         m.nombre AS nombre_mascota,
-         m.raza,
-         m.edad,
-         m.sexo,
-         m.estado
-       FROM mascotas m
-       JOIN usuarios u ON m.id_usuario = u.id
-       WHERE u.dni = ?`,
-        [dni]
-      );
-
-      return {
-        usuario,
-        mascotas
-      };
+      return { usuario, mascotas };
     } catch (error) {
-      console.error('Error al obtener usuario y mascotas por DNI:', error);
+      console.error('Error al obtener usuario y mascotas con SP:', error);
       throw error;
     }
   }

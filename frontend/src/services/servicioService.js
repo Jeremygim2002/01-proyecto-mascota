@@ -69,3 +69,9 @@ export async function obtenerServiciosPorCategoria(idCategoria) {
   if (!res.ok) throw new Error("Error al obtener servicios por categoría");
   return res.json(); 
 }
+
+export async function obtenerServicioPorId(id) {
+  const res = await fetch(`${API_URL}/${id}`);
+  if (!res.ok) throw new Error("Error al obtener servicio por ID");
+  return res.json();
+}

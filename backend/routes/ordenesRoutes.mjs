@@ -3,13 +3,13 @@ import { OrdenController } from '../controllers/ordenController.mjs';
 
 export const createOrdenesRouter = ({ ordenModel }) => {
     const router = Router();
-    const ctrl = new OrdenController({ ordenModel });
+    const ordenController = new OrdenController({ ordenModel });
 
-    router.get('/', ctrl.getAll);
-    router.get('/:id', ctrl.getById);
-    router.post('/', ctrl.create);
-    router.patch('/:id', ctrl.update);
-    router.delete('/:id', ctrl.delete);
+    router.get('/', ordenController.getAll);
+    router.get('/:id', ordenController.getById);
+    router.post('/', ordenController.create);
+    router.patch('/:id', ordenController.update);
+    router.delete('/:id', ordenController.delete);
 
     return router;
 };

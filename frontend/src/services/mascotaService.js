@@ -10,6 +10,19 @@ export async function actualizarEstadoMascota(id, nuevoEstado) {
   return res.json();
 }
 
+export async function obtenerTodasLasMascotas() {
+  const res = await fetch(`${API_URL}`);
+  if (!res.ok) throw new Error("Error al obtener mascotas");
+  return res.json();
+}
+
+export async function obtenerMascotaPorId(id) {
+  const res = await fetch(`${API_URL}/${id}`);
+  if (!res.ok) throw new Error("Error al obtener mascota por ID");
+  return res.json();
+}
+
+
 export async function crearMascota(data) {
   const res = await fetch(`${API_URL}`, {
     method: "POST",
@@ -34,5 +47,11 @@ export async function actualizarMascota(mascota) {
     const error = await res.json();
     throw new Error(error.error || "Error al actualizar mascota");
   }
+  return res.json();
+}
+
+export async function eliminarMascota(id) {
+  const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+  if (!res.ok) throw new Error("Error al eliminar mascota");
   return res.json();
 }

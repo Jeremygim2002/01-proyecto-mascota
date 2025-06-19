@@ -7,12 +7,13 @@ import ModalAgregarUsuario from "./ModalAgregarUsuario";
 import { buscarUsuarioPorDni } from "@services/usuarioService";
 import { obtenerTiposMascota } from "@services/tipoMascotaService";
 import { useResetFormulario } from "@hooks/useResetFormulario";
-import { mascotaSchema } from "@schemas/mascotaSchema";
+import { validateMascota } from "@schemas/mascotaSchema";
 
 import {
   notificarError,
   notificarExito,
   notificarUsuarioInvalido,
+  notificarErroresZod,
 } from "@lib/notificaciones";
 
 const ModalAgregarMascota = ({
@@ -45,7 +46,7 @@ const ModalAgregarMascota = ({
       }
     };
 
-    if (isOpen) cargarTiposMascota(); // solo cuando abre
+    if (isOpen) cargarTiposMascota();
   }, [isOpen]);
 
   const resetCampos = useResetFormulario(
@@ -83,13 +84,9 @@ const ModalAgregarMascota = ({
     };
 
     try {
-      const validacion = mascotaSchema.safeParse(nuevaMascota);
+      const validacion = validateMascota(nuevaMascota);
       if (!validacion.success) {
-        const errores = validacion.error.format();
-        for (const campo in errores) {
-          const mensaje = errores[campo]?._errors?.[0];
-          if (mensaje) notificarError(mensaje);
-        }
+        notificarErroresZod(validacion.error);
         return;
       }
 
@@ -115,7 +112,7 @@ const ModalAgregarMascota = ({
       return;
     }
     notificarExito("Usuario encontrado satisfactoriamente");
-    setLecturaUsuario(true); // ✅ Bloquea los campos
+    setLecturaUsuario(true);
     setIdUsuario(usuario.id);
     setNombre(usuario.nombre);
     setApellidoPaterno(usuario.apellido_paterno);

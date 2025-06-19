@@ -85,9 +85,9 @@ export class ServicioModel {
 
     static async getByCategoria({ idCategoria }) {
         const [rows] = await pool.query(
-            `SELECT id, nombre, duracion, precio 
-     FROM servicios 
-     WHERE id_categoria = ? AND estado = TRUE`,
+            `SELECT BIN_TO_UUID(id) AS id_servicio, nombre, duracion, precio 
+FROM servicios 
+WHERE id_categoria = ? AND estado = TRUE`,
             [idCategoria]
         );
         return rows;

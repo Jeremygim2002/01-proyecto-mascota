@@ -27,7 +27,7 @@ const DniMascota = ({ usuario }) => {
           <img
             src={fotoFinal}
             alt="Foto de la mascota"
-            className="w-32 h-32 object-cover rounded-xl border-4 border-boton-primario shadow"
+            className="w-32 h-32 object-cover rounded-xl"
           />
           <p className="text-center font-semibold mt-2">{nombre_mascota}</p>
         </div>

@@ -3,9 +3,9 @@ import { TipoMascotaController } from '../controllers/tipoMascotaController.mjs'
 
 export const createTipoMascotaRouter = ({ tipoMascotaModel }) => {
   const router = Router();
-  const ctrl = new TipoMascotaController({ tipoMascotaModel });
+  const tipoMascotaController = new TipoMascotaController({ tipoMascotaModel });
 
-  router.get('/', ctrl.getAll);
+  router.get('/', tipoMascotaController.getAll);
 
   return router;
 };

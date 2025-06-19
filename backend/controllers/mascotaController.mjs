@@ -85,4 +85,5 @@ export class MascotaController {
     await this.mascotaModel.updateEstado({ id, estado });
     res.json({ message: 'Estado actualizado correctamente' });
   };
+
 }

@@ -31,8 +31,12 @@ export class OrdenController {
             return res.status(400).json({ error: result.error.format() });
         }
 
-        const nuevaOrden = await this.ordenModel.create({ input: result.data });
-        res.status(201).json(nuevaOrden);
+        try {
+            await this.ordenModel.create({ input: result.data });
+            res.status(201).json({ message: 'Orden registrada correctamente' });
+        } catch (error) {
+            res.status(500).json({ error: error.message || 'Error al registrar la orden' });
+        }
     };
 
     update = async (req, res) => {
@@ -55,6 +59,7 @@ export class OrdenController {
     delete = async (req, res) => {
         const { id } = req.params;
         const { id_asistente } = req.body;
+
         if (!id_asistente) {
             return res.status(400).json({ error: 'ID de asistente requerido para eliminar' });
         }

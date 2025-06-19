@@ -42,7 +42,7 @@ const TablaOrden = () => {
   const { busqueda, handleSearch } = useBusqueda();
   const ordenesFiltradas = useFiltrado(
     ordenes,
-    ["usuario", "nombre_mascota", "veterinario", "servicios"],
+    ["usuario", "nombre_mascota", "veterinario", "servicio"],
     busqueda
   );
   const toggleEstado = useToggleEstado(
@@ -56,6 +56,7 @@ const TablaOrden = () => {
       }
     }
   );
+  
 
   const handleAgregar = async (nuevaOrden) => {
     await crearOrden(nuevaOrden);
@@ -119,10 +120,11 @@ const TablaOrden = () => {
           { id: "usuario", label: "Usuario" },
           { id: "nombre_mascota", label: "Mascota" },
           { id: "veterinario", label: "Veterinario" },
-          { id: "servicios", label: "Servicios" },
-          { id: "total", label: "Total S/." },
+          { id: "servicio", label: "Servicio" },
+          { id: "precio", label: "Precio S/." },
           { id: "fecha", label: "Fecha" },
-          { id: "hora", label: "Hora" },
+          { id: "hora_inicio", label: "Hora Inicio" },
+          { id: "hora_fin", label: "Hora Fin" },
         ]}
         datos={ordenesFiltradas}
         onVer={handleVer}

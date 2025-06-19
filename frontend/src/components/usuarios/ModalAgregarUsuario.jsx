@@ -4,8 +4,12 @@ import Input from "@common/ui/Input";
 import Button from "@common/ui/Button";
 import { crearUsuario } from "@services/usuarioService";
 import { useResetFormulario } from "@hooks/useResetFormulario";
-import { usuarioSchema } from "@schemas/usuarioSchema";
-import { notificarError, notificarExito } from "@lib/notificaciones";
+import { validateUsuario } from "@schemas/usuarioSchema";
+import {
+  notificarError,
+  notificarExito,
+  notificarErroresZod,
+} from "@lib/notificaciones";
 
 const ModalAgregarUsuario = ({ isOpen, onClose, onSubmit }) => {
   const [dni, setDni] = useState("");
@@ -39,13 +43,9 @@ const ModalAgregarUsuario = ({ isOpen, onClose, onSubmit }) => {
       numero_telefono: numero,
     };
 
-    const validacion = usuarioSchema.safeParse(nuevoUsuario);
+    const validacion = validateUsuario(nuevoUsuario);
     if (!validacion.success) {
-      const errores = validacion.error.format();
-      for (const campo in errores) {
-        const mensaje = errores[campo]?._errors?.[0];
-        if (mensaje) notificarError(mensaje);
-      }
+      notificarErroresZod(validacion.error);
       return;
     }
 

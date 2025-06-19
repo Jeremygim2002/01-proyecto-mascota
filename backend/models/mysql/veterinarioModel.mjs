@@ -107,12 +107,12 @@ export class VeterinarioModel {
     try {
       const [rows] = await pool.query(
         `SELECT 
-         BIN_TO_UUID(v.id) AS id,
-         CONCAT(v.nombre, ' ', v.apellido_paterno) AS nombre_completo,
-         v.dni
-       FROM veterinario v
-       JOIN especialidad_categorias ec ON v.id_especialidad = ec.id_especialidad
-       WHERE ec.id_categoria = ?`,
+  BIN_TO_UUID(v.id) AS id_veterinario,
+  CONCAT(v.nombre, ' ', v.apellido_paterno, ' ', v.apellido_materno) AS nombre
+FROM veterinario v
+JOIN tipo_especialidad te ON v.id_especialidad = te.id
+JOIN especialidad_categorias ec ON ec.id_especialidad = te.id
+WHERE ec.id_categoria = ? AND v.estado = TRUE`,
         [idCategoria]
       );
       return rows;
