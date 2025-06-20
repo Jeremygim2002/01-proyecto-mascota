@@ -17,15 +17,15 @@ const PanelUsuario = () => {
       notificarExito("Sesión cerrada correctamente");
       setTimeout(() => {
         navigate("/login");
-      }, 3000); // Mismo tiempo del loader
+      }, 1500); 
     } catch (error) {
-      setMostrandoLoader(false); // Si falla, ocultamos loader
+      setMostrandoLoader(false); 
       console.error("Error al cerrar sesión", error);
       notificarError(error);
     }
   };
 
-  if (mostrandoLoader) return <Loader duracion={2500} />;
+  if (mostrandoLoader) return <Loader duracion={1500} />;
 
   return (
     <PanelGeneral className="w-48 flex flex-col space-y-3">

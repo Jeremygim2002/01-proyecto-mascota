@@ -19,12 +19,16 @@ import ModalAgregarOrden from "./ModalAgregarOrden";
 import ModalEditarOrden from "./ModalEditarOrden";
 import ModalVerOrden from "./ModalVerOrden";
 
+import useLogin from "@hooks/useLogin";
+
 const TablaOrden = () => {
   const [modalAgregar, setModalAgregar] = useState(false);
   const [modalEditar, setModalEditar] = useState(false);
   const [modalVer, setModalVer] = useState(false);
   const [ordenes, setOrdenes] = useState([]);
   const [seleccionado, setSeleccionado] = useState(null);
+
+  const { usuario: asistente } = useLogin();
 
   const cargarOrdenes = async () => {
     try {
@@ -56,7 +60,6 @@ const TablaOrden = () => {
       }
     }
   );
-  
 
   const handleAgregar = async (nuevaOrden) => {
     await crearOrden(nuevaOrden);
@@ -69,7 +72,12 @@ const TablaOrden = () => {
   };
 
   const handleEliminar = async (id) => {
-    await eliminarOrden(id);
+    if (!asistente?.id) {
+      console.error("No hay ID de asistente disponible");
+      return;
+    }
+
+    await eliminarOrden(id, asistente.id);
     await cargarOrdenes();
   };
 

@@ -49,6 +49,7 @@ export async function eliminarServicio(id) {
   return res.json();
 }
 
+
 export async function actualizarEstadoServicio(id, nuevoEstado) {
   const res = await fetch(`${API_URL}/${id}/estado`, {
     method: "PATCH",
@@ -67,7 +68,7 @@ export async function actualizarEstadoServicio(id, nuevoEstado) {
 export async function obtenerServiciosPorCategoria(idCategoria) {
   const res = await fetch(`${API_URL}/categoria/${idCategoria}`);
   if (!res.ok) throw new Error("Error al obtener servicios por categoría");
-  return res.json(); 
+  return res.json();
 }
 
 export async function obtenerServicioPorId(id) {

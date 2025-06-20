@@ -60,14 +60,27 @@ export class ServicioController {
       return res.status(404).json({ error: 'Servicio no encontrado' });
     }
 
-    const success = await this.servicioModel.delete({ id });
+    try {
+      const success = await this.servicioModel.delete({ id });
 
-    if (!success) {
-      return res.status(500).json({ error: 'Error al eliminar servicio' });
+      if (!success) {
+        return res.status(500).json({ error: 'Error al eliminar servicio' });
+      }
+
+      res.json({ message: 'Servicio eliminado' });
+
+    } catch (error) {
+      if (error.code === "ER_ROW_IS_REFERENCED_2") {
+        return res.status(409).json({
+          error: "Este servicio está vinculado a una orden y no puede ser eliminado.",
+        });
+      }
+
+      console.error("Error al eliminar servicio:", error);
+      res.status(500).json({ error: "Error inesperado al eliminar servicio" });
     }
-
-    res.json({ message: 'Servicio eliminado' });
   };
+
 
   toggleEstado = async (req, res) => {
     const { id } = req.params;

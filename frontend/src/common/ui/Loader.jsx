@@ -7,7 +7,7 @@ const Loader = ({ duracion = 3000, onFinish }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setVisible(false);
-      onFinish?.(); // Llama a onFinish si lo pasas
+      onFinish?.(); 
     }, duracion);
 
     return () => clearTimeout(timer);

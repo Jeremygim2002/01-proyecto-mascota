@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { validateAsistente, validateLogin } from '../schemas/asistenteSchema.mjs';
 import dotenv from 'dotenv';
 dotenv.config();
-const JWT_SECRET = process.env.JWT_SECRET || 'mi-clave-secreta';
+const JWT_SECRET = process.env.JWT_SECRET;
 const COOKIE_NAME = 'token';
 
 

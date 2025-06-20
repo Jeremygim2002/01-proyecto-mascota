@@ -17,6 +17,8 @@ import {
 } from "@services/veterinarioService";
 import { obtenerEspecialidades } from "@services/especialidadVeterinarioService";
 
+import { notificarError, notificarExito } from "@lib/notificaciones";
+
 import TablaFiltrosVeterinario from "./TablaFiltrosVeterinario";
 import ModalAgregarVeterinario from "./ModalAgregarVeterinario";
 import ModalEditarVeterinario from "./ModalEditarVeterinario";
@@ -67,10 +69,21 @@ const TablaVeterinario = () => {
     await cargarVeterinarios();
   };
 
-  const handleEliminar = async (id) => {
+
+
+const handleEliminar = async (id) => {
+  try {
     await eliminarVeterinario(id);
+    notificarExito("Veterinario eliminado correctamente");
     await cargarVeterinarios();
-  };
+  } catch (error) {
+    console.error("Error al eliminar veterinario:", error);
+    notificarError(
+      error.message || "No se pudo eliminar el veterinario. Está relacionado con una orden."
+    );
+  }
+};
+
 
   const handleEditar = (vet) => {
     setSeleccionado(vet);

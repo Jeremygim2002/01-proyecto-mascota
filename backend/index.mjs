@@ -12,9 +12,6 @@ import { createTipoMascotaRouter } from './routes/tiposMascotaRoutes.mjs';
 import { createOrdenesRouter } from './routes/ordenesRoutes.mjs';
 import { createEspecialidadesCategoriaRouter } from './routes/especialidadesCategoriaRoutes.mjs';
 
-
-
-
 import { corsMiddleware } from './middlewares/cors.mjs';
 import cookieParser from 'cookie-parser';
 
@@ -41,8 +38,6 @@ export const createApp = ({ usuarioModel, mascotaModel, asistenteModel, historia
   app.use('/api/tipos-mascota', createTipoMascotaRouter({ tipoMascotaModel }));
   app.use('/api/ordenes', createOrdenesRouter({ ordenModel }));
   app.use('/api/especialidad-categorias', createEspecialidadesCategoriaRouter({ especialidadCategoriaModel }));
-
-
 
 
   app.listen(port, () => {

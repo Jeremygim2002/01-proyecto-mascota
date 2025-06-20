@@ -77,7 +77,7 @@ Content-Type: application/json
 ### Eliminar mascota
 DELETE http://localhost:3000/api/mascotas/50145ec0-4ae1-11f0-8d8e-a8a159de6f1d
 
-### 🔄 Cambiar estado de mascota
+###  Cambiar estado de mascota
 PATCH http://localhost:3000/api/mascotas/50145ec0-4ae1-11f0-8d8e-a8a159de6f1d
 Content-Type: application/json
 
@@ -105,7 +105,7 @@ GET http://localhost:3000/api/veterinarios
 
 
 ### Obtener veterinario por ID
-GET http://localhost:3000/api/veterinarios/e383034c-4a09-11f0-aa02-a8a159de6f1d
+GET http://localhost:3000/api/veterinarios/9068a227-4cc7-11f0-a5b8-a8a159de6f1d
 
 
 ### Crear veterinario
@@ -125,7 +125,7 @@ Content-Type: application/json
 
 
 ### Actualizar veterinario
-PATCH http://localhost:3000/api/veterinarios/d8973415-4a09-11f0-aa02-a8a159de6f1d
+PATCH http://localhost:3000/api/veterinarios/ea47c147-4dab-11f0-87e4-a8a159de6f1d
 Content-Type: application/json
 
 {
@@ -134,11 +134,11 @@ Content-Type: application/json
 
 
 ### Eliminar veterinario
-DELETE http://localhost:3000/api/veterinarios/96a4668b-4a0a-11f0-aa02-a8a159de6f1d
+DELETE http://localhost:3000/api/veterinarios/ea47c147-4dab-11f0-87e4-a8a159de6f1d
 
 
 ### Cambiar estado del veterinario
-PATCH http://localhost:3000/api/veterinarios/7f86ac21-4a0d-11f0-aa02-a8a159de6f1d
+PATCH http://localhost:3000/api/veterinarios/ea47c147-4dab-11f0-87e4-a8a159de6f1d
 Content-Type: application/json
 
 {
@@ -153,7 +153,7 @@ Content-Type: application/json
 GET http://localhost:3000/api/servicios
 
 ### Obtener servicio por ID
-GET http://localhost:3000/api/servicios/bae538ad-4a15-11f0-aa02-a8a159de6f1d
+GET http://localhost:3000/api/servicios/90675d9e-4cc7-11f0-a5b8-a8a159de6f1d
 
 ### Crear servicio
 POST http://localhost:3000/api/servicios
@@ -169,7 +169,7 @@ Content-Type: application/json
 }
 
 ### Actualizar servicio
-PATCH http://localhost:3000/api/servicios/bae538ad-4a15-11f0-aa02-a8a159de6f1d
+PATCH http://localhost:3000/api/servicios/6abcb058-4da8-11f0-87e4-a8a159de6f1d
 Content-Type: application/json
 
 {
@@ -177,14 +177,14 @@ Content-Type: application/json
 }
 
 ### Eliminar servicio
-DELETE http://localhost:3000/api/servicios/bae538ad-4a15-11f0-aa02-a8a159de6f1d
+DELETE http://localhost:3000/api/servicios/6abcb058-4da8-11f0-87e4-a8a159de6f1d
 
 ### Cambiar estado del servicio
-PATCH http://localhost:3000/api/servicios/c460ef98-4a15-11f0-aa02-a8a159de6f1d
+PATCH http://localhost:3000/api/servicios/90675d9e-4cc7-11f0-a5b8-a8a159de6f1d
 Content-Type: application/json
 
 {
-  "estado": true
+  "estado": false
 }
 
 
@@ -196,19 +196,19 @@ Content-Type: application/json
 
 #====== ORDENES =====#
 
-### 📄 Obtener todas las órdenes
+###  Obtener todas las órdenes
 GET http://localhost:3000/api/ordenes
 Content-Type: application/json
 
 ###
 
-### 🔍 Obtener una orden por ID
-GET http://localhost:3000/api/ordenes/d22a050e-4b45-11f0-af39-a8a159de6f1d
+###  Obtener una orden por ID
+GET http://localhost:3000/api/ordenes/5575507a-4d53-11f0-989f-a8a159de6f1d
 Content-Type: application/json
 
 ###
 
-### ➕ Crear nueva orden
+###  Crear nueva orden
 POST http://localhost:3000/api/ordenes
 Content-Type: application/json
 
@@ -217,14 +217,13 @@ Content-Type: application/json
   "id_veterinario": "02546cb3-4adf-11f0-8d8e-a8a159de6f1d",
   "id_asistente": "337f397e-4ae6-11f0-8d8e-a8a159de6f1d",
   "servicios": [
-    "0252f7ce-4adf-11f0-8d8e-a8a159de6f1d",
-    "0252fa63-4adf-11f0-8d8e-a8a159de6f1d"
+    "0252f7ce-4adf-11f0-8d8e-a8a159de6f1d"
   ]
 }
 
 ###
 
-### ✏️ Actualizar orden
+###  Actualizar orden
 PATCH http://localhost:3000/api/ordenes/
 Content-Type: application/json
 
@@ -237,7 +236,7 @@ Content-Type: application/json
 
 ###
 
-### ❌ Eliminar orden
+###  Eliminar orden
 DELETE http://localhost:3000/api/ordenes/cf6c25bc-4b45-11f0-af39-a8a159de6f1d
 Content-Type: application/json
 
@@ -258,7 +257,7 @@ Content-Type: application/json
 #====== ASISTENTE AUTH =====#
 
 
-### 🔐 Login asistente
+###  Login asistente
 POST http://localhost:3000/api/asistente/login
 Content-Type: application/json
 
@@ -269,10 +268,10 @@ Content-Type: application/json
 
 ###
 
-### 🚪 Logout asistente
+###  Logout asistente
 POST http://localhost:3000/api/asistente/logout
 
-### 👤 Perfil del asistente autenticado
+###  Perfil del asistente autenticado
 GET http://localhost:3000/api/asistente/profile
 
 

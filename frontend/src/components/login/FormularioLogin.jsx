@@ -30,7 +30,7 @@ const FormularioLogin = ({ onOlvidaste, onCrearCuenta }) => {
 
       setTimeout(() => {
         navigate("/dashboard");
-      }, 3000); 
+      }, 1500); 
     } catch (error) {
       notificarError("correo o contraseña incorrecta");
       console.error("Error al iniciar sesión:", error);

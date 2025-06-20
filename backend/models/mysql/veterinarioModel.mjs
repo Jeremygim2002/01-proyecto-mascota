@@ -105,21 +105,14 @@ export class VeterinarioModel {
 
   static async getByCategoria(idCategoria) {
     try {
-      const [rows] = await pool.query(
-        `SELECT 
-  BIN_TO_UUID(v.id) AS id_veterinario,
-  CONCAT(v.nombre, ' ', v.apellido_paterno, ' ', v.apellido_materno) AS nombre
-FROM veterinario v
-JOIN tipo_especialidad te ON v.id_especialidad = te.id
-JOIN especialidad_categorias ec ON ec.id_especialidad = te.id
-WHERE ec.id_categoria = ? AND v.estado = TRUE`,
-        [idCategoria]
-      );
-      return rows;
+      const [resultSets] = await pool.query("CALL sp_veterinarios_por_categoria(?)", [Number(idCategoria)]);
+      return resultSets[0];
     } catch (error) {
-      console.error('Error al obtener veterinarios por categoría:', error);
+      console.error("Error al obtener veterinarios por categoría:", error);
       throw error;
     }
   }
+
+
 
 }

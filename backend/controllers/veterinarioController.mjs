@@ -43,7 +43,6 @@ export class VeterinarioController {
             return res.status(400).json({ error: result.error.format() });
         }
 
-        // Obtener veterinario actual
         const veterinario = await this.veterinarioModel.getById({ id });
         if (!veterinario) {
             return res.status(404).json({ error: 'Veterinario no encontrado' });
@@ -62,14 +61,27 @@ export class VeterinarioController {
             return res.status(404).json({ error: 'Veterinario no encontrado' });
         }
 
-        const success = await this.veterinarioModel.delete({ id });
+        try {
+            const success = await this.veterinarioModel.delete({ id });
 
-        if (!success) {
-            return res.status(500).json({ error: 'Error al eliminar veterinario' });
+            if (!success) {
+                return res.status(500).json({ error: 'Error al eliminar veterinario' });
+            }
+
+            res.json({ message: 'Veterinario eliminado' });
+
+        } catch (error) {
+            if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+                return res.status(409).json({
+                    error: 'No se puede eliminar este veterinario porque está asignado a una orden.',
+                });
+            }
+
+            console.error('Error al eliminar veterinario:', error);
+            res.status(500).json({ error: 'Error inesperado al eliminar veterinario' });
         }
-
-        res.json({ message: 'Veterinario eliminado' });
     };
+
 
     toggleEstado = async (req, res) => {
         const { id } = req.params;

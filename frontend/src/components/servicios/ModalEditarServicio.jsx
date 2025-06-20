@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import ModalGeneral from "@common/modals/ModalGeneral";
 import Input from "@common/ui/Input";
-import Select from "@common/ui/Select";
 import Button from "@common/ui/Button";
 
 import {
@@ -16,23 +15,18 @@ const ModalEditarServicio = ({
   onClose,
   onSubmit,
   servicio,
-  categorias = [],
 }) => {
-  const [nombre, setNombre] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [duracion, setDuracion] = useState("");
   const [precio, setPrecio] = useState("");
   const [estado, setEstado] = useState(true);
-  const [idCategoria, setIdCategoria] = useState("");
 
   useEffect(() => {
     if (servicio) {
-      setNombre(servicio.nombre || "");
       setDescripcion(servicio.descripcion || "");
       setDuracion(String(servicio.duracion || ""));
       setPrecio(String(servicio.precio || ""));
       setEstado(Boolean(servicio.estado));
-      setIdCategoria(String(servicio.id_categoria || ""));
     }
   }, [servicio]);
 
@@ -41,12 +35,10 @@ const ModalEditarServicio = ({
 
     const servicioEditado = {
       id: servicio.id_servicio,
-      nombre,
       descripcion,
       duracion: Number(duracion),
       precio: Number(precio),
       estado: Boolean(estado),
-      id_categoria: Number(idCategoria),
     };
 
     const validacion = validatePartialServicio(servicioEditado);
@@ -69,29 +61,6 @@ const ModalEditarServicio = ({
     <ModalGeneral isOpen={isOpen} onClose={onClose} title="Editar servicio">
       <form onSubmit={handleSubmit} className="space-y-8">
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-8">
-                    <Select
-            className="col-span-2"
-            name="idCategoria"
-            value={idCategoria}
-            onChange={(e) => setIdCategoria(e.target.value)}
-          >
-            <option value="">Seleccione una categoría</option>
-            {categorias.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.nombre}
-              </option>
-            ))}
-          </Select>
-          
-          <Input
-            className="col-span-2 pl-4"
-            name="nombre"
-            type="text"
-            placeholder="Nombre del servicio"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-          />
-
           <Input
             className="col-span-4 pl-4"
             name="descripcion"

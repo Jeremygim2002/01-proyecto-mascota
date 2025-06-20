@@ -17,6 +17,8 @@ import {
 } from "@services/servicioService";
 import { obtenerCategorias } from "@services/categoriaServicioService";
 
+import { notificarExito, notificarError } from "@lib/notificaciones";
+
 import TablaFiltrosServicio from "./TablaFiltrosServicio";
 import ModalAgregarServicio from "./ModalAgregarServicio";
 import ModalEditarServicio from "./ModalEditarServicio";
@@ -67,10 +69,17 @@ const TablaServicio = () => {
     await cargarServicios();
   };
 
-  const handleEliminar = async (id) => {
+
+const handleEliminar = async (id) => {
+  try {
     await eliminarServicio(id);
+    notificarExito("Servicio eliminado correctamente.");
     await cargarServicios();
-  };
+  } catch (error) {
+    console.error("Error al eliminar servicio:", error);
+    notificarError(error.message); 
+  }
+}
 
   const handleEditar = (servicio) => {
     setSeleccionado(servicio);
