@@ -1,3 +1,4 @@
+import useLogin from "@hooks/useLogin";
 import { useState, useEffect } from "react";
 
 import ModalGeneral from "@common/modals/ModalGeneral";
@@ -5,44 +6,39 @@ import Input from "@common/ui/Input";
 import Select from "@common/ui/Select";
 import Button from "@common/ui/Button";
 
-import { buscarUsuarioConMascotasPorDni } from "@services/usuarioService";
+import useUsuarioConMascotas from "@hooks/ordenes/useUsuariosConMascotas";
+import useServiciosCategoria from "@hooks/ordenes/useServiciosCategoria";
+import useVeterinariosPorCategoria from "@hooks/ordenes/useVeterinariosPorCategoria";
+
 import { obtenerCategorias } from "@services/categoriaServicioService";
-import { obtenerServiciosPorCategoria } from "@services/servicioService";
-import { obtenerVeterinariosPorCategoria } from "@services/veterinarioService";
 
 import {
   notificarError,
   notificarExito,
   notificarErroresZod,
-  notificarUsuarioInvalido,
 } from "@lib/notificaciones";
-import useLogin from "@hooks/useLogin";
 
 import { validateOrden } from "@schemas/ordenSchema";
 import { confirmarAccion } from "@lib/confirmaciones.jsx";
 
 const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
   const [dni, setDni] = useState("");
-  const [usuario, setUsuario] = useState(null);
-  const [mascotas, setMascotas] = useState([]);
   const [idMascota, setIdMascota] = useState("");
-
-  const [categorias, setCategorias] = useState([]);
   const [idCategoria, setIdCategoria] = useState("");
-
-  const [servicios, setServicios] = useState([]);
   const [idServicio, setIdServicio] = useState("");
   const [duracion, setDuracion] = useState(0);
   const [precio, setPrecio] = useState(0);
-
-  const [veterinarios, setVeterinarios] = useState([]);
   const [idVeterinario, setIdVeterinario] = useState("");
-
   const [fecha, setFecha] = useState("");
   const [horaInicio, setHoraInicio] = useState("");
   const [horaFin, setHoraFin] = useState("");
+  const [categorias, setCategorias] = useState([]);
 
   const { usuario: asistente } = useLogin();
+  const { usuario, mascotas, buscarPorDni } = useUsuarioConMascotas();
+  const servicios = useServiciosCategoria(idCategoria);
+  const veterinarios = useVeterinariosPorCategoria(idCategoria);
+
   useEffect(() => {
     if (horaInicio && duracion) {
       const [h, m] = horaInicio.split(":").map(Number);
@@ -51,20 +47,6 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
       setHoraFin(endTime);
     }
   }, [horaInicio, duracion]);
-
-  const buscarUsuario = async () => {
-    try {
-      const data = await buscarUsuarioConMascotasPorDni(dni);
-      setUsuario(data.usuario);
-      setMascotas(data.mascotas);
-      if (data.mascotas.length === 0) {
-        notificarUsuarioInvalido("Este usuario no tiene mascotas registradas");
-      }
-      notificarExito("Usuario encontrado");
-    } catch {
-      notificarError("No se encontró usuario con ese DNI");
-    }
-  };
 
   useEffect(() => {
     const cargarCategorias = async () => {
@@ -79,21 +61,10 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
   }, [isOpen]);
 
   useEffect(() => {
-    const cargarServicios = async () => {
-      if (!idCategoria) return;
-      const data = await obtenerServiciosPorCategoria(idCategoria);
-      setServicios(data);
-    };
-    cargarServicios();
-  }, [idCategoria]);
-
-  useEffect(() => {
     if (!idServicio || typeof idServicio !== "string") return;
-
     const servicio = servicios.find(
       (s) => String(s.id_servicio) === String(idServicio)
     );
-
     if (servicio) {
       setDuracion(servicio.duracion);
       setPrecio(servicio.precio);
@@ -103,18 +74,8 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
     }
   }, [idServicio, servicios]);
 
-  useEffect(() => {
-    const cargarVeterinarios = async () => {
-      if (!idCategoria) return;
-      const data = await obtenerVeterinariosPorCategoria(idCategoria);
-      setVeterinarios(data);
-    };
-    cargarVeterinarios();
-  }, [idCategoria]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const nuevaOrden = {
       id_mascota: idMascota,
       id_veterinario: idVeterinario,
@@ -131,7 +92,6 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
         notificarErroresZod(validacion.error);
         return;
       }
-
       await onSubmit(validacion.data);
       notificarExito("Orden registrada correctamente");
       onClose();
@@ -143,15 +103,11 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
 
   const limpiarCampos = () => {
     setDni("");
-    setUsuario(null);
-    setMascotas([]);
     setIdMascota("");
     setIdCategoria("");
-    setServicios([]);
     setIdServicio("");
     setDuracion(0);
     setPrecio(0);
-    setVeterinarios([]);
     setIdVeterinario("");
     setFecha("");
     setHoraInicio("");
@@ -169,7 +125,6 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
       });
       return;
     }
-
     limpiarCampos();
     onClose();
   };
@@ -186,7 +141,7 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
               value={dni}
               onChange={(e) => setDni(e.target.value)}
             />
-            <Button type="button" onClick={buscarUsuario}>
+            <Button type="button" onClick={() => buscarPorDni(dni)}>
               Buscar
             </Button>
           </div>
@@ -214,18 +169,15 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
                 Este usuario no tiene mascotas registradas
               </option>
             ) : (
-              mascotas.map((m) => (
-                <option key={m.id_mascota} value={m.id_mascota}>
-                  {m.nombre_mascota}
-                </option>
-              ))
+              mascotas
+                .filter((m) => m.estado) // solo muestra las activas
+                .map((m) => (
+                  <option key={m.id_mascota} value={m.id_mascota}>
+                    {m.nombre_mascota}
+                  </option>
+                ))
             )}
           </Select>
-          {usuario && mascotas.length === 0 && (
-            <p className="col-span-4 text-sm text-red-500 pl-4">
-              Este usuario no tiene mascotas registradas.
-            </p>
-          )}
 
           <Select
             className="col-span-2"
@@ -246,17 +198,13 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
             onChange={(e) => setIdServicio(e.target.value)}
           >
             <option value="">Selecciona Servicio</option>
-            {servicios.length === 0 ? (
-              <option disabled value="">
-                No hay servicios disponibles
-              </option>
-            ) : (
-              servicios.map((s) => (
-                <option key={s.id_servicio} value={s.id_servicio}>
-                  {s.nombre}
-                </option>
-              ))
-            )}
+            {servicios.length > 0 && idCategoria
+              ? servicios.map((s) => (
+                  <option key={s.id_servicio} value={s.id_servicio}>
+                    {s.nombre}
+                  </option>
+                ))
+              : null}
           </Select>
 
           <Input
@@ -265,7 +213,6 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
             value={duracion + " min"}
             readOnly
           />
-
           <Input
             className="col-span-2 pl-4"
             type="text"
@@ -279,17 +226,13 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
             onChange={(e) => setIdVeterinario(e.target.value)}
           >
             <option value="">Selecciona Veterinario</option>
-            {veterinarios.length === 0 ? (
-              <option disabled value="">
-                No hay veterinarios disponibles
-              </option>
-            ) : (
-              veterinarios.map((v) => (
-                <option key={v.id_veterinario} value={v.id_veterinario}>
-                  {v.nombre}
-                </option>
-              ))
-            )}
+            {veterinarios.length > 0 && idCategoria
+              ? veterinarios.map((v) => (
+                  <option key={v.id_veterinario} value={v.id_veterinario}>
+                    {v.nombre}
+                  </option>
+                ))
+              : null}
           </Select>
 
           <Input

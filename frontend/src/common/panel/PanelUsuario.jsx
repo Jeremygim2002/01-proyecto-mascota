@@ -15,17 +15,14 @@ const PanelUsuario = () => {
       setMostrandoLoader(true);
       await logout();
       notificarExito("Sesión cerrada correctamente");
-      setTimeout(() => {
-        navigate("/login");
-      }, 1500); 
     } catch (error) {
-      setMostrandoLoader(false); 
+      setMostrandoLoader(false);
       console.error("Error al cerrar sesión", error);
       notificarError(error);
     }
   };
 
-  if (mostrandoLoader) return <Loader duracion={1500} />;
+  if (mostrandoLoader) return <Loader onFinish={() => navigate("/login")} />;
 
   return (
     <PanelGeneral className="w-48 flex flex-col space-y-3">
@@ -35,7 +32,7 @@ const PanelUsuario = () => {
         className="flex items-center space-x-2 text-texto text-sm hover:bg-sidebar-hover rounded-lg p-2 transition"
       >
         <User size={18} />
-        <span href="../../../pages/PaginaCuenta.jsx">Ver perfil</span>
+        <span>Ver perfil</span>
       </Link>
 
       <hr className="border-panel-flotante-linea" />
@@ -43,7 +40,7 @@ const PanelUsuario = () => {
       <button
         onClick={cerrarSesion}
         className="flex items-center space-x-2 text-red-400 text-sm hover:bg-sidebar-hover rounded-lg p-2 transition font-cuerpo"
-        aria-label="Cerrar Sesion"
+        aria-label="Cerrar Sesión"
       >
         <LogOut size={18} />
         <span>Cerrar sesión</span>

@@ -6,7 +6,7 @@ import Select from "@common/ui/Select";
 import ModalAgregarUsuario from "./ModalAgregarUsuario";
 import { buscarUsuarioPorDni } from "@services/usuarioService";
 import { obtenerTiposMascota } from "@services/tipoMascotaService";
-import { useResetFormulario } from "@hooks/useResetFormulario";
+import { useResetFormulario } from "@hooks/filtros/useResetFormulario";
 import { validateMascota } from "@schemas/mascotaSchema";
 
 import {

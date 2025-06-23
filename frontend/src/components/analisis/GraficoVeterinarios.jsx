@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import {
@@ -9,27 +10,37 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-import Title from "@common/layout/Titulo"
-
-const datosVeterinarios= [
-  { canal: "Medicina interna", valor: 4200 },
-  { canal: "Cirugía veterinaria", valor: 3000 },
-  { canal: "Dermatología veterinaria", valor: 2500 },
-  { canal: "Oftalmología veterinaria", valor: 2000 },
-  { canal: "Cardiología veterinaria", valor: 1500 },
-  { canal: "Odontología veterinaria", valor: 1200 },
-];
+import Title from "@common/layout/Titulo";
+import { obtenerVeterinariosPorEspecialidad } from "@services/veterinarioService";
 
 const COLORS = [
-  "#14B8A6",  
-  "#6366F1",  
-  "#9333EA",  
-  "#D946EF",  
-  "#FACC15",  
-  "#EF4444",  
+  "#14B8A6",
+  "#6366F1",
+  "#9333EA",
+  "#D946EF",
+  "#FACC15",
+  "#EF4444",
 ];
 
-const GraficoVeterinarios= () => {
+const GraficoVeterinarios = () => {
+  const [datos, setDatos] = useState([]);
+
+  useEffect(() => {
+    const fetchDatos = async () => {
+      try {
+        const raw = await obtenerVeterinariosPorEspecialidad();
+        const formateado = raw.map((v) => ({
+          canal: v.especialidad,
+          valor: v.total,
+        }));
+        setDatos(formateado);
+      } catch (error) {
+        console.error("Error al obtener datos de veterinarios:", error);
+      }
+    };
+    fetchDatos();
+  }, []);
+
   return (
     <motion.div
       className="bg-slate-800 p-6 md:p-8 rounded-2xl shadow-xl border border-slate-700 transition-all duration-500"
@@ -37,11 +48,11 @@ const GraficoVeterinarios= () => {
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 0.3, duration: 0.7, ease: "easeOut" }}
     >
-      <Title className="text-center tracking-wide mb-4" text="VETERINARIOS DISPONIBLE POR ESPECIALIDAD" />
+      <Title className="text-center tracking-wide mb-4" text="VETERINARIOS DISPONIBLES POR ESPECIALIDAD" />
       <div className="w-full h-[360px]">
         <ResponsiveContainer>
           <BarChart
-            data={datosVeterinarios}
+            data={datos}
             layout="vertical"
             margin={{ top: 10, right: 30, left: 60, bottom: 10 }}
             barCategoryGap={16}
@@ -69,7 +80,7 @@ const GraficoVeterinarios= () => {
               barSize={18}
               isAnimationActive={true}
             >
-              {datosVeterinarios.map((entry, index) => (
+              {datos.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               ))}
             </Bar>

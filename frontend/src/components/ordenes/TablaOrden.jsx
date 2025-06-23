@@ -3,15 +3,17 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 import TablaBase from "@common/tablas/TablaBase";
-import { useBusqueda } from "@hooks/useBusqueda";
-import { useFiltrado } from "@hooks/useFiltrado";
-import { useToggleEstado } from "@hooks/useToggleEstado";
+import { useBusqueda } from "@hooks/filtros/useBusqueda";
+import { useFiltrado } from "@hooks/filtros/useFiltrado";
+import { useToggleEstado } from "@hooks/common/useToggleEstado";
 
 import {
   obtenerOrdenes,
   crearOrden,
   actualizarOrden,
   eliminarOrden,
+  obtenerOrdenPorId,
+  actualizarEstadoOrden,
 } from "@services/ordenService";
 
 import TablaFiltrosOrden from "./TablaFiltrosOrden";
@@ -49,16 +51,10 @@ const TablaOrden = () => {
     ["usuario", "nombre_mascota", "veterinario", "servicio"],
     busqueda
   );
-  const toggleEstado = useToggleEstado(
+  const ToggleEstado = useToggleEstado(
     setOrdenes,
     "id_orden",
-    async (id, nuevoEstado) => {
-      try {
-        await actualizarOrden({ id, estado: nuevoEstado });
-      } catch (error) {
-        console.error("Error actualizando estado:", error);
-      }
-    }
+    actualizarEstadoOrden
   );
 
   const handleAgregar = async (nuevaOrden) => {
@@ -77,12 +73,17 @@ const TablaOrden = () => {
       return;
     }
 
-    await eliminarOrden(id, asistente.id);
-    await cargarOrdenes();
+    try {
+      await eliminarOrden(id, asistente.id);
+      await cargarOrdenes();
+    } catch (error) {
+      console.error("Error al eliminar orden:", error);
+    }
   };
 
-  const handleEditar = (orden) => {
-    setSeleccionado(orden);
+  const handleEditar = async (orden) => {
+    const ordenCompleta = await obtenerOrdenPorId(orden.id_orden);
+    setSeleccionado(ordenCompleta);
     setModalEditar(true);
   };
 
@@ -138,7 +139,8 @@ const TablaOrden = () => {
         onVer={handleVer}
         onEditar={handleEditar}
         onEliminar={handleEliminar}
-        onToggleEstado={toggleEstado}
+        onToggleEstado={ToggleEstado}
+        textoEstado={["Pagado", "No pagado"]}
         idKey="id_orden"
       />
     </motion.div>

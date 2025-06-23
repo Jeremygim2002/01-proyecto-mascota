@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { validateVeterinario } from "@schemas/veterinarioSchema";
-import { useResetFormulario } from "@hooks/useResetFormulario";
+import { useResetFormulario } from "@hooks/filtros/useResetFormulario";
 
 import ModalGeneral from "@common/modals/ModalGeneral";
 import Input from "@common/ui/Input";

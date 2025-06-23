@@ -30,7 +30,7 @@ const CartillaMascota = ({ ordenes }) => {
                 <td className="px-4 py-2">{orden.veterinario}</td>
                 <td className="px-4 py-2 font-semibold">
                   {orden.estado === "Completado" ? (
-                    <span > Completado</span>
+                    <span> Completado</span>
                   ) : (
                     <span>Pendiente</span>
                   )}

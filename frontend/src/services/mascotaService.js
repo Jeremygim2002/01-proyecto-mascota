@@ -51,7 +51,37 @@ export async function actualizarMascota(mascota) {
 }
 
 export async function eliminarMascota(id) {
-  const res = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
-  if (!res.ok) throw new Error("Error al eliminar mascota");
-  return res.json();
+  try {
+    const res = await fetch(`http://localhost:3000/api/mascotas/${id}`, {
+      method: "DELETE",
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || "Error al eliminar mascota");
+    }
+
+    return data;
+  } catch (error) {
+    throw new Error(error.message || "Error al eliminar mascota");
+  }
 }
+
+
+export async function obtenerMascotasActivasPorDni(dni) {
+  const res = await fetch(`${API_URL}/usuario/${dni}`);
+  if (!res.ok) throw new Error("Error al obtener mascotas activas por DNI");
+  return res.json(); // { usuario, mascotas }
+}
+
+
+
+export async function obtenerTotalMascotasActivas() {
+  const res = await fetch(`${API_URL}/total/activas`);
+  if (!res.ok) throw new Error("No se pudo obtener el total de mascotas activas");
+
+  const data = await res.json();
+  return data.total;
+}
+

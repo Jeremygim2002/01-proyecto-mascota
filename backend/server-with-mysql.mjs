@@ -2,7 +2,7 @@ import { createApp } from "./index.mjs";
 import { UsuarioModel } from './models/mysql/usuarioModel.mjs'
 import { MascotaModel } from './models/mysql/mascotaModel.mjs'
 import { AsistenteModel } from './models/mysql/asistenteModel.mjs';
-import { HistorialModel } from './models/mysql/historialModel.mjs';
+import { CompuestoModel } from './models/mysql/compuestoModel.mjs';
 import { VeterinarioModel } from './models/mysql/veterinarioModel.mjs';
 import { ServicioModel } from './models/mysql/servicioModel.mjs';
 import { EspecialidadVeterinarioModel } from './models/mysql/especialidadVeterinarioModel.mjs';
@@ -15,7 +15,7 @@ createApp({
     usuarioModel: UsuarioModel,
     mascotaModel: MascotaModel,
     asistenteModel: AsistenteModel,
-    historialModel: HistorialModel,
+    compuestoModel: CompuestoModel,
     veterinarioModel: VeterinarioModel,
     servicioModel: ServicioModel,
     especialidadVeterinarioModel: EspecialidadVeterinarioModel,

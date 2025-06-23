@@ -68,6 +68,10 @@ export class MascotaModel {
       await pool.query('CALL sp_eliminar_mascota(UUID_TO_BIN(?))', [id]);
       return true;
     } catch (error) {
+      if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+        return false;
+      }
+
       console.error(`Error al eliminar mascota con ID ${id}:`, error);
       throw error;
     }
@@ -85,5 +89,40 @@ export class MascotaModel {
       throw error;
     }
   }
+
+  static async getActivasPorUsuarioDni({ dni }) {
+    const [[usuario]] = await pool.query(
+      `SELECT id FROM usuarios WHERE dni = ?`,
+      [dni]
+    );
+
+    if (!usuario) return { usuario: null, mascotas: [] };
+
+    const [mascotas] = await pool.query(
+      `SELECT 
+        BIN_TO_UUID(id) AS id_mascota, 
+        nombre AS nombre_mascota 
+     FROM mascotas 
+     WHERE id_usuario = ? AND estado = TRUE`,
+      [usuario.id]
+    );
+
+    return { usuario, mascotas };
+  }
+
+
+static async contarActivas() {
+  try {
+    const [[{ total }]] = await pool.query(
+      'SELECT COUNT(*) AS total FROM mascotas WHERE estado = 1'
+    );
+    return total;
+  } catch (error) {
+    console.error('Error al contar mascotas activas:', error);
+    throw error;
+  }
+}
+
+
 
 }

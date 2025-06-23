@@ -113,6 +113,22 @@ export class VeterinarioModel {
     }
   }
 
+  static async contarPorEspecialidad() {
+  try {
+    const [rows] = await pool.query(`
+      SELECT especialidad, COUNT(*) AS total
+      FROM vista_veterinarios_especialidad
+      WHERE estado = 1
+      GROUP BY especialidad
+    `);
+    return rows;
+  } catch (error) {
+    console.error('Error al contar veterinarios por especialidad:', error);
+    throw error;
+  }
+}
+
+
 
 
 }

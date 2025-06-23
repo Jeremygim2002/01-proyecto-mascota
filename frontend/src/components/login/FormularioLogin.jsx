@@ -25,21 +25,16 @@ const FormularioLogin = ({ onOlvidaste, onCrearCuenta }) => {
     try {
       await login(data);
       notificarExito("Inicio de sesión exitoso");
-   
       setMostrandoLoader(true);
 
       setTimeout(() => {
         navigate("/dashboard");
-      }, 1500); 
+      }, 1500);
     } catch (error) {
       notificarError("correo o contraseña incorrecta");
       console.error("Error al iniciar sesión:", error);
     }
   };
-
-  if (mostrandoLoader) {
-    return <Loader duracion={2500} />;
-  }
 
   return (
     <motion.div
@@ -128,6 +123,7 @@ const FormularioLogin = ({ onOlvidaste, onCrearCuenta }) => {
           </button>
         </p>
       </form>
+      {mostrandoLoader && <Loader />}
     </motion.div>
   );
 };

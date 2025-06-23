@@ -3,12 +3,12 @@ import { Bell } from "lucide-react";
 // eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 
-import PanelNotificacion from "../panel/PanelNotificacion";
-import PanelUsuario from "../panel/PanelUsuario";
-import PanelBusqueda from "../panel/PanelBusqueda";
-import Title from "../layout/Titulo";
-import SearchInput from "../ui/SearchInput";
-import useClickFuera from "../../hooks/useClickFuera"
+import PanelNotificacion from "@common/panel/PanelNotificacion";
+import PanelUsuario from "@common/panel/PanelUsuario";
+import PanelBusqueda from "@common/panel/PanelBusqueda";
+import Title from "@common/layout/Titulo";
+import SearchInput from "@common/ui/SearchInput";
+import useClickFuera from "@hooks/common/useClickFuera"
 
 
 const Header = ({ title }) => {

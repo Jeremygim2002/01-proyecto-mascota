@@ -38,20 +38,32 @@ export async function crearOrden(data) {
 }
 
 
-export async function actualizarOrden(orden) {
-  const res = await fetch(`${API_URL}/${orden.id_orden}`, {
+export async function actualizarOrden({ id_orden, ...input }) {
+  if (!id_orden) {
+    throw new Error("ID de orden no proporcionado");
+  }
+
+  const res = await fetch(`${API_URL}/${id_orden}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(orden),
+    body: JSON.stringify(input),
   });
 
   if (!res.ok) {
-    const error = await res.json();
-    throw new Error(error.error || "Error al actualizar orden");
+const error = await res.json();
+console.error("💥 Error completo:", error); // 👈 Añade esto
+throw new Error(
+  typeof error === "string"
+    ? error
+    : JSON.stringify(error, null, 2)
+);
   }
 
   return res.json();
 }
+
+
+
 
 export async function eliminarOrden(id_orden, id_asistente) {
   const res = await fetch(`${API_URL}/${id_orden}`, {
@@ -67,3 +79,45 @@ export async function eliminarOrden(id_orden, id_asistente) {
 
   return res.json();
 }
+
+
+
+export async function actualizarEstadoOrden(id, nuevoEstado) {
+  const res = await fetch(`${API_URL}/${id}/estado`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ estado: nuevoEstado }),
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.error || "Error al actualizar estado de la orden");
+  }
+
+  return res.json();
+}
+
+
+export async function obtenerTotalOrdenesActivas() {
+  const res = await fetch(`${API_URL}/total/activos`);
+  if (!res.ok) throw new Error("No se pudo obtener el total de órdenes activas");
+
+  const data = await res.json();
+  return data.total;
+}
+
+
+
+
+export async function obtenerIngresosPorCategoria() {
+  const res = await fetch(`${API_URL}/analisis/ingresos-categoria`);
+  if (!res.ok) throw new Error("Error al obtener ingresos por categoría");
+  return res.json();
+}
+
+export async function obtenerIngresosPorMes() {
+  const res = await fetch(`${API_URL}/ingresos/mensuales`);
+  if (!res.ok) throw new Error("Error al obtener ingresos por mes");
+  return res.json();
+}
+

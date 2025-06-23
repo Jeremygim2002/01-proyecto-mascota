@@ -3,7 +3,7 @@ import ModalGeneral from "@common/modals/ModalGeneral";
 import Input from "@common/ui/Input";
 import Button from "@common/ui/Button";
 import { crearUsuario } from "@services/usuarioService";
-import { useResetFormulario } from "@hooks/useResetFormulario";
+import { useResetFormulario } from "@hooks/filtros/useResetFormulario";
 import { validateUsuario } from "@schemas/usuarioSchema";
 import {
   notificarError,
@@ -49,7 +49,7 @@ const ModalAgregarUsuario = ({ isOpen, onClose, onSubmit }) => {
       return;
     }
 
-    try {
+     try {
       const usuarioCreado = await crearUsuario(nuevoUsuario);
       notificarExito("Usuario registrado correctamente");
       onSubmit?.(usuarioCreado);
@@ -57,8 +57,14 @@ const ModalAgregarUsuario = ({ isOpen, onClose, onSubmit }) => {
       onClose();
     } catch (error) {
       console.error("Error al crear usuario:", error);
-      notificarError(error);
+
+      if (error.message.includes("Ya existe")) {
+        notificarError("Ya hay un usuario registrado con ese correo o DNI");
+      } else {
+        notificarError("Ocurrió un error inesperado al registrar el usuario");
+      }
     }
+
   };
 
   return (

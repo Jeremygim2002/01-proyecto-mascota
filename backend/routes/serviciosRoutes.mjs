@@ -12,6 +12,8 @@ export const createServiciosRouter = ({ servicioModel }) => {
   serviciosRouter.delete('/:id', servicioController.delete)
   serviciosRouter.patch('/:id/estado', servicioController.toggleEstado)
   serviciosRouter.get('/categoria/:idCategoria', servicioController.getByCategoria);
+  serviciosRouter.get('/total/activos', servicioController.contarActivos);
+
 
 
   return serviciosRouter

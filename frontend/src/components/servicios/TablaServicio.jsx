@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 
 import TablaBase from "@common/tablas/TablaBase";
 
-import { useBusqueda } from "@hooks/useBusqueda";
-import { useFiltrado } from "@hooks/useFiltrado";
-import { useToggleEstado } from "@hooks/useToggleEstado";
+import { useBusqueda } from "@hooks/filtros/useBusqueda";
+import { useFiltrado } from "@hooks/filtros/useFiltrado";
+import { useToggleEstado } from "@hooks/common/useToggleEstado";
 
 import {
   obtenerServicios,

@@ -75,3 +75,10 @@ export async function obtenerVeterinarioPorId(id) {
   if (!res.ok) throw new Error("Error al obtener veterinario por ID");
   return res.json();
 }
+
+export async function obtenerVeterinariosPorEspecialidad() {
+  const res = await fetch(`${API_URL}/total/especialidades`);
+  if (!res.ok) throw new Error("Error al obtener conteo por especialidad");
+
+  return res.json();
+}

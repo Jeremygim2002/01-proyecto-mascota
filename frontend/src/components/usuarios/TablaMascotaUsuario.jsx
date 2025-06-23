@@ -4,17 +4,24 @@ import { useState, useEffect } from "react";
 
 import TablaBase from "@common/tablas/TablaBase";
 
-import { useBusqueda } from "@hooks/useBusqueda";
-import { useFiltrado } from "@hooks/useFiltrado";
-import { useToggleEstado } from "@hooks/useToggleEstado";
+import { useBusqueda } from "@hooks/filtros/useBusqueda";
+import { useFiltrado } from "@hooks/filtros/useFiltrado";
+import { useToggleEstado } from "@hooks/common/useToggleEstado";
 
-import { obtenerMascotasUsuarios } from "@services/historialService";
+import { obtenerMascotasUsuarios } from "@services/compuestoService";
 import {
   eliminarMascota,
   crearMascota,
   actualizarEstadoMascota,
 } from "@services/mascotaService";
-import { actualizarUsuario } from "@services/usuarioService";
+import { actualizarUsuario, crearUsuario } from "@services/usuarioService";
+
+import {
+  notificarError,
+  notificarExito,
+  notificarErroresZod,
+} from "@lib/notificaciones";
+import { validateUsuario } from "@schemas/usuarioSchema";
 
 import TablaFiltrosUsuario from "./TablaFiltrosUsuario";
 import ModalAgregarMascota from "./ModalAgregarMascota";
@@ -40,12 +47,31 @@ const TablaMascotaUsuario = () => {
     }
   };
 
+  const registrarUsuario = async (nuevoUsuario) => {
+    try {
+      const validacion = validateUsuario(nuevoUsuario);
+      if (!validacion.success) {
+        notificarErroresZod(validacion.error);
+        return;
+      }
+
+      await crearUsuario(validacion.data);
+      notificarExito("Usuario registrado correctamente");
+      setModalUsuarioOpen(false);
+      await cargarUsuarios();
+    } catch (error) {
+      console.error("Error al registrar usuario:", error);
+      notificarError("Error al registrar usuario");
+    }
+  };
+
   const registrarMascota = async (nuevaMascota) => {
     try {
       await crearMascota(nuevaMascota);
       await cargarUsuarios();
     } catch (error) {
       console.error("Error al crear mascota:", error);
+      notificarError("Error al crear mascota");
     }
   };
 
@@ -87,9 +113,11 @@ const TablaMascotaUsuario = () => {
   const handleEliminar = async (id) => {
     try {
       await eliminarMascota(id);
+      notificarExito("Mascota eliminada correctamente");
       await cargarUsuarios();
     } catch (error) {
       console.error("Error al eliminar mascota:", error);
+      notificarError(error.message || "Error al registrar usuario");
     }
   };
 
@@ -116,6 +144,7 @@ const TablaMascotaUsuario = () => {
       <ModalAgregarUsuario
         isOpen={modalUsuarioOpen}
         onClose={() => setModalUsuarioOpen(false)}
+        onSubmit={registrarUsuario}
       />
 
       <ModalVerMascotaUsuario
@@ -136,7 +165,14 @@ const TablaMascotaUsuario = () => {
 
       <TablaBase
         columnas={[
-          { id: "nombre_usuario", label: "Nombre dueño" },
+          {
+            id: "nombreCompleto",
+            label: "Nombre dueño",
+            render: (row) =>
+              `${row.nombre_usuario ?? ""} ${row.apellido_paterno ?? ""} ${
+                row.apellido_materno ?? ""
+              }`,
+          },
           { id: "dni", label: "DNI" },
           { id: "nombre_mascota", label: "Nombre Mascota" },
           { id: "raza", label: "Raza" },

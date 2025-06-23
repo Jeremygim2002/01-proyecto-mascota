@@ -10,20 +10,31 @@ import {
 } from "recharts";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
-import Title from "@common/layout/Titulo"
-
-const datosUsuarios = [
-  { name: "Enero", cantidad: 100 },
-  { name: "Febrero", cantidad: 78 },
-  { name: "Marzo", cantidad: 64 },
-  { name: "Abril", cantidad: 53 },
-  { name: "Mayo", cantidad: 45 },
-  { name: "Junio", cantidad: 43 },
-  { name: "Julio", cantidad: 46 },
-  { name: "Agosto", cantidad: 51 },
-];
+import { useEffect, useState } from "react";
+import Title from "@common/layout/Titulo";
+import { obtenerIngresosPorMes } from "@services/ordenService";
 
 const GraficoUsuarios = () => {
+  const [datosIngresos, setDatosIngresos] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const datos = await obtenerIngresosPorMes();
+        const ordenados = datos.sort((a, b) => new Date(`01 ${a.mes}`) - new Date(`01 ${b.mes}`));
+        setDatosIngresos(
+          ordenados.map((d) => ({
+            name: d.mes,
+            cantidad: d.ingresos,
+          }))
+        );
+      } catch (error) {
+        console.error("Error al obtener ingresos mensuales:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <motion.div
       className="bg-slate-800 p-6 md:p-8 rounded-2xl shadow-xl border border-slate-700 transition-all duration-500"
@@ -31,16 +42,16 @@ const GraficoUsuarios = () => {
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
     >
-      <Title className="text-center tracking-wide mb-4" text="USUARIOS POR MES "/>
+      <Title className="text-center tracking-wide mb-4" text="INGRESOS MENSUALES" />
       <div className="w-full h-[300px] sm:h-[350px] md:h-[400px]">
         <ResponsiveContainer>
-          <LineChart data={datosUsuarios}>
+          <LineChart data={datosIngresos}>
             <CartesianGrid strokeDasharray="3 3" stroke="#475569" />
             <XAxis dataKey="name" stroke="#CBD5E1" tick={{ fill: "#CBD5E1" }} />
             <YAxis
               stroke="#CBD5E1"
               tick={{ fill: "#CBD5E1" }}
-              domain={[0, 100]}
+              domain={['auto', 'auto']}
             />
             <Tooltip
               contentStyle={{

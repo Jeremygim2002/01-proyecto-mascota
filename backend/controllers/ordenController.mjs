@@ -56,6 +56,7 @@ export class OrdenController {
         res.json({ message: 'Orden actualizada correctamente' });
     };
 
+
     delete = async (req, res) => {
         const { id } = req.params;
         const { id_asistente } = req.body;
@@ -77,4 +78,55 @@ export class OrdenController {
 
         res.json({ message: 'Orden eliminada correctamente' });
     };
+
+
+
+    toggleEstado = async (req, res) => {
+        const { id } = req.params;
+        const { estado } = req.body;
+
+        if (typeof estado !== 'boolean') {
+            return res.status(400).json({ error: 'Estado inválido' });
+        }
+
+        const orden = await this.ordenModel.getById({ id });
+        if (!orden) {
+            return res.status(404).json({ error: 'Orden no encontrada' });
+        }
+
+        await this.ordenModel.updateEstado({ id, estado });
+        res.json({ message: 'Estado actualizado correctamente' });
+    };
+
+    contarActivos = async (req, res) => {
+        try {
+            const total = await this.ordenModel.contarActivos();
+            res.json({ total });
+        } catch (error) {
+            console.error('Error al contar órdenes activas:', error);
+            res.status(500).json({ error: 'Error interno al contar órdenes' });
+        }
+    };
+
+    obtenerIngresosPorCategoria = async (req, res) => {
+        try {
+            const datos = await this.ordenModel.obtenerIngresosPorCategoria();
+            res.json(datos);
+        } catch (error) {
+            console.error('Error al obtener ingresos por categoría:', error);
+            res.status(500).json({ error: 'Error interno al obtener ingresos por categoría' });
+        }
+    };
+obtenerIngresosPorMes = async (req, res) => {
+  try {
+    const datos = await this.ordenModel.obtenerIngresosPorMes();
+    res.json(datos);
+  } catch (error) {
+    console.error("Error al obtener ingresos mensuales:", error);
+    res.status(500).json({ error: "Error interno al obtener ingresos mensuales" });
+  }
+};
+
+
+
 }

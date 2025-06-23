@@ -57,17 +57,25 @@ export class MascotaController {
 
     const mascota = await this.mascotaModel.getById({ id });
     if (!mascota) {
-      return res.status(404).json({ error: 'Mascota no encontrada' });
+      return res.status(404).json({ error: "Mascota no encontrada" });
     }
 
-    const success = await this.mascotaModel.delete({ id });
+    try {
+      const success = await this.mascotaModel.delete({ id });
 
-    if (!success) {
-      return res.status(500).json({ error: 'Error al eliminar mascota' });
+      if (!success) {
+        return res.status(400).json({
+          error: "No se puede eliminar la mascota porque tiene órdenes asociadas",
+        });
+      }
+
+      res.json({ message: "Mascota eliminada correctamente" });
+    } catch (error) {
+      console.error("Error inesperado al eliminar mascota:", error);
+      res.status(500).json({ error: "Error interno al eliminar mascota" });
     }
-
-    res.json({ message: 'Mascota eliminada' });
   };
+
 
   toggleEstado = async (req, res) => {
     const { id } = req.params;
@@ -85,5 +93,31 @@ export class MascotaController {
     await this.mascotaModel.updateEstado({ id, estado });
     res.json({ message: 'Estado actualizado correctamente' });
   };
+
+  getPorDni = async (req, res) => {
+    const { dni } = req.params;
+    try {
+      const data = await this.mascotaModel.getActivasPorUsuarioDni({ dni });
+      if (!data.usuario) {
+        return res.status(404).json({ error: "Usuario no encontrado" });
+      }
+      res.json(data);
+    } catch (error) {
+      console.error("Error al buscar usuario y mascotas:", error);
+      res.status(500).json({ error: "Error interno del servidor" });
+    }
+  }
+
+
+  contarActivas = async (req, res) => {
+    try {
+      const total = await this.mascotaModel.contarActivas();
+      res.json({ total });
+    } catch (error) {
+      console.error('Error al contar mascotas activas:', error);
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
+  }
+
 
 }

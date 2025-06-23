@@ -86,11 +86,42 @@ export class ServicioModel {
     static async getByCategoria({ idCategoria }) {
         const [rows] = await pool.query(
             `SELECT BIN_TO_UUID(id) AS id_servicio, nombre, duracion, precio 
-FROM servicios 
-WHERE id_categoria = ? AND estado = TRUE`,
+                FROM servicios 
+                        WHERE id_categoria = ? AND estado = TRUE`,
             [idCategoria]
         );
         return rows;
     }
+
+    static async contarActivos() {
+        try {
+            const [[{ total }]] = await pool.query(
+                'SELECT COUNT(*) AS total FROM servicios WHERE estado = TRUE'
+            );
+            return total;
+        } catch (error) {
+            console.error('Error al contar servicios activos:', error);
+            throw error;
+        }
+    }
+
+    static async contarPorCategoria() {
+        try {
+            const [rows] = await pool.query(`
+      SELECT c.nombre AS categoria, COUNT(*) AS total
+      FROM servicios s
+      JOIN categoria_servicio c ON s.id_categoria = c.id
+      WHERE s.estado = TRUE
+      GROUP BY s.id_categoria
+    `);
+            return rows;
+        } catch (error) {
+            console.error('Error al contar servicios por categoría:', error);
+            throw error;
+        }
+    }
+
+
+
 
 }

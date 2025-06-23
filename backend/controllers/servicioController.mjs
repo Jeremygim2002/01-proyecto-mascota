@@ -110,4 +110,15 @@ export class ServicioController {
     }
   };
 
+  contarActivos = async (req, res) => {
+    try {
+      const total = await this.servicioModel.contarActivos();
+      res.json({ total });
+    } catch (error) {
+      console.error('Error al contar servicios activos:', error);
+      res.status(500).json({ error: 'Error interno al contar servicios' });
+    }
+  };
+
+
 }

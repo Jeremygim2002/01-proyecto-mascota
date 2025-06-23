@@ -7,7 +7,7 @@ import {
   notificarExito,
   notificarErroresZod,
 } from "@lib/notificaciones";
-import { actualizarUsuario } from "@services/usuarioService";
+import { actualizarUsuario, obtenerUsuarios } from "@services/usuarioService";
 import { validatePartialUsuario } from "@schemas/usuarioSchema";
 
 const ModalEditarUsuario = ({ isOpen, onClose, usuario, onActualizar }) => {
@@ -18,7 +18,6 @@ const ModalEditarUsuario = ({ isOpen, onClose, usuario, onActualizar }) => {
     if (usuario) {
       setCorreo(usuario.correo || "");
       setNumeroTelefono(usuario.numero_telefono || "");
-      console.log(usuario);
     }
   }, [usuario]);
 
@@ -31,14 +30,37 @@ const ModalEditarUsuario = ({ isOpen, onClose, usuario, onActualizar }) => {
       numero_telefono: numeroTelefono,
     };
 
+
     const validacion = validatePartialUsuario(usuarioActualizado);
     if (!validacion.success) {
       notificarErroresZod(validacion.error);
       return;
     }
 
+
+    if (
+      correo === usuario.correo &&
+      numeroTelefono === usuario.numero_telefono
+    ) {
+      notificarError("No hiciste ningún cambio.");
+      return;
+    }
+
+
     try {
+      const usuarios = await obtenerUsuarios();
+      const correoDuplicado = usuarios.find(
+        (u) => u.correo === correo && u.id !== usuario.id
+      );
+
+      if (correoDuplicado) {
+        notificarError("Este correo ya está en uso por otro usuario.");
+        return;
+      }
+
+
       await actualizarUsuario(usuarioActualizado);
+      console.log("Usuario a actualizar:", usuarioActualizado);
       notificarExito("Usuario actualizado correctamente");
       onActualizar?.(usuarioActualizado);
       onClose();

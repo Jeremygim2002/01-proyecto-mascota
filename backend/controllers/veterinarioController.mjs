@@ -108,4 +108,17 @@ export class VeterinarioController {
         res.json(veterinarios);
     };
 
+
+
+    contarPorEspecialidad = async (req, res) => {
+  try {
+    const data = await this.veterinarioModel.contarPorEspecialidad();
+    res.json(data);
+  } catch (error) {
+    console.error('Error al contar veterinarios por especialidad:', error);
+    res.status(500).json({ error: 'Error interno al contar especialidades' });
+  }
+};
+
+
 }

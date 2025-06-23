@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import {
@@ -8,16 +9,8 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import Title from "@common/layout/Titulo"
-
-const datosServicios = [
-  { name: "Consulta general y preventiva", value: 4200 },
-  { name: "Vacunación y desparasitación", value: 3000 },
-  { name: "Peluquería y estética", value: 2500 },
-  { name: "Fisioterapia y rehabilitación", value: 2000 },
-  { name: "Cirugías generales y especializadas", value: 1500 },
-  { name: "Hospitalización y cuidados intensivos", value: 1200 },
-];
+import Title from "@common/layout/Titulo";
+import { obtenerIngresosPorCategoria } from "@services/ordenService";
 
 const COLORS = [
   "#2563EB", 
@@ -30,6 +23,24 @@ const COLORS = [
 ];
 
 const GraficoServicios = () => {
+  const [datos, setDatos] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await obtenerIngresosPorCategoria();
+        const formateado = response.map(({ categoria, ingresos }) => ({
+          name: categoria,
+          value: Number(ingresos),
+        }));
+        setDatos(formateado);
+      } catch (error) {
+        console.error("Error al cargar ingresos por categoría:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <motion.div
       className="bg-slate-800 p-6 md:p-8 rounded-2xl shadow-xl border border-slate-700 transition-all duration-500"
@@ -37,12 +48,15 @@ const GraficoServicios = () => {
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 0.3, duration: 0.8, ease: "easeOut" }}
     >
-      <Title className="text-center tracking-wide mb-4" text="SERVICIOS DISPONIBLES POR TIPO" />
+      <Title
+        className="text-center tracking-wide mb-4"
+        text="INGRESOS POR CATEGORÍA DE SERVICIOS"
+      />
       <div className="w-full h-[320px] sm:h-[360px] md:h-[400px]">
         <ResponsiveContainer>
           <PieChart>
             <Pie
-              data={datosServicios}
+              data={datos}
               cx="45%"
               cy="50%"
               innerRadius={60}
@@ -62,7 +76,7 @@ const GraficoServicios = () => {
                 </text>
               )}
             >
-              {datosServicios.map((entry, index) => (
+              {datos.map((_, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={COLORS[index % COLORS.length]}

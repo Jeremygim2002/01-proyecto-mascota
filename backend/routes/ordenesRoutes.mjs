@@ -10,6 +10,16 @@ export const createOrdenesRouter = ({ ordenModel }) => {
     router.post('/', ordenController.create);
     router.patch('/:id', ordenController.update);
     router.delete('/:id', ordenController.delete);
+    router.patch('/:id/estado', ordenController.toggleEstado);
+    router.get('/total/activos', ordenController.contarActivos);
+    router.get('/analisis/ingresos-categoria', ordenController.obtenerIngresosPorCategoria);
+    router.get('/ingresos/mensuales', ordenController.obtenerIngresosPorMes);
+
+
+
+
+
+
 
     return router;
 };

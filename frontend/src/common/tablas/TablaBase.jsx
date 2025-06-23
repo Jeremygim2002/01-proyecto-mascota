@@ -15,6 +15,7 @@ const TablaBase = ({
   mostrarEstado = true,
   mostrarAcciones = true,
   idKey = "id",
+  textoEstado = ["Activo", "Inactivo"],
 }) => {
   return (
     <div className="overflow-x-auto ">
@@ -62,7 +63,7 @@ const TablaBase = ({
                   key={col.id}
                   className="px-6 py-4 whitespace-nowrap text-sm text-texto font-cuerpo"
                 >
-                  {fila[col.id]}
+                  {col.render ? col.render(fila) : fila[col.id]}
                 </td>
               ))}
 
@@ -71,6 +72,7 @@ const TablaBase = ({
                   <Switch
                     estado={fila.estado}
                     onToggle={() => onToggleEstado(fila[idKey], fila.estado)}
+                    texto={textoEstado}
                   />
                 </td>
               )}

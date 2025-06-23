@@ -37,14 +37,19 @@ export class UsuarioController {
 
     create = async (req, res) => {
         const result = validateUsuario(req.body);
-
         if (!result.success) {
             return res.status(400).json({ error: result.error.format() });
         }
 
-        const newUsuario = await this.usuarioModel.create({ input: result.data });
-        res.status(201).json(newUsuario);
+        try {
+            const newUsuario = await this.usuarioModel.create({ input: result.data });
+            res.status(201).json(newUsuario);
+        } catch (error) {
+            const status = error.status || 500;
+            res.status(status).json({ error: error.message || 'Error interno' });
+        }
     };
+
 
     update = async (req, res) => {
         const { id } = req.params;
@@ -59,7 +64,13 @@ export class UsuarioController {
             return res.status(404).json({ error: 'Usuario no encontrado' });
         }
 
-        await this.usuarioModel.update({ id, input: result.data });
+
+        const usuarioActualizado = {
+            ...usuario,
+            ...result.data,
+        };
+
+        await this.usuarioModel.update({ id, input: usuarioActualizado });
         res.json({ message: 'Usuario actualizado' });
     };
 
@@ -93,5 +104,16 @@ export class UsuarioController {
             res.status(500).json({ error: 'Error interno al obtener usuario y mascotas' });
         }
     };
+
+    contarActivos = async (req, res) => {
+        try {
+            const total = await this.usuarioModel.contarActivos();
+            res.json({ total });
+        } catch (error) {
+            console.error('Error al contar usuarios activos:', error);
+            res.status(500).json({ error: 'Error interno al contar usuarios' });
+        }
+    };
+
 
 }

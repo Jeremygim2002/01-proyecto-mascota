@@ -76,3 +76,11 @@ export async function obtenerServicioPorId(id) {
   if (!res.ok) throw new Error("Error al obtener servicio por ID");
   return res.json();
 }
+
+export async function obtenerTotalServiciosActivos() {
+  const res = await fetch(`${API_URL}/total/activos`);
+  if (!res.ok) throw new Error("No se pudo obtener el total de servicios activos");
+
+  const data = await res.json();
+  return data.total;
+}

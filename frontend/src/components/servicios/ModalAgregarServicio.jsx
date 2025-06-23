@@ -4,7 +4,7 @@ import Input from "@common/ui/Input";
 import Select from "@common/ui/Select";
 import Button from "@common/ui/Button";
 
-import { useResetFormulario } from "@hooks/useResetFormulario";
+import { useResetFormulario } from "@hooks/filtros/useResetFormulario";
 import {
   notificarError,
   notificarExito,

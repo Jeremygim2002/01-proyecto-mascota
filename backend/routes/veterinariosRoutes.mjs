@@ -12,6 +12,8 @@ export const createVeterinariosRouter = ({ veterinarioModel }) => {
   veterinariosRouter.delete('/:id', veterinarioController.delete);
   veterinariosRouter.patch('/:id/estado', veterinarioController.toggleEstado);
   veterinariosRouter.get('/categoria/:idCategoria', veterinarioController.getByCategoria);
+  veterinariosRouter.get('/total/especialidades', veterinarioController.contarPorEspecialidad);
+
 
 
   return veterinariosRouter;

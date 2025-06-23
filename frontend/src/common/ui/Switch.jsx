@@ -1,4 +1,4 @@
-const Switch = ({ estado, onToggle }) => (
+const Switch = ({ estado, onToggle, texto = ["Activo", "Inactivo"] }) => (
   <div className="flex items-center gap-3">
     <button
       type="button"
@@ -14,7 +14,7 @@ const Switch = ({ estado, onToggle }) => (
       />
     </button>
     <span className="text-sm text-texto-secundario w-16 text-left font-cuerpo">
-      {estado ? "Activo" : "Inactivo"}
+      {estado ? texto[0] : texto[1]}
     </span>
   </div>
 );

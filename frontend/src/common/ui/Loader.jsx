@@ -1,26 +1,28 @@
 import { useEffect, useState } from "react";
 import loaderGif from "@assets/loader.gif";
 
-const Loader = ({ duracion = 3000, onFinish }) => {
+const DURACION_PREDETERMINADA = 2000;
+
+const Loader = ({ onFinish }) => {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setVisible(false);
       onFinish?.(); 
-    }, duracion);
+    }, DURACION_PREDETERMINADA);
 
     return () => clearTimeout(timer);
-  }, [duracion, onFinish]);
+  }, [onFinish]);
 
   if (!visible) return null;
 
   return (
-    <div className="flex justify-center items-center h-screen bg-slate-900 z-50 fixed inset-0">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
       <img
         src={loaderGif}
         alt="Cargando..."
-        className="w-52 sm:w-64 md:w-72 lg:w-80 xl:w-96 h-auto object-contain"
+        className="w-40 sm:w-56 md:w-64 lg:w-72 xl:w-80 h-auto object-contain"
       />
     </div>
   );

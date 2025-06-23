@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 
 import TablaBase from "@common/tablas/TablaBase";
 
-import { useBusqueda } from "@hooks/useBusqueda";
-import { useFiltrado } from "@hooks/useFiltrado";
-import { useToggleEstado } from "@hooks/useToggleEstado";
+import { useBusqueda } from "@hooks/filtros/useBusqueda";
+import { useFiltrado } from "@hooks/filtros/useFiltrado";
+import { useToggleEstado } from "@hooks/common/useToggleEstado";
 
 import {
   obtenerVeterinarios,
@@ -69,21 +69,19 @@ const TablaVeterinario = () => {
     await cargarVeterinarios();
   };
 
-
-
-const handleEliminar = async (id) => {
-  try {
-    await eliminarVeterinario(id);
-    notificarExito("Veterinario eliminado correctamente");
-    await cargarVeterinarios();
-  } catch (error) {
-    console.error("Error al eliminar veterinario:", error);
-    notificarError(
-      error.message || "No se pudo eliminar el veterinario. Está relacionado con una orden."
-    );
-  }
-};
-
+  const handleEliminar = async (id) => {
+    try {
+      await eliminarVeterinario(id);
+      notificarExito("Veterinario eliminado correctamente");
+      await cargarVeterinarios();
+    } catch (error) {
+      console.error("Error al eliminar veterinario:", error);
+      notificarError(
+        error.message ||
+          "No se pudo eliminar el veterinario. Está relacionado con una orden."
+      );
+    }
+  };
 
   const handleEditar = (vet) => {
     setSeleccionado(vet);
@@ -129,7 +127,14 @@ const handleEliminar = async (id) => {
 
       <TablaBase
         columnas={[
-          { id: "nombre", label: "Nombre" },
+          {
+            id: "nombreCompleto",
+            label: "Nombre",
+            render: (row) =>
+              `${row.nombre} ${row.apellido_paterno ?? ""} ${
+                row.apellido_materno ?? ""
+              }`,
+          },
           { id: "correo", label: "Correo" },
           { id: "numero_telefono", label: "Teléfono" },
           { id: "dni", label: "DNI" },

@@ -37,38 +37,39 @@ export class UsuarioModel {
     }
   }
 
+
+  static async exists({ correo, dni }) {
+    const [rows] = await pool.query(
+      'SELECT 1 FROM usuarios WHERE correo = ? OR dni = ? LIMIT 1',
+      [correo, dni]
+    );
+    return rows.length > 0;
+  }
+
   static async create({ input }) {
-    const {
-      nombre,
-      apellido_paterno,
-      apellido_materno,
-      correo,
-      numero_telefono,
-      dni
-    } = input;
+    const { correo, dni } = input;
 
-    try {
-      const [[{ uuid }]] = await pool.query('SELECT UUID() AS uuid');
-
-      await pool.query(
-        'CALL sp_insertar_usuario(?, ?, ?, ?, ?, ?)',
-        [nombre, apellido_paterno, apellido_materno, correo, numero_telefono, dni]
-      );
-
-      return {
-        id: uuid,
-        nombre,
-        apellido_paterno,
-        apellido_materno,
-        correo,
-        numero_telefono,
-        dni
-      };
-    } catch (error) {
-      console.error('Error al crear usuario:', error);
+    const yaExiste = await this.exists({ correo, dni });
+    if (yaExiste) {
+      const error = new Error('Ya existe un usuario con ese correo o DNI');
+      error.status = 400;
       throw error;
     }
+
+    await pool.query('CALL sp_insertar_usuario(?, ?, ?, ?, ?, ?)', [
+      input.nombre,
+      input.apellido_paterno,
+      input.apellido_materno,
+      correo,
+      input.numero_telefono,
+      dni
+    ]);
+
+    return input;
   }
+
+
+
 
   static async update({ id, input }) {
     const {
@@ -104,6 +105,9 @@ export class UsuarioModel {
     }
   }
 
+
+
+
   static async getUsuarioConMascotasByDni(dni) {
     try {
       const [resultSets] = await pool.query('CALL sp_get_usuario_con_mascotas(?)', [dni]);
@@ -119,4 +123,17 @@ export class UsuarioModel {
       throw error;
     }
   }
+
+  static async contarActivos() {
+    try {
+      const [[{ total }]] = await pool.query(
+        'SELECT COUNT(*) AS total FROM usuarios'
+      );
+      return total;
+    } catch (error) {
+      console.error('Error al contar usuarios activos:', error);
+      throw error;
+    }
+  }
+
 }
