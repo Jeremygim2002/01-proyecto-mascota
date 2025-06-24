@@ -117,15 +117,37 @@ export class OrdenController {
             res.status(500).json({ error: 'Error interno al obtener ingresos por categoría' });
         }
     };
-obtenerIngresosPorMes = async (req, res) => {
-  try {
-    const datos = await this.ordenModel.obtenerIngresosPorMes();
-    res.json(datos);
-  } catch (error) {
-    console.error("Error al obtener ingresos mensuales:", error);
-    res.status(500).json({ error: "Error interno al obtener ingresos mensuales" });
-  }
-};
+    obtenerIngresosPorMes = async (req, res) => {
+        try {
+            const datos = await this.ordenModel.obtenerIngresosPorMes();
+            res.json(datos);
+        } catch (error) {
+            console.error("Error al obtener ingresos mensuales:", error);
+            res.status(500).json({ error: "Error interno al obtener ingresos mensuales" });
+        }
+    };
+
+    obtenerOrdenesPorTipoMascota = async (req, res) => {
+        try {
+            const datos = await this.ordenModel.obtenerOrdenesPorTipoMascota();
+            res.json(datos);
+        } catch (error) {
+            console.error('Error al obtener órdenes por tipo de mascota:', error);
+            res.status(500).json({ error: 'Error interno obteniendo datos' });
+        }
+    };
+    getHistorialByMascota = async (req, res) => {
+        const { id_mascota } = req.params;
+
+        try {
+            const historial = await this.ordenModel.getHistorialByMascota({ id_mascota });
+            res.json(historial);
+        } catch (error) {
+            console.error('Error obteniendo historial por mascota:', error);
+            res.status(500).json({ error: 'Error interno al obtener historial' });
+        }
+    };
+
 
 
 

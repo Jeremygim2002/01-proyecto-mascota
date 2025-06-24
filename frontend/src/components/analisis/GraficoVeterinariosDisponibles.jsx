@@ -14,15 +14,16 @@ import Title from "@common/layout/Titulo";
 import { obtenerVeterinariosPorEspecialidad } from "@services/veterinarioService";
 
 const COLORS = [
-  "#14B8A6",
-  "#6366F1",
-  "#9333EA",
-  "#D946EF",
-  "#FACC15",
-  "#EF4444",
+  "#38BDF8", 
+  "#818CF8", 
+  "#A78BFA", 
+  "#67E8F9", 
+  "#6EE7B7", 
+  "#FCD34D", 
+  "#93C5FD", 
 ];
 
-const GraficoVeterinarios = () => {
+const GraficoVeterinariosDisponibles = () => {
   const [datos, setDatos] = useState([]);
 
   useEffect(() => {
@@ -49,13 +50,15 @@ const GraficoVeterinarios = () => {
       transition={{ delay: 0.3, duration: 0.7, ease: "easeOut" }}
     >
       <Title className="text-center tracking-wide mb-4" text="VETERINARIOS DISPONIBLES POR ESPECIALIDAD" />
-      <div className="w-full h-[360px]">
-        <ResponsiveContainer>
+      
+      
+        <div className="w-full h-[360px] -translate-x-16 transform">
+        <ResponsiveContainer width="110%">
           <BarChart
             data={datos}
             layout="vertical"
             margin={{ top: 10, right: 30, left: 60, bottom: 10 }}
-            barCategoryGap={16}
+            barCategoryGap={18}
           >
             <XAxis type="number" stroke="#94A3B8" tick={{ fontSize: 12 }} />
             <YAxis
@@ -63,12 +66,12 @@ const GraficoVeterinarios = () => {
               dataKey="canal"
               stroke="#94A3B8"
               tick={{ fontSize: 13 }}
-              width={120}
+              width={140}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#1e293b",
-                borderColor: "#475569",
+                backgroundColor: "#0f172a",
+                borderColor: "#334155",
                 borderRadius: "0.5rem",
               }}
               itemStyle={{ color: "#F1F5F9", fontWeight: "500" }}
@@ -77,7 +80,7 @@ const GraficoVeterinarios = () => {
             <Bar
               dataKey="valor"
               radius={[0, 12, 12, 0]}
-              barSize={18}
+              barSize={20}
               isAnimationActive={true}
             >
               {datos.map((entry, index) => (
@@ -91,4 +94,4 @@ const GraficoVeterinarios = () => {
   );
 };
 
-export default GraficoVeterinarios;
+export default GraficoVeterinariosDisponibles;

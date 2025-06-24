@@ -282,8 +282,8 @@ GET http://localhost:3000/api/mascotas/total/activas
 
 
 
-
-
+### Obtener total de mascotas activas
+GET http://localhost:3000/api/ordenes/mascota/bb51da26-50bb-11f0-8ec4-a8a159de6f1d/historial
 
 
 

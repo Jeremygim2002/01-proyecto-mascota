@@ -13,16 +13,17 @@ import Title from "@common/layout/Titulo";
 import { obtenerIngresosPorCategoria } from "@services/ordenService";
 
 const COLORS = [
-  "#2563EB", 
-  "#3B82F6",  
-  "#60A5FA",  
-  "#818CF8",  
-  "#A78BFA",  
-  "#C084FC",  
-  "#E879F9",  
+  "#14B8A6", 
+  "#06B6D4", 
+  "#4F46E5", 
+  "#8B5CF6", 
+  "#F43F5E", 
+  "#F59E0B", 
+  "#10B981", 
+  "#EC4899",
 ];
 
-const GraficoServicios = () => {
+const GraficoIngresoCategoria = () => {
   const [datos, setDatos] = useState([]);
 
   useEffect(() => {
@@ -61,15 +62,15 @@ const GraficoServicios = () => {
               cy="50%"
               innerRadius={60}
               outerRadius={100}
-              paddingAngle={3}
+              paddingAngle={4}
               dataKey="value"
               labelLine={false}
               label={({ name, percent }) => (
                 <text
                   style={{
-                    fill: "#CBD5E1",
+                    fill: "#E2E8F0",
                     fontSize: "0.75rem",
-                    fontWeight: 500,
+                    fontWeight: 600,
                   }}
                 >
                   {`${name}: ${(percent * 100).toFixed(1)}%`}
@@ -85,12 +86,12 @@ const GraficoServicios = () => {
             </Pie>
             <Tooltip
               contentStyle={{
-                backgroundColor: "#1e293b",
-                borderColor: "#475569",
+                backgroundColor: "#0f172a",
+                borderColor: "#334155",
                 borderRadius: "0.5rem",
               }}
-              itemStyle={{ color: "#F8FAFC", fontWeight: "bold" }}
-              labelStyle={{ color: "#E2E8F0" }}
+              itemStyle={{ color: "#F0FDF4", fontWeight: 600 }}
+              labelStyle={{ color: "#A5F3FC" }}
             />
             <Legend
               layout="vertical"
@@ -98,7 +99,7 @@ const GraficoServicios = () => {
               align="right"
               iconType="circle"
               wrapperStyle={{
-                color: "#E2E8F0",
+                color: "#E0F2FE",
                 fontSize: "0.875rem",
                 fontWeight: 500,
               }}
@@ -110,4 +111,4 @@ const GraficoServicios = () => {
   );
 };
 
-export default GraficoServicios;
+export default GraficoIngresoCategoria;

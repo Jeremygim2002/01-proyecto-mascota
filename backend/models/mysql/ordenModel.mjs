@@ -30,6 +30,7 @@ export class OrdenModel {
             id_veterinario,
             id_asistente,
             servicios,
+            fecha,
             hora_inicio
         } = input;
 
@@ -39,8 +40,8 @@ export class OrdenModel {
 
         try {
             await pool.query(
-                'CALL sp_insertar_orden(UUID_TO_BIN(?), UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?)',
-                [id_mascota, id_veterinario, id_asistente, hora_inicio, serviciosTexto]
+                'CALL sp_insertar_orden(UUID_TO_BIN(?), UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?, ?)',
+                [id_mascota, id_veterinario, id_asistente, fecha, hora_inicio, serviciosTexto]
             );
         } catch (error) {
             console.error('Error al crear orden:', error);
@@ -120,19 +121,45 @@ export class OrdenModel {
         }
     }
 
-static async obtenerIngresosPorMes() {
-  try {
-    const [rows] = await pool.query('SELECT * FROM vista_ingresos_mensuales');
-    return rows.map(({ mes, ingresos }) => ({
-      mes,
-      ingresos: Number(ingresos)
-    }));
-  } catch (error) {
-    console.error("Error al obtener ingresos por mes:", error);
-    throw error;
-  }
-}
+    static async obtenerIngresosPorMes() {
+        try {
+            const [rows] = await pool.query('SELECT * FROM vista_ingresos_mensuales');
+            return rows.map(({ mes, ingresos }) => ({
+                mes,
+                ingresos: Number(ingresos)
+            }));
+        } catch (error) {
+            console.error("Error al obtener ingresos por mes:", error);
+            throw error;
+        }
+    }
 
+    static async obtenerOrdenesPorTipoMascota() {
+        try {
+            const [rows] = await pool.query('SELECT * FROM vista_ordenes_por_tipo_mascota');
+            return rows.map(({ mes, tipo_mascota, total_ordenes }) => ({
+                mes,
+                tipo_mascota,
+                total_ordenes: Number(total_ordenes),
+            }));
+        } catch (error) {
+            console.error('Error al obtener órdenes por tipo de mascota:', error);
+            throw error;
+        }
+    }
+
+    static async getHistorialByMascota({ id_mascota }) {
+        try {
+            const [historial] = await pool.query(
+                'CALL sp_obtener_historial_ordenes_mascota(UUID_TO_BIN(?))',
+                [id_mascota]
+            );
+            return historial[0]; // resultado de CALL
+        } catch (error) {
+            console.error('❌ Error en getHistorialByMascota:', error);
+            throw error;
+        }
+    }
 
 
 }

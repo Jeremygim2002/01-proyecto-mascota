@@ -1,9 +1,9 @@
 import Header from "@common/layout/Header";
 import StatCardsGroup from "@common/stats/StatCardsGroup";
-import GraficoServicios from "@components/analisis/GraficoServicios";
-import GraficoUsuarios from "@components/analisis/GraficoUsuarios";
-import GraficoVeterinarios from "@components/analisis/GraficoVeterinarios";
-import GraficoOrdenes from "@components/analisis/GraficoOrdenes";
+import GraficoIngresoMensual from "@components/analisis/GraficoIngresoMensual";
+import GraficoIngresoCategoria from "@components/analisis/GraficoIngresoCategoria";
+import GraficoVeterinariosDisponibles from "@components/analisis/GraficoVeterinariosDisponibles";
+import GraficoOrdenesTipoMascota from "@components/analisis/GraficoOrdenesTipoMascota";
 
 const PaginaAnalisis = () => {
   return (
@@ -13,10 +13,10 @@ const PaginaAnalisis = () => {
         <StatCardsGroup />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <GraficoOrdenes />
-          <GraficoUsuarios />
-          <GraficoVeterinarios />
-          <GraficoServicios />
+          <GraficoOrdenesTipoMascota />
+          <GraficoIngresoMensual />
+          <GraficoVeterinariosDisponibles />
+          <GraficoIngresoCategoria />
         </div>
       </main>
     </div>

@@ -50,20 +50,17 @@ export async function actualizarOrden({ id_orden, ...input }) {
   });
 
   if (!res.ok) {
-const error = await res.json();
-console.error("💥 Error completo:", error); // 👈 Añade esto
-throw new Error(
-  typeof error === "string"
-    ? error
-    : JSON.stringify(error, null, 2)
-);
+    const error = await res.json();
+    console.error("💥 Error completo:", error); // 👈 Añade esto
+    throw new Error(
+      typeof error === "string"
+        ? error
+        : JSON.stringify(error, null, 2)
+    );
   }
 
   return res.json();
 }
-
-
-
 
 export async function eliminarOrden(id_orden, id_asistente) {
   const res = await fetch(`${API_URL}/${id_orden}`, {
@@ -80,8 +77,6 @@ export async function eliminarOrden(id_orden, id_asistente) {
   return res.json();
 }
 
-
-
 export async function actualizarEstadoOrden(id, nuevoEstado) {
   const res = await fetch(`${API_URL}/${id}/estado`, {
     method: "PATCH",
@@ -97,7 +92,6 @@ export async function actualizarEstadoOrden(id, nuevoEstado) {
   return res.json();
 }
 
-
 export async function obtenerTotalOrdenesActivas() {
   const res = await fetch(`${API_URL}/total/activos`);
   if (!res.ok) throw new Error("No se pudo obtener el total de órdenes activas");
@@ -105,9 +99,6 @@ export async function obtenerTotalOrdenesActivas() {
   const data = await res.json();
   return data.total;
 }
-
-
-
 
 export async function obtenerIngresosPorCategoria() {
   const res = await fetch(`${API_URL}/analisis/ingresos-categoria`);
@@ -121,3 +112,14 @@ export async function obtenerIngresosPorMes() {
   return res.json();
 }
 
+export async function obtenerOrdenesPorTipoMascota() {
+  const res = await fetch(`${API_URL}/analisis/ordenes-tipo-mascota`);
+  if (!res.ok) throw new Error('Error al obtener órdenes por tipo de mascota');
+  return res.json();
+}
+
+export async function obtenerHistorialOrdenesMascota(id_mascota) {
+  const res = await fetch(`${API_URL}/mascota/${id_mascota}/historial`);
+  if (!res.ok) throw new Error("Error al obtener historial de mascota");
+  return res.json();
+}

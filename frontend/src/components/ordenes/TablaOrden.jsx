@@ -92,6 +92,16 @@ const TablaOrden = () => {
     setModalVer(true);
   };
 
+const ordenesConFechaFormateada = ordenesFiltradas.map((orden) => ({
+  ...orden,
+  fecha: new Date(orden.fecha).toLocaleDateString("es-PE", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }),
+}));
+
+
   return (
     <motion.div
       className="bg-superficie backdrop-blur-md shadow-lg rounded-xl p-6 border border-superficie-borde mb-8"
@@ -135,7 +145,7 @@ const TablaOrden = () => {
           { id: "hora_inicio", label: "Hora Inicio" },
           { id: "hora_fin", label: "Hora Fin" },
         ]}
-        datos={ordenesFiltradas}
+        datos={ordenesConFechaFormateada}
         onVer={handleVer}
         onEditar={handleEditar}
         onEliminar={handleEliminar}

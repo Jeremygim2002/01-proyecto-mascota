@@ -15,6 +15,7 @@ import PaginaUsuarios from "@pages/PaginaUsuarios";
 import PaginaCuenta from "@pages/PaginaCuenta";
 import RutaPrivada from "@routes/RutaPrivada";
 import PaginaNoEncontrada from "@pages/PaginaNoEncontrada";
+import PaginaCalendario from "@pages/PaginaCalendario"
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -36,6 +37,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="veterinarios" element={<PaginaVeterinarios />} />
           <Route path="usuarios" element={<PaginaUsuarios />} />
           <Route path="cuenta" element={<PaginaCuenta />} />
+          <Route path="calendario" element={<PaginaCalendario />} />
           <Route path="*" element={<PaginaNoEncontrada />} />
         </Route>
         <Route path="*" element={<PaginaNoEncontrada />} />

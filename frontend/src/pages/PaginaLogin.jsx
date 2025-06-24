@@ -4,7 +4,7 @@ import FormularioRegistro from "@components/login/FormularioRegistro";
 import FormularioRecuperar from "@components/login/FormularioRecuperar";
 
 const PaginaLogin = () => {
-  const [formActivo, setFormActivo] = useState("login"); // "login" | "registro" | "recuperar"
+  const [formActivo, setFormActivo] = useState("login"); 
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-900 transition-all duration-300">

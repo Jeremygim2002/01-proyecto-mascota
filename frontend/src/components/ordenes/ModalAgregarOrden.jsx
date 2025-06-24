@@ -76,15 +76,19 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const nuevaOrden = {
-      id_mascota: idMascota,
-      id_veterinario: idVeterinario,
-      id_asistente: asistente?.id,
-      servicios: [idServicio],
-      fecha,
-      hora_inicio: horaInicio,
-      estado: true,
-    };
+ const parsedFecha = new Date(fecha);
+const isoFecha = parsedFecha.toISOString().split("T")[0]; // yyyy-mm-dd
+
+const nuevaOrden = {
+  id_mascota: idMascota,
+  id_veterinario: idVeterinario,
+  id_asistente: asistente?.id,
+  servicios: [idServicio],
+  fecha: isoFecha,
+  hora_inicio: horaInicio,
+  hora_fin: horaFin,
+  estado: true,
+};
 
     try {
       const validacion = validateOrden(nuevaOrden);
