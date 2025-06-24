@@ -111,17 +111,17 @@ export class MascotaModel {
   }
 
 
-static async contarActivas() {
-  try {
-    const [[{ total }]] = await pool.query(
-      'SELECT COUNT(*) AS total FROM mascotas WHERE estado = 1'
-    );
-    return total;
-  } catch (error) {
-    console.error('Error al contar mascotas activas:', error);
-    throw error;
+  static async contarActivas() {
+    try {
+      const [[{ total }]] = await pool.query(
+        'SELECT COUNT(*) AS total FROM mascotas WHERE estado = 1'
+      );
+      return total;
+    } catch (error) {
+      console.error('Error al contar mascotas activas:', error);
+      throw error;
+    }
   }
-}
 
 
 

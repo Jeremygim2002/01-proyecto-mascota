@@ -63,6 +63,7 @@ const GraficoIngresoMensual = () => {
               stroke="#94a3b8"
               tick={{ fill: "#cbd5e1", fontSize: 12 }}
               domain={["auto", "auto"]}
+                tickFormatter={(value) => `S/ ${value}`}
             />
             <Tooltip
               contentStyle={{
@@ -72,6 +73,7 @@ const GraficoIngresoMensual = () => {
               }}
               itemStyle={{ color: "#34D399", fontWeight: 600 }}
               labelStyle={{ color: "#e2e8f0", fontWeight: 500 }}
+                formatter={(value) => [`S/. ${value}`, "Ingresos"]}
             />
             <Legend
               verticalAlign="bottom"

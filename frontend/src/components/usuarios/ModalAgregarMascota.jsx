@@ -138,31 +138,19 @@ const ModalAgregarMascota = ({
             </div>
             <Input
               className="col-span-2 pl-4"
-              name="nombre"
+              name="nombreCompleto"
               type="text"
               placeholder="Nombre completo"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
+              value={`${nombre} ${apellidoPaterno} ${apellidoMaterno}`.trim()}
+              onChange={(e) => {
+                const partes = e.target.value.trim().split(" ");
+                setNombre(partes[0] || "");
+                setApellidoPaterno(partes[1] || "");
+                setApellidoMaterno(partes.slice(2).join(" ") || "");
+              }}
               disabled={lecturaUsuario}
             />
-            <Input
-              className="col-span-2 pl-4"
-              name="apellidoPaterno"
-              type="text"
-              placeholder="Apellido Paterno"
-              value={apellidoPaterno}
-              onChange={(e) => setApellidoPaterno(e.target.value)}
-              disabled={lecturaUsuario}
-            />
-            <Input
-              className="col-span-2 pl-4"
-              name="apellidoMaterno"
-              type="text"
-              placeholder="Apellido Materno"
-              value={apellidoMaterno}
-              onChange={(e) => setApellidoMaterno(e.target.value)}
-              disabled={lecturaUsuario}
-            />
+
             <Select
               name="tipo_mascota"
               value={idTipoMascota}

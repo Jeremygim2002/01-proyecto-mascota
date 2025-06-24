@@ -13,13 +13,13 @@ import Title from "@common/layout/Titulo";
 import { obtenerIngresosPorCategoria } from "@services/ordenService";
 
 const COLORS = [
-  "#14B8A6", 
-  "#06B6D4", 
-  "#4F46E5", 
-  "#8B5CF6", 
-  "#F43F5E", 
-  "#F59E0B", 
-  "#10B981", 
+  "#14B8A6",
+  "#06B6D4",
+  "#4F46E5",
+  "#8B5CF6",
+  "#F43F5E",
+  "#F59E0B",
+  "#10B981",
   "#EC4899",
 ];
 
@@ -92,6 +92,7 @@ const GraficoIngresoCategoria = () => {
               }}
               itemStyle={{ color: "#F0FDF4", fontWeight: 600 }}
               labelStyle={{ color: "#A5F3FC" }}
+              formatter={(value) => [`S/. ${value}`, "Ingresos"]}
             />
             <Legend
               layout="vertical"

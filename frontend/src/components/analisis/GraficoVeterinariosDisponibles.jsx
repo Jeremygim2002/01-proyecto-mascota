@@ -21,7 +21,7 @@ const COLORS = [
   "#6EE7B7", 
   "#FCD34D", 
   "#93C5FD", 
-];
+];  
 
 const GraficoVeterinariosDisponibles = () => {
   const [datos, setDatos] = useState([]);

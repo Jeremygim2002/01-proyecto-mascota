@@ -1,5 +1,12 @@
 const API_URL = import.meta.env.VITE_API_URL + "/api/usuarios";
 
+export async function obtenerUsuarios() {
+    const res = await fetch(`${API_URL}`);
+    if (!res.ok) throw new Error("Error al obtener usuarios");
+    return res.json();
+}
+
+
 export async function buscarUsuarioPorDni(dni) {
     const res = await fetch(`${API_URL}/dni/${dni}`);
     if (!res.ok) return null;
@@ -14,18 +21,15 @@ export async function crearUsuario(datos) {
   });
 
   let data = null;
-  try {
-    data = await res.json();
-  } catch {
-    // si no hay cuerpo, no pasa nada
-  }
+  data = await res.json();
+ 
 
   if (!res.ok) {
     const msg = data?.error || "Error al crear usuario";
     throw new Error(msg);
   }
 
-  return data ?? datos; // ⬅️ fallback si no hay body
+  return data ?? datos; 
 }
 
 
@@ -36,11 +40,6 @@ export async function buscarUsuarioConMascotasPorDni(dni) {
     return res.json();
 }
 
-export async function obtenerUsuarios() {
-    const res = await fetch(`${API_URL}`);
-    if (!res.ok) throw new Error("Error al obtener usuarios");
-    return res.json();
-}
 
 export async function obtenerUsuarioPorId(id) {
     const res = await fetch(`${API_URL}/${id}`);
