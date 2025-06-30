@@ -111,7 +111,7 @@ const ModalAgregarMascota = ({
       notificarError("No se encontró ningún usuario con ese DNI.");
       return;
     }
-    notificarExito("Usuario encontrado satisfactoriamente");
+    notificarExito("Usuario registrado correctamente");
     setLecturaUsuario(true);
     setIdUsuario(usuario.id);
     setNombre(usuario.nombre);
@@ -207,7 +207,7 @@ const ModalAgregarMascota = ({
               type="button"
               onClick={() => {
                 resetCampos();
-                setLecturaUsuario(false); // 🔓 Desbloquea campos
+                setLecturaUsuario(false); 
                 onAbrirModalUsuario(true);
               }}
             >

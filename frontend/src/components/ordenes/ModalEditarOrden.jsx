@@ -5,6 +5,7 @@ import Input from "@common/ui/Input";
 import Select from "@common/ui/Select";
 import useLogin from "@hooks/useLogin";
 import { obtenerVeterinariosPorCategoria } from "@services/veterinarioService";
+import { notificarExito, notificarError } from "@lib/notificaciones";
 
 const ModalEditarOrden = ({ isOpen, onClose, onSubmit, orden }) => {
   const [veterinarios, setVeterinarios] = useState([]);
@@ -42,17 +43,23 @@ const ModalEditarOrden = ({ isOpen, onClose, onSubmit, orden }) => {
     e.preventDefault();
     const fixTimeFormat = (timeStr) => timeStr?.slice(0, 5);
 
-    await onSubmit({
-      id_orden: orden.id_orden,
-      id_asistente: asistente?.id,
-      id_veterinario: idVeterinario,
-      id_mascota: orden.id_mascota,
-      fecha,
-      hora_inicio: fixTimeFormat(horaInicio),
-      estado: Boolean(orden.estado),
-    });
+    try {
+      await onSubmit({
+        id_orden: orden.id_orden,
+        id_asistente: asistente?.id,
+        id_veterinario: idVeterinario,
+        id_mascota: orden.id_mascota,
+        fecha,
+        hora_inicio: fixTimeFormat(horaInicio),
+        estado: Boolean(orden.estado),
+      });
 
-    onClose();
+      notificarExito("Orden actualizada correctamente");
+      onClose();
+    } catch (error) {
+      console.error("Error al actualizar orden:", error);
+      notificarError(error.message || "Error al actualizar orden");
+    }
   };
 
   return (

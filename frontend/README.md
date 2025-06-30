@@ -1,12 +1,109 @@
-# React + Vite
+# 🐾 Dashboard de Gestión Veterinaria
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto es una aplicación web moderna desarrollada con **React + Vite** en el frontend y **Node.js + Express + MySQL** en el backend. Está diseñado para gestionar de forma eficiente todos los procesos internos de una veterinaria, desde el registro de usuarios y mascotas hasta la creación de órdenes de servicio y análisis de datos.
 
-Currently, two official plugins are available:
+## 🚀 Características principales
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Registro y gestión de:
+  - Usuarios (dueños de mascotas)
+  - Mascotas
+  - Servicios veterinarios
+  - Veterinarios y asistentes
+  - Órdenes de atención
+- Calendario de citas con FullCalendar
+- Estadísticas visuales con Recharts
+- Generación de cartillas y DNI de mascota en PDF
+- Autenticación básica con login seguro
+- Sistema de notificaciones y modales reutilizables
+- Registro de auditoría de acciones (tabla `registro`)
 
-## Expanding the ESLint configuration
+## ⚙️ Tecnologías utilizadas
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 🖥️ Frontend
+
+- [React](https://reactjs.org/)
+- [Vite](https://vitejs.dev/)
+- [Tailwind CSS (v3.4)](https://tailwindcss.com/)
+- [Framer Motion](https://www.framer.com/motion/)
+- [Lucide React](https://lucide.dev/)
+- [Recharts](https://recharts.org/)
+- [FullCalendar](https://fullcalendar.io/)
+- [Zod](https://zod.dev/)
+- [Sonner](https://sonner.emilkowal.dev/) – sistema de notificaciones
+- [html2pdf.js](https://www.npmjs.com/package/html2pdf.js) – generación de PDF
+
+### 🗄️ Backend
+
+- [Node.js](https://nodejs.org/)
+- [Express.js](https://expressjs.com/)
+- [MySQL](https://www.mysql.com/)
+- Arquitectura modular: `controllers`, `routes`, `models`, `middlewares`, `schemas`
+
+## 📁 Estructura del proyecto
+
+├── frontend/
+│ ├── public/
+│ ├── src/
+│ │ ├── assets/
+│ │ ├── common/
+│ │ ├── components/
+│ │ ├── hooks/
+│ │ ├── lib/
+│ │ ├── pages/
+│ │ ├── routes/
+│ │ ├── schemas/
+│ │ ├── services/
+│ │ ├── App.jsx
+│ │ ├── main.jsx
+│ │ └── index.css
+├── backend/
+│ ├── config/
+│ ├── controllers/
+│ ├── middlewares/
+│ ├── models/
+│ ├── routes/
+│ ├── schemas/
+│ ├── server.mjs
+│ └── createApp.mjs
+
+
+## 🧪 Instalación y uso
+
+### Requisitos previos
+
+- Node.js ≥ 18
+- MySQL ≥ 8
+- Vite ≥ 6
+- Tailwind CSS v3.4.x
+
+### Clonar el repositorio
+
+```bash
+git clone https://github.com/Jeremygim2002/01-proyecto-mascota.git
+cd 01-proyecto-mascota
+
+### Instalar dependencias
+# Backend
+cd backend
+npm install
+
+# Frontend
+cd ../frontend
+npm install
+
+
+### Ejecutar en desarrollo
+# Iniciar backend (con conexión MySQL)
+cd backend
+npm run dev
+
+# Iniciar frontend
+cd ../frontend
+npm run dev
+
+
+## Notas adicionales
+- Este proyecto está orientado a recepcionistas de veterinaria, por lo que solo hay una cuenta de acceso.
+- La base de datos incluye una tabla registro para llevar auditoría de todas las acciones.
+- El frontend se comunica con el backend mediante una API RESTful.
+- Importante: Tailwind está fijado en la versión 3.4.x debido a compatibilidades con estilos personalizados ya implementados.

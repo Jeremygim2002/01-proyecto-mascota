@@ -1,10 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import ToasterCustom from "@common/ui/ToasterCustom";
 
-import "./index.css";
 import App from "./App";
+import "./index.css";
+import ToasterCustom from "@common/ui/ToasterCustom";
 
 import PaginaLogin from "@pages/PaginaLogin";
 import PaginaAnalisis from "@pages/PaginaAnalisis";
@@ -15,14 +15,17 @@ import PaginaUsuarios from "@pages/PaginaUsuarios";
 import PaginaCuenta from "@pages/PaginaCuenta";
 import RutaPrivada from "@routes/RutaPrivada";
 import PaginaNoEncontrada from "@pages/PaginaNoEncontrada";
-import PaginaCalendario from "@pages/PaginaCalendario"
+import PaginaCalendario from "@pages/PaginaCalendario";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
+        {/* Redirección a login */}
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<PaginaLogin />} />
+
+        {/* Rutas protegidas dentro del dashboard */}
         <Route
           path="/dashboard"
           element={
@@ -40,6 +43,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="calendario" element={<PaginaCalendario />} />
           <Route path="*" element={<PaginaNoEncontrada />} />
         </Route>
+        {/* Página 404 global */}
         <Route path="*" element={<PaginaNoEncontrada />} />
       </Routes>
       <ToasterCustom />

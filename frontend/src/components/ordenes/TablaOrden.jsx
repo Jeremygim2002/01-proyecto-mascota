@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 
 import TablaBase from "@common/tablas/TablaBase";
 import { useBusqueda } from "@hooks/filtros/useBusqueda";
-import { useFiltrado } from "@hooks/filtros/useFiltrado";
 import { useToggleEstado } from "@hooks/common/useToggleEstado";
+import useFiltroOrdenes from "@hooks/filtros/useFiltroOrdenes";
 
 import {
   obtenerOrdenes,
@@ -15,7 +15,8 @@ import {
   obtenerOrdenPorId,
   actualizarEstadoOrden,
 } from "@services/ordenService";
-
+import { obtenerVeterinarios } from "@services/veterinarioService";
+import { notificarExito, notificarError } from "@lib/notificaciones";
 import TablaFiltrosOrden from "./TablaFiltrosOrden";
 import ModalAgregarOrden from "./ModalAgregarOrden";
 import ModalEditarOrden from "./ModalEditarOrden";
@@ -29,6 +30,8 @@ const TablaOrden = () => {
   const [modalVer, setModalVer] = useState(false);
   const [ordenes, setOrdenes] = useState([]);
   const [seleccionado, setSeleccionado] = useState(null);
+  const [filtros, setFiltros] = useState({ veterinario: "", estado: "" });
+  const [veterinarios, setVeterinarios] = useState([]);
 
   const { usuario: asistente } = useLogin();
 
@@ -41,45 +44,76 @@ const TablaOrden = () => {
     }
   };
 
+  const cargarVeterinarios = async () => {
+    try {
+      const data = await obtenerVeterinarios();
+      const conNombreCompleto = data.map((v) => ({
+        ...v,
+        nombre_completo: `${v.nombre} ${v.apellido_paterno ?? ""} ${v.apellido_materno ?? ""}`.trim(),
+      }));
+      setVeterinarios(conNombreCompleto);
+    } catch (error) {
+      console.error("Error al cargar veterinarios:", error);
+    }
+  };
+
   useEffect(() => {
     cargarOrdenes();
+    cargarVeterinarios();
   }, []);
 
   const { busqueda, handleSearch } = useBusqueda();
-  const ordenesFiltradas = useFiltrado(
-    ordenes,
-    ["usuario", "nombre_mascota", "veterinario", "servicio"],
-    busqueda
-  );
+
+  const ordenesFiltradas = useFiltroOrdenes(ordenes, filtros, busqueda);
+
   const ToggleEstado = useToggleEstado(
     setOrdenes,
     "id_orden",
     actualizarEstadoOrden
   );
 
-  const handleAgregar = async (nuevaOrden) => {
+const handleAgregar = async (nuevaOrden) => {
+  try {
     await crearOrden(nuevaOrden);
+    notificarExito("Orden registrada correctamente");
+    setModalAgregar(false); 
     await cargarOrdenes();
-  };
+  } catch (error) {
+    console.error("Error al registrar orden:", error);
+    notificarError(error.message || "Error al registrar orden");
+  }
+};
 
-  const handleActualizar = async (ordenEditada) => {
+
+const handleActualizar = async (ordenEditada) => {
+  try {
     await actualizarOrden(ordenEditada);
+    notificarExito("Orden actualizada correctamente");
+    setModalEditar(false); 
     await cargarOrdenes();
-  };
+  } catch (error) {
+    console.error("Error al actualizar orden:", error);
+    notificarError(error.message || "Error al actualizar orden");
+  }
+};
 
-  const handleEliminar = async (id) => {
-    if (!asistente?.id) {
-      console.error("No hay ID de asistente disponible");
-      return;
-    }
 
-    try {
-      await eliminarOrden(id, asistente.id);
-      await cargarOrdenes();
-    } catch (error) {
-      console.error("Error al eliminar orden:", error);
-    }
-  };
+const handleEliminar = async (id) => {
+  if (!asistente?.id) {
+    console.error("No hay ID de asistente disponible");
+    return;
+  }
+
+  try {
+    await eliminarOrden(id, asistente.id);
+    notificarExito("Orden eliminada correctamente"); 
+    await cargarOrdenes();
+  } catch (error) {
+    console.error("Error al eliminar orden:", error);
+    notificarError(error.message || "Error al eliminar orden");
+  }
+};
+
 
   const handleEditar = async (orden) => {
     const ordenCompleta = await obtenerOrdenPorId(orden.id_orden);
@@ -92,15 +126,14 @@ const TablaOrden = () => {
     setModalVer(true);
   };
 
-const ordenesConFechaFormateada = ordenesFiltradas.map((orden) => ({
-  ...orden,
-  fecha: new Date(orden.fecha).toLocaleDateString("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  }),
-}));
-
+  const ordenesConFechaFormateada = ordenesFiltradas.map((orden) => ({
+    ...orden,
+    fecha: new Date(orden.fecha).toLocaleDateString("es-PE", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    }),
+  }));
 
   return (
     <motion.div
@@ -113,6 +146,9 @@ const ordenesConFechaFormateada = ordenesFiltradas.map((orden) => ({
         busqueda={busqueda}
         handleSearch={handleSearch}
         onClickBoton={() => setModalAgregar(true)}
+        filtros={filtros}
+        setFiltros={setFiltros}
+        veterinarios={veterinarios}
       />
 
       <ModalAgregarOrden

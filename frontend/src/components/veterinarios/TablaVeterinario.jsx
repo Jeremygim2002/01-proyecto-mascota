@@ -1,11 +1,11 @@
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useFiltroVeterinarios } from "@hooks/filtros/useFiltroVeterinarios";
 
 import TablaBase from "@common/tablas/TablaBase";
 
 import { useBusqueda } from "@hooks/filtros/useBusqueda";
-import { useFiltrado } from "@hooks/filtros/useFiltrado";
 import { useToggleEstado } from "@hooks/common/useToggleEstado";
 
 import {
@@ -48,11 +48,18 @@ const TablaVeterinario = () => {
   }, []);
 
   const { busqueda, handleSearch } = useBusqueda();
-  const veterinariosFiltrados = useFiltrado(
+
+  const [filtros, setFiltros] = useState({
+    estado: "",
+    especialidad: "",
+  });
+
+  const veterinariosFinal = useFiltroVeterinarios(
     veterinarios,
-    ["nombre", "dni", "especialidad"],
+    filtros,
     busqueda
   );
+
   const toggleEstado = useToggleEstado(
     setVeterinarios,
     "id_veterinario",
@@ -103,6 +110,9 @@ const TablaVeterinario = () => {
         busqueda={busqueda}
         handleSearch={handleSearch}
         onClickBoton={() => setModalAgregar(true)}
+        filtros={filtros}
+        setFiltros={setFiltros}
+        especialidades={especialidades}
       />
       <ModalAgregarVeterinario
         isOpen={modalAgregar}
@@ -140,7 +150,7 @@ const TablaVeterinario = () => {
           { id: "dni", label: "DNI" },
           { id: "especialidad", label: "Especialidad" },
         ]}
-        datos={veterinariosFiltrados}
+        datos={veterinariosFinal}
         onVer={handleVer}
         onEditar={handleEditar}
         onEliminar={handleEliminar}

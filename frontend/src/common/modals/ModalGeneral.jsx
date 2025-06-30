@@ -12,15 +12,21 @@ const ModalGeneral = ({ isOpen, onClose, title, children }) => {
           transition={{ duration: 0.3, ease: "easeOut" }}
           className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30"
         >
-          <div className="mt-10 bg-superficie opacity-100 text-white border border-superficie-borde shadow-xl rounded-xl p-6 w-full max-w-xl relative">
+          <div className="relative mt-10 w-full max-w-xl p-6 rounded-xl border border-superficie-borde bg-superficie text-white shadow-xl">
             <button
               onClick={onClose}
               aria-label="Cerrar modal"
-              className="text-2xl font-bold absolute top-4 right-4 text-gray-400 hover:text-red-400"
+              className="absolute top-4 right-4 text-2xl font-bold text-gray-400 hover:text-red-400"
             >
               ✕
             </button>
-            <h2 className="text-lg font-semibold mb-8 font-tituloSecundario">{title}</h2>
+
+            {title && (
+              <h2 className="mb-8 text-lg font-semibold font-tituloSecundario">
+                {title}
+              </h2>
+            )}
+
             {children}
           </div>
         </motion.div>

@@ -5,8 +5,12 @@
       "@common/*": ["common/*"],
       "@components/*": ["components/*"],
       "@hooks/*": ["hooks/*"],
-      "@utils/*": ["utils/*"],
-      "@pages/*": ["pages/*"]
+      "@pages/*": ["pages/*"],
+      "@routes/*": ["routes/*"],
+      "@services/*": ["services/*"],
+      "@lib/*": ["lib/*"],
+      "@schemas/*": ["schemas/*"],
+      "@assets/*": ["assets/*"]
     }
   }
 }

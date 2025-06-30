@@ -8,7 +8,7 @@ import Title from "@common/layout/Titulo";
 
 const FormularioCodigoAdministrador = ({ onExito, onVolver }) => {
   const [codigo, setCodigo] = useState("");
-  const CODIGO_VALIDO = "123456"; // <- Aquí puedes cambiar el código secreto
+  const CODIGO_VALIDO = "123456"; 
 
   const verificarCodigo = (e) => {
     e.preventDefault();

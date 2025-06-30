@@ -27,7 +27,7 @@ const Perfil = () => {
     <CuentaGeneral icon={User} title="Perfil">
       <div className="flex flex-col sm:flex-row items-center mb-6">
         <img
-          src="../../../public/avatar.jpg"
+          src="/avatar.jpg"
           alt="Profile"
           className="rounded-full w-20 h-20 object-cover mr-4"
         />

@@ -10,7 +10,7 @@ const DniMascota = ({ usuario }) => {
     estado,
     sexo,
     foto_mascota,
-    tipo_mascota
+    tipo_mascota,
   } = usuario;
 
   const fotoFinal =
@@ -33,17 +33,23 @@ const DniMascota = ({ usuario }) => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2 text-sm md:text-base flex-1">
-          <p><strong> Raza:</strong> {raza}</p>
-          <p><strong> Edad:</strong> {edad} años</p>
-          <p><strong> Sexo:</strong> {sexo}</p>
-          <p><strong> Estado:</strong> {estado ? "Activo" : "Inactivo"}</p>
-          <p><strong> Dueño:</strong> {nombre_usuario}</p>
-          <p><strong> DNI Dueño:</strong> {dni}</p>
-          <p><strong> Tipo de Mascota:</strong> {tipo_mascota}</p>
+          <Info label="Raza" value={raza} />
+          <Info label="Edad" value={`${edad} años`} />
+          <Info label="Sexo" value={sexo} />
+          <Info label="Estado" value={estado ? "Activo" : "Inactivo"} />
+          <Info label="Dueño" value={nombre_usuario} />
+          <Info label="DNI Dueño" value={dni} />
+          <Info label="Tipo de Mascota" value={tipo_mascota} />
         </div>
       </div>
     </div>
   );
 };
+
+const Info = ({ label, value }) => (
+  <p>
+    <strong>{label}:</strong> {value}
+  </p>
+);
 
 export default DniMascota;

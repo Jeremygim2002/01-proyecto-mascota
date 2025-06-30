@@ -28,7 +28,7 @@ const ModalAgregarUsuario = ({ isOpen, onClose, onSubmit }) => {
       setCorreo,
       setNumero,
     ],
-    ["", "", "", "", "", "", true]
+    ["", "", "", "", "", ""]
   );
 
   const manejarRegistroUsuario = async (e) => {
@@ -45,13 +45,14 @@ const ModalAgregarUsuario = ({ isOpen, onClose, onSubmit }) => {
 
     const validacion = validateUsuario(nuevoUsuario);
     if (!validacion.success) {
-      notificarErroresZod(validacion.error);
+      notificarErroresZod(validacion.error); 
       return;
     }
 
-     try {
+    try {
       const usuarioCreado = await crearUsuario(nuevoUsuario);
       notificarExito("Usuario registrado correctamente");
+
       onSubmit?.(usuarioCreado);
       resetCampos();
       onClose();
@@ -64,7 +65,6 @@ const ModalAgregarUsuario = ({ isOpen, onClose, onSubmit }) => {
         notificarError("Ocurrió un error inesperado al registrar el usuario");
       }
     }
-
   };
 
   return (

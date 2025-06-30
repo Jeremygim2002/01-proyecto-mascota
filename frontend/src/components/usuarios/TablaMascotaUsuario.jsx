@@ -5,8 +5,8 @@ import { useState, useEffect } from "react";
 import TablaBase from "@common/tablas/TablaBase";
 
 import { useBusqueda } from "@hooks/filtros/useBusqueda";
-import { useFiltrado } from "@hooks/filtros/useFiltrado";
 import { useToggleEstado } from "@hooks/common/useToggleEstado";
+import useFiltroMascotasUsuarios from "@hooks/filtros/useFiltroMascotasUsuarios";
 
 import { obtenerMascotasUsuarios } from "@services/compuestoService";
 import {
@@ -15,6 +15,7 @@ import {
   actualizarEstadoMascota,
 } from "@services/mascotaService";
 import { actualizarUsuario, crearUsuario } from "@services/usuarioService";
+import { obtenerTiposMascota } from "@services/tipoMascotaService";
 
 import {
   notificarError,
@@ -37,6 +38,8 @@ const TablaMascotaUsuario = () => {
   const [datosMascotasUsuarios, setDatosMascotasUsuarios] = useState([]);
   const [modalEditarOpen, setModalEditarOpen] = useState(false);
   const [usuarioEditando, setUsuarioEditando] = useState(null);
+  const [tiposMascota, setTiposMascota] = useState([]);
+  const [filtros, setFiltros] = useState({ tipo: "", estado: "" });
 
   const cargarUsuarios = async () => {
     try {
@@ -46,6 +49,20 @@ const TablaMascotaUsuario = () => {
       console.error("Error actualizando datos:", error);
     }
   };
+
+  const cargarTiposMascota = async () => {
+    try {
+      const data = await obtenerTiposMascota();
+      setTiposMascota(data);
+    } catch (error) {
+      console.error("Error cargando tipos de mascota:", error);
+    }
+  };
+
+  useEffect(() => {
+    cargarUsuarios();
+    cargarTiposMascota();
+  }, []);
 
   const registrarUsuario = async (nuevoUsuario) => {
     try {
@@ -75,15 +92,11 @@ const TablaMascotaUsuario = () => {
     }
   };
 
-  useEffect(() => {
-    cargarUsuarios();
-  }, []);
-
   const { busqueda, handleSearch } = useBusqueda();
-  const usuarioFiltrado = useFiltrado(
+  const usuarioFiltrado = useFiltroMascotasUsuarios(
     datosMascotasUsuarios,
-    ["nombre_mascota", "raza", "nombre_usuario", "dni"],
-    busqueda
+    busqueda,
+    filtros
   );
 
   const toggleEstado = useToggleEstado(
@@ -132,6 +145,9 @@ const TablaMascotaUsuario = () => {
         busqueda={busqueda}
         handleSearch={handleSearch}
         onClickBoton={() => setModalMascotaOpen(true)}
+        filtros={filtros}
+        setFiltros={setFiltros}
+        tiposMascota={tiposMascota}
       />
 
       <ModalAgregarMascota

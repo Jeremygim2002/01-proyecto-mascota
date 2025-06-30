@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import TablaBase from "@common/tablas/TablaBase";
 
 import { useBusqueda } from "@hooks/filtros/useBusqueda";
-import { useFiltrado } from "@hooks/filtros/useFiltrado";
 import { useToggleEstado } from "@hooks/common/useToggleEstado";
+import useFiltroServicios from "@hooks/filtros/useFiltroServicios";
 
 import {
   obtenerServicios,
@@ -31,6 +31,11 @@ const TablaServicio = () => {
   const [servicios, setServicios] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [seleccionado, setSeleccionado] = useState(null);
+  const [filtros, setFiltros] = useState({
+    categoria: "",
+    servicio: "",
+    estado: "",
+  });
 
   const cargarServicios = async () => {
     const data = await obtenerServicios();
@@ -48,11 +53,9 @@ const TablaServicio = () => {
   }, []);
 
   const { busqueda, handleSearch } = useBusqueda();
-  const serviciosFiltrados = useFiltrado(
-    servicios,
-    ["nombre", "categoria", "descripcion"],
-    busqueda
-  );
+
+  const serviciosFiltrados = useFiltroServicios(servicios, busqueda, filtros);
+
   const toggleEstado = useToggleEstado(
     setServicios,
     "id_servicio",
@@ -60,26 +63,39 @@ const TablaServicio = () => {
   );
 
   const handleAgregar = async (nuevoServicio) => {
-    await crearServicio(nuevoServicio);
-    await cargarServicios();
+    try {
+      await crearServicio(nuevoServicio);
+      notificarExito("Servicio registrado correctamente.");
+      await cargarServicios();
+      setModalAgregar(false);
+    } catch (error) {
+      console.error("Error al registrar servicio:", error);
+      notificarError("No se pudo registrar el servicio.");
+    }
   };
 
   const handleActualizar = async (servicioEditado) => {
-    await actualizarServicio(servicioEditado);
-    await cargarServicios();
+    try {
+      await actualizarServicio(servicioEditado);
+      notificarExito("Servicio actualizado correctamente.");
+      await cargarServicios();
+      setModalEditar(false);
+    } catch (error) {
+      console.error("Error al actualizar servicio:", error);
+      notificarError("No se pudo actualizar el servicio.");
+    }
   };
 
-
-const handleEliminar = async (id) => {
-  try {
-    await eliminarServicio(id);
-    notificarExito("Servicio eliminado correctamente.");
-    await cargarServicios();
-  } catch (error) {
-    console.error("Error al eliminar servicio:", error);
-    notificarError(error.message); 
-  }
-}
+  const handleEliminar = async (id) => {
+    try {
+      await eliminarServicio(id);
+      notificarExito("Servicio eliminado correctamente.");
+      await cargarServicios();
+    } catch (error) {
+      console.error("Error al eliminar servicio:", error);
+      notificarError(error.message);
+    }
+  };
 
   const handleEditar = (servicio) => {
     setSeleccionado(servicio);
@@ -102,6 +118,9 @@ const handleEliminar = async (id) => {
         busqueda={busqueda}
         handleSearch={handleSearch}
         onClickBoton={() => setModalAgregar(true)}
+        filtros={filtros}
+        setFiltros={setFiltros}
+        categorias={categorias}
       />
 
       <ModalAgregarServicio

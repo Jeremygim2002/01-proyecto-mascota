@@ -12,12 +12,21 @@ import {
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import Title from "@common/layout/Titulo";
-import useOrdenesPorTipoMascota from "@hooks/useOrdenesPorTipoMascota";
+import { obtenerOrdenesPorTipoMascota } from "@services/ordenService";
+
+const useOrdenesPorTipoMascota = () => {
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    obtenerOrdenesPorTipoMascota()
+      .then(setData)
+      .catch(console.error);
+  }, []);
+  return data;
+};
 
 const GraficoOrdenesTipoMascota = () => {
   const raw = useOrdenesPorTipoMascota();
 
-  // Pivot: { mes, Perro: x, Gato: y, ... }
   const [formatted, setFormatted] = useState([]);
 
   useEffect(() => {
@@ -38,7 +47,7 @@ const GraficoOrdenesTipoMascota = () => {
   const colors = ["#0EA5E9", "#F43F5E", "#8B5CF6", "#10B981", "#F59E0B"];
 
   return (
-   <motion.div
+    <motion.div
       className="bg-slate-800 p-6 md:p-8 rounded-2xl shadow-xl border border-slate-700 transition-all duration-500"
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}

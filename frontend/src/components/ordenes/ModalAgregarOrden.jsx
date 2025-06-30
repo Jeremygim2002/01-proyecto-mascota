@@ -19,7 +19,6 @@ import {
 } from "@lib/notificaciones";
 
 import { validateOrden } from "@schemas/ordenSchema";
-import { confirmarAccion } from "@lib/confirmaciones.jsx";
 
 const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
   const [dni, setDni] = useState("");
@@ -76,19 +75,19 @@ const ModalAgregarOrden = ({ isOpen, onClose, onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
- const parsedFecha = new Date(fecha);
-const isoFecha = parsedFecha.toISOString().split("T")[0]; // yyyy-mm-dd
+    const parsedFecha = new Date(fecha);
+    const isoFecha = parsedFecha.toISOString().split("T")[0]; // yyyy-mm-dd
 
-const nuevaOrden = {
-  id_mascota: idMascota,
-  id_veterinario: idVeterinario,
-  id_asistente: asistente?.id,
-  servicios: [idServicio],
-  fecha: isoFecha,
-  hora_inicio: horaInicio,
-  hora_fin: horaFin,
-  estado: true,
-};
+    const nuevaOrden = {
+      id_mascota: idMascota,
+      id_veterinario: idVeterinario,
+      id_asistente: asistente?.id,
+      servicios: [idServicio],
+      fecha: isoFecha,
+      hora_inicio: horaInicio,
+      hora_fin: horaFin,
+      estado: false,
+    };
 
     try {
       const validacion = validateOrden(nuevaOrden);
@@ -118,20 +117,11 @@ const nuevaOrden = {
     setHoraFin("");
   };
 
-  const handleClose = () => {
-    if (idMascota || idServicio || fecha || horaInicio) {
-      confirmarAccion({
-        mensaje: "¿Cerrar sin guardar esta orden?",
-        onConfirm: () => {
-          limpiarCampos();
-          onClose();
-        },
-      });
-      return;
-    }
-    limpiarCampos();
-    onClose();
-  };
+const handleClose = () => {
+  limpiarCampos();
+  onClose();
+};
+
 
   return (
     <ModalGeneral isOpen={isOpen} onClose={handleClose} title="Agregar Orden">
@@ -248,6 +238,8 @@ const nuevaOrden = {
           <Input
             className="col-span-2 pl-4"
             type="time"
+            min="08:00"
+            max="22:00"
             value={horaInicio}
             onChange={(e) => setHoraInicio(e.target.value)}
           />

@@ -7,7 +7,6 @@ import Button from "@common/ui/Button";
 import { useResetFormulario } from "@hooks/filtros/useResetFormulario";
 import {
   notificarError,
-  notificarExito,
   notificarErroresZod,
 } from "@lib/notificaciones";
 import { validateServicio } from "@schemas/servicioSchema";
@@ -49,7 +48,6 @@ const ModalAgregarServicio = ({
 
     try {
       await onSubmit(nuevoServicio);
-      notificarExito("Servicio registrado correctamente.");
       resetCampos();
       onClose();
     } catch (error) {
