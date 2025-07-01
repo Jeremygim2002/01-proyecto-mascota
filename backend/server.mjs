@@ -1,6 +1,11 @@
-import { createApp } from "./index.mjs";
-import { UsuarioModel } from './models/mysql/usuarioModel.mjs'
-import { MascotaModel } from './models/mysql/mascotaModel.mjs'
+
+import dotenv from 'dotenv';
+dotenv.config();
+
+import { createApp } from './createApp.mjs';
+
+import { UsuarioModel } from './models/mysql/usuarioModel.mjs';
+import { MascotaModel } from './models/mysql/mascotaModel.mjs';
 import { AsistenteModel } from './models/mysql/asistenteModel.mjs';
 import { CompuestoModel } from './models/mysql/compuestoModel.mjs';
 import { VeterinarioModel } from './models/mysql/veterinarioModel.mjs';
@@ -11,7 +16,9 @@ import { TipoMascotaModel } from './models/mysql/tipoMascotaModel.mjs';
 import { OrdenModel } from './models/mysql/ordenModel.mjs';
 import { EspecialidadCategoriaModel } from './models/mysql/especialidadCategoriaModel.mjs';
 
-createApp({
+const PORT = process.env.PORT || 3000;
+
+const app = createApp({
     usuarioModel: UsuarioModel,
     mascotaModel: MascotaModel,
     asistenteModel: AsistenteModel,
@@ -23,5 +30,8 @@ createApp({
     tipoMascotaModel: TipoMascotaModel,
     ordenModel: OrdenModel,
     especialidadCategoriaModel: EspecialidadCategoriaModel
-})
+});
 
+app.listen(PORT, () => {
+    console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+});

@@ -1,7 +1,12 @@
 
+// createApp.mjs
 import express from 'express';
-import { createUsuarioRouter } from './routes/usuariosRoutes.mjs'
-import { createMascotasRouter } from './routes/mascotasRoutes.mjs'
+import cookieParser from 'cookie-parser';
+import { corsMiddleware } from './middlewares/cors.mjs';
+
+// Rutas
+import { createUsuarioRouter } from './routes/usuariosRoutes.mjs';
+import { createMascotasRouter } from './routes/mascotasRoutes.mjs';
 import { createAsistentesRouter } from './routes/asistentesRoutes.mjs';
 import { createCompuestoRouter } from './routes/compuestoRoutes.mjs';
 import { createVeterinariosRouter } from './routes/veterinariosRoutes.mjs';
@@ -12,16 +17,11 @@ import { createTipoMascotaRouter } from './routes/tiposMascotaRoutes.mjs';
 import { createOrdenesRouter } from './routes/ordenesRoutes.mjs';
 import { createEspecialidadesCategoriaRouter } from './routes/especialidadesCategoriaRoutes.mjs';
 
-import { corsMiddleware } from './middlewares/cors.mjs';
-import cookieParser from 'cookie-parser';
-
-
 export const createApp = ({ usuarioModel, mascotaModel, asistenteModel, compuestoModel, veterinarioModel, servicioModel, especialidadVeterinarioModel, categoriaServicioModel, tipoMascotaModel, ordenModel, especialidadCategoriaModel }) => {
 
   const app = express();
 
-  const port = 3000;
-
+  // Middlewares base
   app.disable('x-powered-by');
   app.use(cookieParser());
   app.use(corsMiddleware);
@@ -39,10 +39,6 @@ export const createApp = ({ usuarioModel, mascotaModel, asistenteModel, compuest
   app.use('/api/ordenes', createOrdenesRouter({ ordenModel }));
   app.use('/api/especialidad-categorias', createEspecialidadesCategoriaRouter({ especialidadCategoriaModel }));
 
-
-  app.listen(port, () => {
-    console.log(`Servidor corriendo en http://localhost:${port}`);
-  });
   return app;
 }
 

@@ -31,7 +31,8 @@ export class OrdenModel {
             id_asistente,
             servicios,
             fecha,
-            hora_inicio
+            hora_inicio,
+            estado
         } = input;
 
         const serviciosTexto = Array.isArray(servicios)
@@ -40,14 +41,15 @@ export class OrdenModel {
 
         try {
             await pool.query(
-                'CALL sp_insertar_orden(UUID_TO_BIN(?), UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?, ?)',
-                [id_mascota, id_veterinario, id_asistente, fecha, hora_inicio, serviciosTexto]
+                'CALL sp_insertar_orden(UUID_TO_BIN(?), UUID_TO_BIN(?), UUID_TO_BIN(?), ?, ?, ?, ?)',
+                [id_mascota, id_veterinario, id_asistente, fecha, hora_inicio, serviciosTexto, estado]
             );
         } catch (error) {
             console.error('Error al crear orden:', error);
             throw error;
         }
     }
+
 
 
     static async update({ id, input }) {

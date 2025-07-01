@@ -43,7 +43,7 @@ export class UsuarioController {
 
         try {
             const newUsuario = await this.usuarioModel.create({ input: result.data });
-            res.status(201).json(newUsuario);
+            res.status(201).json({ mensaje: 'Usuario creado exitosamente', usuario: newUsuario });
         } catch (error) {
             const status = error.status || 500;
             res.status(status).json({ error: error.message || 'Error interno' });

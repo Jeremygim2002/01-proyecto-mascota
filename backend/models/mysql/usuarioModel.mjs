@@ -53,7 +53,7 @@ export class UsuarioModel {
     if (yaExiste) {
       const error = new Error('Ya existe un usuario con ese correo o DNI');
       error.status = 400;
-      throw error;s
+      throw error;
     }
 
     await pool.query('CALL sp_insertar_usuario(?, ?, ?, ?, ?, ?)', [
