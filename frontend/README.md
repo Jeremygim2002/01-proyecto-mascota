@@ -41,6 +41,7 @@ Este proyecto es una aplicación web moderna desarrollada con **React + Vite** e
 
 ## 📁 Estructura del proyecto
 
+01-proyecto-dashboard-mascota
 ├── frontend/
 │ ├── public/
 │ ├── src/

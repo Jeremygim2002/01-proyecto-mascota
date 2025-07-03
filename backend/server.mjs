@@ -16,7 +16,7 @@ import { TipoMascotaModel } from './models/mysql/tipoMascotaModel.mjs';
 import { OrdenModel } from './models/mysql/ordenModel.mjs';
 import { EspecialidadCategoriaModel } from './models/mysql/especialidadCategoriaModel.mjs';
 
-const PORT = process.env.PORT || 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
 const app = createApp({
     usuarioModel: UsuarioModel,
