@@ -6,25 +6,23 @@ function uuidToBin(uuid) {
 }
 
 export class AsistenteModel {
-    static async create({ input }) {
-        const { nombre, apellido_paterno, apellido_materno, correo, numero_telefono, dni, password } = input;
+  static async create({ input }) {
+    const { nombre, apellido_paterno, apellido_materno, correo, numero_telefono, dni, password } = input;
+    const [[{ uuid }]] = await pool.query('SELECT UUID() AS uuid');
+    const password_hash = await bcrypt.hash(password, 10);
 
-        const [[{ uuid }]] = await pool.query('SELECT UUID() AS uuid');
-        const password_hash = await bcrypt.hash(password, 10);
-
-        await pool.query('CALL sp_crear_asistente(?, ?, ?, ?, ?, ?, ?, ?)', [
-            uuidToBin(uuid),
-            nombre,
-            apellido_paterno,
-            apellido_materno,
-            correo,
-            numero_telefono,
-            dni,
-            password_hash
-        ]);
-
-        return { id: uuid, nombre, apellido_paterno, apellido_materno, correo, numero_telefono, dni };
+    try {
+      await pool.query('CALL sp_crear_asistente(?, ?, ?, ?, ?, ?, ?, ?)', [
+        uuidToBin(uuid),
+        nombre, apellido_paterno, apellido_materno,
+        correo, numero_telefono, dni, password_hash
+      ]);
+      return { id: uuid, nombre, apellido_paterno, apellido_materno, correo, numero_telefono, dni };
+    } catch (err) {
+      console.error('📌 ERROR al crear asistente:', err);
+      throw err; 
     }
+  }
 
     static async findByCorreo({ correo }) {
         const [resultSets] = await pool.query('CALL sp_buscar_asistente_por_correo(?)', [correo]);

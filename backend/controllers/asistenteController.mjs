@@ -19,15 +19,22 @@ export class AsistenteController {
       return res.status(400).json({ error: result.error.format() });
     }
 
-    const existe = await this.model.findByCorreo({ correo: result.data.correo });
-    if (existe) {
-      return res.status(409).json({ error: 'El correo ya está registrado' });
+    try {
+      const existe = await this.model.findByCorreo({ correo: result.data.correo });
+      if (existe) {
+        return res.status(409).json({ error: 'El correo ya está registrado' });
+      }
+
+      const asistente = await this.model.create({ input: result.data });
+      return res.status(201).json({ message: 'Asistente registrado exitosamente', asistente });
+    } catch (err) {
+      console.error('❌ ERROR REGISTER:', err);
+      return res.status(500).json({
+        error: 'Error al registrar al asistente',
+        detalle: err?.message || 'Error desconocido'
+      });
     }
-
-    const asistente = await this.model.create({ input: result.data });
-    return res.status(201).json({ message: 'Asistente registrado exitosamente', asistente });
   };
-
   login = async (req, res) => {
     const result = validateLogin(req.body);
     if (!result.success) {
