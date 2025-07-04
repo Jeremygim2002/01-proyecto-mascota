@@ -9,7 +9,6 @@ COPY . .
 
 RUN npm run build
 
-# Usa un servidor web ligero para servir los archivos
 RUN npm install -g serve
 
 EXPOSE 80

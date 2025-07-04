@@ -13,7 +13,7 @@ services:
   backend:
     image: jremygim/vet-backend:1.0
     ports:
-      - "3001:3000"
+      - "3005:3000"  
     environment:
       - DB_HOST=mysql-db
       - DB_PORT=3306
