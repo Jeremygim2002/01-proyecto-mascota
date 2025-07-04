@@ -1,33 +1,26 @@
 version: "3.9"
-services:
 
+services:
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.dev
+    image: jremygim/vet-frontend:1.0
     ports:
-      - "5173:5173"
-    volumes:
-      - ./frontend:/home/app
-      - /home/app/node_modules
-    env_file:
-      - ./frontend/.env
+      - "5173:80"
     networks:
       - vetnet
     depends_on:
       - backend
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.dev
+    image: jremygim/vet-backend:1.0
     ports:
       - "3001:3000"
-    volumes:
-      - ./backend:/home/app
-      - /home/app/node_modules
-    env_file:
-      - ./backend/.env
+    environment:
+      - DB_HOST=mysql-db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=123456
+      - DB_NAME=db_vet
+      - JWT_SECRET=clave-ultra-secreta-vetapp2025
     networks:
       - vetnet
     depends_on:
@@ -51,4 +44,4 @@ volumes:
   mysql-data:
 
 networks:
-  vetnet: {}
+  vetnet:
