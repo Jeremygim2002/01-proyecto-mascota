@@ -3,9 +3,10 @@ FROM node:20-bullseye-slim
 WORKDIR /home/app
 
 COPY package*.json ./
-RUN npm install
+COPY .env .env         
+COPY . .               
 
-COPY . .
+RUN npm install
 
 RUN npm run build
 
