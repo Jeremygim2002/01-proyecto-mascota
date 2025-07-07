@@ -1,19 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { PinInput, PinInputField } from "@common/ui/pin-input";
 import Button from "@common/ui/Button";
 import Title from "@common/layout/Titulo";
+import { obtenerAdministradores } from "@services/administradorService";
 
 const FormularioCodigoAdministrador = ({ onExito, onVolver }) => {
   const [codigo, setCodigo] = useState("");
-  const CODIGO_VALIDO = "123456"; 
+  const [administradores, setAdministradores] = useState([]);
+
+  useEffect(() => {
+    const fetchAdmins = async () => {
+      try {
+        const data = await obtenerAdministradores();
+        setAdministradores(data);
+      } catch {
+        toast.error("Error al cargar códigos de administrador.");
+      }
+    };
+    fetchAdmins();
+  }, []);
 
   const verificarCodigo = (e) => {
     e.preventDefault();
-    if (codigo === CODIGO_VALIDO) {
-      toast.success("Código correcto. Acceso concedido.");
+
+    const admin = administradores.find((a) => a.password_hash === codigo);
+
+    if (admin) {
+      toast.success(`Acceso concedido. Sede ${admin.distrito}`);
       onExito();
     } else {
       toast.error("Código incorrecto. Intenta nuevamente.");
@@ -35,16 +51,11 @@ const FormularioCodigoAdministrador = ({ onExito, onVolver }) => {
         </p>
 
         <div className="flex justify-center">
-          <PinInput
-            otp
-            value={codigo}
-            onChange={setCodigo}
-            className="gap-2"
-          >
+          <PinInput value={codigo} onChange={setCodigo} className="gap-2">
             {Array.from({ length: 6 }).map((_, i) => (
               <PinInputField
                 key={i}
-                className="w-12 h-14 text-xl text-center rounded-lg border border-superficie-borde bg-input text-texto focus-visible:ring-2 focus-visible:ring-primary"
+                className="w-12 h-14 text-xl text-center rounded-lg font-cuerpo bg-input border border-input-borde focus:outline-none focus:ring-2 focus:ring-input-foco text-texto placeholder-texto-secundario mx-1.5"
               />
             ))}
           </PinInput>

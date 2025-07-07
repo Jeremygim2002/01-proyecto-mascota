@@ -39,7 +39,6 @@ export class OrdenController {
         }
     };
 
-
     update = async (req, res) => {
         const { id } = req.params;
         const result = validatePartialOrden(req.body);
@@ -57,13 +56,12 @@ export class OrdenController {
         res.json({ message: 'Orden actualizada correctamente' });
     };
 
-
     delete = async (req, res) => {
         const { id } = req.params;
         const { id_asistente } = req.body;
 
         if (!id_asistente) {
-            return res.status(400).json({ error: 'ID de asistente requerido para eliminar' });
+            return res.status(400).json({ error: 'ID de asistente requerido' });
         }
 
         const orden = await this.ordenModel.getById({ id });
@@ -79,8 +77,6 @@ export class OrdenController {
 
         res.json({ message: 'Orden eliminada correctamente' });
     };
-
-
 
     toggleEstado = async (req, res) => {
         const { id } = req.params;
@@ -118,6 +114,7 @@ export class OrdenController {
             res.status(500).json({ error: 'Error interno al obtener ingresos por categoría' });
         }
     };
+
     obtenerIngresosPorMes = async (req, res) => {
         try {
             const datos = await this.ordenModel.obtenerIngresosPorMes();
@@ -137,6 +134,7 @@ export class OrdenController {
             res.status(500).json({ error: 'Error interno obteniendo datos' });
         }
     };
+
     getHistorialByMascota = async (req, res) => {
         const { id_mascota } = req.params;
 
@@ -148,8 +146,4 @@ export class OrdenController {
             res.status(500).json({ error: 'Error interno al obtener historial' });
         }
     };
-
-
-
-
 }

@@ -50,8 +50,6 @@ export class OrdenModel {
         }
     }
 
-
-
     static async update({ id, input }) {
         const {
             id_mascota,
@@ -73,7 +71,6 @@ export class OrdenModel {
             throw error;
         }
     }
-
 
     static async delete({ id, id_asistente }) {
         try {
@@ -156,12 +153,10 @@ export class OrdenModel {
                 'CALL sp_obtener_historial_ordenes_mascota(UUID_TO_BIN(?))',
                 [id_mascota]
             );
-            return historial[0]; // resultado de CALL
+            return historial[0];
         } catch (error) {
             console.error('❌ Error en getHistorialByMascota:', error);
             throw error;
         }
     }
-
-
 }

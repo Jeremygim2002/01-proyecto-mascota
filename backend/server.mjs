@@ -15,6 +15,9 @@ import { CategoriaServicioModel } from './models/mysql/categoriaServicioModel.mj
 import { TipoMascotaModel } from './models/mysql/tipoMascotaModel.mjs';
 import { OrdenModel } from './models/mysql/ordenModel.mjs';
 import { EspecialidadCategoriaModel } from './models/mysql/especialidadCategoriaModel.mjs';
+import { AdministradorModel } from './models/mysql/administradorModel.mjs';
+import { RegistroModel } from './models/mysql/registroModel.mjs';
+
 
 const PORT = process.env.PORT || 3000;
 
@@ -29,7 +32,9 @@ const app = createApp({
     categoriaServicioModel: CategoriaServicioModel,
     tipoMascotaModel: TipoMascotaModel,
     ordenModel: OrdenModel,
-    especialidadCategoriaModel: EspecialidadCategoriaModel
+    especialidadCategoriaModel: EspecialidadCategoriaModel,
+    administradorModel: AdministradorModel,
+    registroModel: RegistroModel
 });
 
 app.listen(PORT, () => {

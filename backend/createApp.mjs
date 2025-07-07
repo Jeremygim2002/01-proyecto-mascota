@@ -16,8 +16,11 @@ import { createCategoriaServicioRouter } from './routes/categoriasServicioRoutes
 import { createTipoMascotaRouter } from './routes/tiposMascotaRoutes.mjs';
 import { createOrdenesRouter } from './routes/ordenesRoutes.mjs';
 import { createEspecialidadesCategoriaRouter } from './routes/especialidadesCategoriaRoutes.mjs';
+import { createAdministradoresRouter } from './routes/administradoresRoutes.mjs';
+import { createRegistroRouter } from './routes/registroRoutes.mjs';
 
-export const createApp = ({ usuarioModel, mascotaModel, asistenteModel, compuestoModel, veterinarioModel, servicioModel, especialidadVeterinarioModel, categoriaServicioModel, tipoMascotaModel, ordenModel, especialidadCategoriaModel }) => {
+
+export const createApp = ({ usuarioModel, mascotaModel, asistenteModel, compuestoModel, veterinarioModel, servicioModel, especialidadVeterinarioModel, categoriaServicioModel, tipoMascotaModel, ordenModel, especialidadCategoriaModel, administradorModel, registroModel }) => {
 
   const app = express();
 
@@ -38,6 +41,8 @@ export const createApp = ({ usuarioModel, mascotaModel, asistenteModel, compuest
   app.use('/api/tipos-mascota', createTipoMascotaRouter({ tipoMascotaModel }));
   app.use('/api/ordenes', createOrdenesRouter({ ordenModel }));
   app.use('/api/especialidad-categorias', createEspecialidadesCategoriaRouter({ especialidadCategoriaModel }));
+  app.use('/api/administradores', createAdministradoresRouter({ administradorModel }));
+  app.use('/api/registro', createRegistroRouter({ registroModel }));
 
   return app;
 }

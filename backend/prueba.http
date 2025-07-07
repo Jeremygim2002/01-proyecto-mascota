@@ -38,8 +38,8 @@ DELETE http://localhost:3000/api/usuarios/b3b341b2-43fc-11f0-8bc8-a8a159de6f1d
 
 
 
-
-
+### Traer administradores
+GET http://localhost:3000/api/administradores
 
 
 #====== MASCOTAS =====#

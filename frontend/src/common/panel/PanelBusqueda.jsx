@@ -1,27 +1,57 @@
-import PanelGeneral from "./PanelGeneral";
-import React from "react";
+import { useState } from "react";
+import SearchInput from "@common/ui/SearchInput";
+import PanelGeneral from "@common/panel/PanelGeneral";
+import ModalVerMascotaUsuario from "@components/usuarios/ModalVerMascotaUsuario";
+import { buscarUsuarioConMascotasPorDni } from "@services/usuarioService";
 
-const busqueda = [
-  { color: "bg-green-400", texto: "Nueva notificación: Nuevo cambio" },
-  { color: "bg-green-400", texto: "Nueva notificación: Nuevo cambio" },
-];
+const Header = () => {
+  const [usuarioMascotas, setUsuarioMascotas] = useState(null);
+  const [mostrarModal, setMostrarModal] = useState(false);
 
-const PanelBusqueda = () => {
+  const handleBuscarDni = async (valor) => {
+    if (valor.length < 8) return;
+    const data = await buscarUsuarioConMascotasPorDni(valor);
+    if (data) setUsuarioMascotas(data);
+  };
+
   return (
-    <PanelGeneral className="w-48 sm:w-72 flex flex-col space-y-3">
-      {busqueda.map((item, idx) => (
-        <React.Fragment key={idx}>
-          <div className="cursor-pointer hover:bg-sidebar-hover rounded-lg p-2 transition flex items-center space-x-2">
-            <div className={`w-2.5 h-2.5 rounded-full ${item.color}`} />
-            <span className="text-sm text-texto">{item.texto}</span>
-          </div>
-          {idx < busqueda.length - 1 && (
-            <hr className="border-panel-flotante-linea" />
-          )}
-        </React.Fragment>
-      ))}
-    </PanelGeneral>
+    <>
+      <div className="relative z-50 p-4">
+        <SearchInput
+          name="buscar_dni"
+          placeholder="Buscar por DNI..."
+          onChange={(e) => handleBuscarDni(e.target.value)}
+        />
+
+        {usuarioMascotas && (
+          <PanelGeneral className="w-80 mt-2 absolute right-0">
+            <p className="text-sm font-semibold text-texto mb-2">
+              {usuarioMascotas.usuario.nombre} {usuarioMascotas.usuario.apellido_paterno}
+            </p>
+            {usuarioMascotas.mascotas.map((m) => (
+              <div
+                key={m.id_mascota}
+                className="cursor-pointer hover:bg-sidebar-hover rounded p-2 transition"
+                onClick={() => {
+                  setUsuarioMascotas({ ...m, ...usuarioMascotas.usuario });
+                  setMostrarModal(true);
+                }}
+              >
+                <p className="text-texto text-sm">{m.nombre_mascota}</p>
+                <p className="text-xs text-texto-secundario italic">{m.tipo_mascota}</p>
+              </div>
+            ))}
+          </PanelGeneral>
+        )}
+      </div>
+
+      <ModalVerMascotaUsuario
+        isOpen={mostrarModal}
+        onClose={() => setMostrarModal(false)}
+        usuario={usuarioMascotas}
+      />
+    </>
   );
 };
 
-export default PanelBusqueda;
+export default Header;
