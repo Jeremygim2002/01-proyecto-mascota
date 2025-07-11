@@ -4,10 +4,10 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
-const COOKIE_NAME = 'token';
+const nombreCookie = 'token';
 
 export function authMiddleware(req, res, next) {
-  const token = req.cookies?.[COOKIE_NAME];
+  const token = req.cookies?.[nombreCookie];
   if (!token) {
     return res.status(401).json({ error: 'Acceso no autorizado' });
   }

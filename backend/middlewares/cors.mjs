@@ -1,24 +1,26 @@
-// cors.mjs
 import cors from 'cors';
 
-const ACCEPTED_ORIGINS = new Set([
+const origenesAceptados = new Set([
   'http://localhost:8080',
   'http://localhost:3030',
   'http://localhost:5173',
   'http://localhost:5174'
 ]);
 
-function isOriginAllowed(origin) {
-  return !origin || ACCEPTED_ORIGINS.has(origin);
+function origenPermitido(origin) {
+  return !origin || origenesAceptados.has(origin);
 }
 
 export const corsMiddleware = cors({
   origin(origin, callback) {
-    if (isOriginAllowed(origin)) {
+    if (origenPermitido(origin)) {
       return callback(null, true);
     }
-    return callback(new Error('Not allowed by CORS'));
+    return callback(new Error('No permitido por el cors'));
   },
   credentials: true,
   optionsSuccessStatus: 200
 });
+
+
+

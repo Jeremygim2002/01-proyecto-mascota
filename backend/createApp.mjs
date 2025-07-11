@@ -1,10 +1,8 @@
 
-// createApp.mjs
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import { corsMiddleware } from './middlewares/cors.mjs';
 
-// Rutas
 import { createUsuarioRouter } from './routes/usuariosRoutes.mjs';
 import { createMascotasRouter } from './routes/mascotasRoutes.mjs';
 import { createAsistentesRouter } from './routes/asistentesRoutes.mjs';
@@ -24,7 +22,6 @@ export const createApp = ({ usuarioModel, mascotaModel, asistenteModel, compuest
 
   const app = express();
 
-  // Middlewares base
   app.disable('x-powered-by');
   app.use(cookieParser());
   app.use(corsMiddleware);
