@@ -1,12 +1,12 @@
-import pool from '../../config/db.mjs';
+import pool from "../../config/db.mjs";
 
 export class MascotaModel {
   static async getAll() {
     try {
-      const [mascotas] = await pool.query('SELECT * FROM vista_mascotas');
+      const [mascotas] = await pool.query("SELECT * FROM vista_mascotas");
       return mascotas;
     } catch (error) {
-      console.error('Error al obtener mascotas:', error);
+      console.error("Error al obtener mascotas:", error);
       throw error;
     }
   }
@@ -14,7 +14,7 @@ export class MascotaModel {
   static async getById({ id }) {
     try {
       const [[mascota]] = await pool.query(
-        'SELECT * FROM vista_mascotas WHERE id = ?',
+        "SELECT * FROM vista_mascotas WHERE id = ?",
         [id]
       );
       return mascota || null;
@@ -24,23 +24,36 @@ export class MascotaModel {
     }
   }
 
-
   static async exists({ nombre, id_usuario }) {
-    const [rows] = await pool.query(`
+    const [rows] = await pool.query(
+      `
     SELECT 1 FROM mascotas 
     WHERE nombre = ? AND id_usuario = UUID_TO_BIN(?) 
     LIMIT 1
-  `, [nombre, id_usuario]);
+  `,
+      [nombre, id_usuario]
+    );
 
     return rows.length > 0;
   }
 
   static async create({ input }) {
-    const { nombre, raza, edad, sexo, estado, imagen, id_usuario, id_tipo_mascota } = input;
+    const {
+      nombre,
+      raza,
+      edad,
+      sexo,
+      estado,
+      imagen,
+      id_usuario,
+      id_tipo_mascota,
+    } = input;
 
     const yaExiste = await this.exists({ nombre, id_usuario });
     if (yaExiste) {
-      const error = new Error('Ya existe una mascota con ese nombre para este usuario.');
+      const error = new Error(
+        "Ya existe una mascota con ese nombre para este usuario."
+      );
       error.status = 409;
       throw error;
     }
@@ -50,25 +63,52 @@ export class MascotaModel {
       [nombre, raza, edad, sexo, estado, imagen, id_usuario, id_tipo_mascota]
     );
 
-    return { nombre, raza, edad, sexo, estado, imagen, id_usuario, id_tipo_mascota };
+    return {
+      nombre,
+      raza,
+      edad,
+      sexo,
+      estado,
+      imagen,
+      id_usuario,
+      id_tipo_mascota,
+    };
   }
 
-
   static async update({ id, input }) {
-    const { nombre, raza, edad, sexo, estado, imagen, id_usuario, id_tipo_mascota } = input;
+    const {
+      nombre,
+      raza,
+      edad,
+      sexo,
+      estado,
+      imagen,
+      id_usuario,
+      id_tipo_mascota,
+    } = input;
 
     await pool.query(
       `CALL sp_actualizar_mascota(UUID_TO_BIN(?), ?, ?, ?, ?, ?, ?, UUID_TO_BIN(?), ?)`,
-      [id, nombre, raza, edad, sexo, estado, imagen, id_usuario, id_tipo_mascota]
+      [
+        id,
+        nombre,
+        raza,
+        edad,
+        sexo,
+        estado,
+        imagen,
+        id_usuario,
+        id_tipo_mascota,
+      ]
     );
   }
 
   static async delete({ id }) {
     try {
-      await pool.query('CALL sp_eliminar_mascota(UUID_TO_BIN(?))', [id]);
+      await pool.query("CALL sp_eliminar_mascota(UUID_TO_BIN(?))", [id]);
       return true;
     } catch (error) {
-      if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+      if (error.code === "ER_ROW_IS_REFERENCED_2") {
         return false;
       }
 
@@ -80,7 +120,7 @@ export class MascotaModel {
   static async updateEstado({ id, estado }) {
     try {
       await pool.query(
-        'UPDATE mascotas SET estado = ? WHERE id = UUID_TO_BIN(?)',
+        "UPDATE mascotas SET estado = ? WHERE id = UUID_TO_BIN(?)",
         [estado, id]
       );
       return true;
@@ -110,19 +150,15 @@ export class MascotaModel {
     return { usuario, mascotas };
   }
 
-
   static async contarActivas() {
     try {
       const [[{ total }]] = await pool.query(
-        'SELECT COUNT(*) AS total FROM mascotas WHERE estado = 1'
+        "SELECT COUNT(*) AS total FROM mascotas WHERE estado = 1"
       );
       return total;
     } catch (error) {
-      console.error('Error al contar mascotas activas:', error);
+      console.error("Error al contar mascotas activas:", error);
       throw error;
     }
   }
-
-
-
 }

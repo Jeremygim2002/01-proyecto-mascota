@@ -27,6 +27,7 @@ export const createApp = ({ usuarioModel, mascotaModel, asistenteModel, compuest
   app.use(corsMiddleware);
   app.use(express.json());
 
+
   app.use('/api/usuarios', createUsuarioRouter({ usuarioModel }));
   app.use('/api/mascotas', createMascotasRouter({ mascotaModel }));
   app.use('/api/asistentes', createAsistentesRouter({ asistenteModel }));
