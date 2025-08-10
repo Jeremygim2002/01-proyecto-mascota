@@ -1,0 +1,304 @@
+#====== USUARIOS =====#
+
+### Obtener todos los usuarios
+GET http://localhost:3000/api/usuarios
+
+
+### Obtener usuario por ID
+GET http://localhost:3000/api/usuarios/21bb7917-5069-11f0-95d1-a8a159de6f1d
+
+### Crear usuario
+POST http://localhost:3000/api/usuarios
+Content-Type: application/json
+
+{
+  "nombre": "JEREMY",
+  "apellido_paterno": "CruzaDDaGado",
+  "apellido_materno": "GómeDDdGsaz",
+  "correo": "luis.crGz@exapGFahhsdle.com",
+  "numero_telefono": "999110787",
+  "dni": "87611149"
+}
+
+### Actualizar usuario
+PATCH http://localhost:3000/api/usuarios/f491b613-4fae-11f0-9c45-a8a159de6f1d
+Content-Type: application/json
+
+{
+  "nombre": "Jeremy",
+  "apellido_paterno": "Cruzadoooooooooo",
+  "apellido_materno": "Gómezzzz",
+  "correo": "lu.c@examle.com",
+  "numero_telefono": "999088777",
+  "dni": "87650329"
+}
+
+### Eliminar usuario
+DELETE http://localhost:3000/api/usuarios/b3b341b2-43fc-11f0-8bc8-a8a159de6f1d
+
+
+
+
+
+
+
+#====== MASCOTAS =====#
+
+### Obtener todas las mascotas
+GET http://localhost:3000/api/mascotas
+
+### Obtener mascota por ID
+GET http://localhost:3000/api/mascotas/025188e3-4adf-11f0-8d8e-a8a159de6f1d
+
+### Crear nueva mascota (con id_usuario existente)
+POST http://localhost:3000/api/mascotas/
+Content-Type: application/json
+
+{
+  "nombre": "THORR",
+  "raza": "NEGRO",
+  "edad": 4,
+  "sexo": "M",
+  "estado": true,
+  "imagen": "https://placekitten.com/300/300",
+  "id_usuario": "025188e3-4adf-11f0-8d8e-a8a159de6f1d",
+  "id_tipo_mascota": 1
+}
+
+### Actualizar mascota (cambiar nombre y edad)
+PATCH http://localhost:3000/api/mascotas/50145ec0-4ae1-11f0-8d8e-a8a159de6f1d
+Content-Type: application/json
+
+{
+  "nombre": "Maxxxxxxx",
+  "raza": "negrooooooooooooo"
+}
+
+### Eliminar mascota
+DELETE http://localhost:3000/api/mascotas/50145ec0-4ae1-11f0-8d8e-a8a159de6f1d
+
+###  Cambiar estado de mascota
+PATCH http://localhost:3000/api/mascotas/50145ec0-4ae1-11f0-8d8e-a8a159de6f1d
+Content-Type: application/json
+
+{
+  "estado": true
+}
+
+
+
+
+
+
+#====== COMPUESTO =====#
+
+### 🔗 Mascotas unidas con usuarios (vista compuesto)
+GET http://localhost:3000/api/mascota-usuario
+
+
+
+
+#====== VETERINARIOS =====#
+
+### Obtener todos los veterinarios
+GET http://localhost:3000/api/veterinarios
+
+
+### Obtener veterinario por ID
+GET http://localhost:3000/api/veterinarios/9068a227-4cc7-11f0-a5b8-a8a159de6f1d
+
+
+### Crear veterinario
+POST http://localhost:3000/api/veterinarios
+Content-Type: application/json
+
+{
+  "nombre": "Andrea",
+  "apellido_paterno": "Paredes",
+  "apellido_materno": "Velásquez",
+  "correo": "andre.pares@example.com",
+  "numero_telefono": "987004321",
+  "dni": "12300078",
+  "estado": true,
+  "id_especialidad": 2
+}
+
+
+### Actualizar veterinario
+PATCH http://localhost:3000/api/veterinarios/ea47c147-4dab-11f0-87e4-a8a159de6f1d
+Content-Type: application/json
+
+{
+  "numero_telefono": "999999999"
+}
+
+
+### Eliminar veterinario
+DELETE http://localhost:3000/api/veterinarios/ea47c147-4dab-11f0-87e4-a8a159de6f1d
+
+
+### Cambiar estado del veterinario
+PATCH http://localhost:3000/api/veterinarios/ea47c147-4dab-11f0-87e4-a8a159de6f1d
+Content-Type: application/json
+
+{
+  "estado": false
+}
+
+
+
+#====== SERVICIOS =====#
+
+### Obtener todos los servicios
+GET http://localhost:3000/api/servicios
+
+### Obtener servicio por ID
+GET http://localhost:3000/api/servicios/90675d9e-4cc7-11f0-a5b8-a8a159de6f1d
+
+### Crear servicio
+POST http://localhost:3000/api/servicios
+Content-Type: application/json
+
+{
+  "nombre": "Baño y cortee",
+  "descripcion": "Servicio completo de higiene",
+  "duracion": 30,
+  "precio": 45.50,
+  "estado": true,
+  "id_categoria": 1
+}
+
+### Actualizar servicio
+PATCH http://localhost:3000/api/servicios/6abcb058-4da8-11f0-87e4-a8a159de6f1d
+Content-Type: application/json
+
+{
+  "precio": 50.00
+}
+
+### Eliminar servicio
+DELETE http://localhost:3000/api/servicios/6abcb058-4da8-11f0-87e4-a8a159de6f1d
+
+### Cambiar estado del servicio
+PATCH http://localhost:3000/api/servicios/90675d9e-4cc7-11f0-a5b8-a8a159de6f1d
+Content-Type: application/json
+
+{
+  "estado": false
+}
+
+
+
+#====== ORDENES =====#
+
+###  Obtener todas las órdenes
+GET http://localhost:3000/api/ordenes
+Content-Type: application/json
+
+###
+
+###  Obtener una orden por ID
+GET http://localhost:3000/api/ordenes/1c4150ce-4fbb-11f0-9c45-a8a159de6f1d
+Content-Type: application/json
+
+###
+
+###  Crear nueva orden
+POST http://localhost:3000/api/ordenes
+Content-Type: application/json
+
+{
+  "id_mascota": "0252119d-4adf-11f0-8d8e-a8a159de6f1d",
+  "id_veterinario": "ba96c744-4fb2-11f0-9c45-a8a159de6f1d",
+  "id_asistente": "337f397e-4ae6-11f0-8d8e-a8a159de6f1d",
+  "servicios": [
+    "0252f7ce-4adf-11f0-8d8e-a8a159de6f1d"
+  ]
+}
+
+###
+
+### Actualizar orden
+PATCH http://localhost:3000/api/ordenes/1c4150ce-4fbb-11f0-9c45-a8a159de6f1d
+Content-Type: application/json
+
+{
+  "id_mascota": "30d9f6fd-4faf-11f0-9c45-a8a159de6f1d",
+  "id_veterinario": "ba96c744-4fb2-11f0-9c45-a8a159de6f1d",
+  "estado": true,
+  "id_asistente": "8b46f829-4fae-11f0-9c45-a8a159de6f1d",
+  "fecha": "2025-06-30",
+  "hora_inicio": "10:45",
+  "hora_fin": "11:50"
+}
+
+
+###
+
+###  Eliminar orden
+DELETE http://localhost:3000/api/ordenes/cf6c25bc-4b45-11f0-af39-a8a159de6f1d
+Content-Type: application/json
+
+{
+  "id_asistente": "337f397e-4ae6-11f0-8d8e-a8a159de6f1d"
+}
+
+
+
+
+
+
+
+
+
+
+
+#====== ASISTENTE AUTH =====#
+
+
+###  Login asistente
+POST http://localhost:3000/api/asistente/login
+Content-Type: application/json
+
+{
+  "correo": "admin@example.com",
+  "password": "123456"
+}
+
+###
+
+###  Logout asistente
+POST http://localhost:3000/api/asistente/logout
+
+###  Perfil del asistente autenticado
+GET http://localhost:3000/api/asistente/profile
+
+
+
+
+### Obtener total de mascotas activas
+GET http://localhost:3000/api/mascotas/total/activas
+
+
+
+
+### Obtener total de mascotas activas
+GET http://localhost:3000/api/ordenes/mascota/bb51da26-50bb-11f0-8ec4-a8a159de6f1d/historial
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

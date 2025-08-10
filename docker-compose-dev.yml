@@ -1,0 +1,54 @@
+version: "3.9"
+services:
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/home/app
+      - /home/app/node_modules
+    env_file:
+      - ./frontend/.env
+    networks:
+      - vetnet
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./backend:/home/app
+      - /home/app/node_modules
+    env_file:
+      - ./backend/.env
+    networks:
+      - vetnet
+    depends_on:
+      - mysql-db
+
+  mysql-db:
+    image: mysql:8
+    container_name: mysql-db
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: db_vet
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./sql:/docker-entrypoint-initdb.d
+    networks:
+      - vetnet
+
+volumes:
+  mysql-data:
+
+networks:
+  vetnet: {}
